@@ -1,3 +1,5 @@
 # config/_default/taxonomies.toml
+# Add custom taxonomies here
 
-topic = "topics"
+tags       = "tags"
+categories = "categories"
