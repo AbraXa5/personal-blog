@@ -87,3 +87,9 @@ A[Point1];
 A-->B[Point2];
 B-->C[Point3];
 {{< /mermaid >}}
+
+## Found a typo?
+
+If you come across any errors, such as typos or sentences that could be improved, or if you have any suggestions for updates to this blog post, please create a new [pull request](https://github.com/AbraXa5/personal-blog/tree/main/content/blog) to propose your changes. Your contributions are greatly appreciated.
+
+> This can also be done by clicking the edit icon besides the title
