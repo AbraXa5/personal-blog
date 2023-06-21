@@ -4,7 +4,7 @@ displayName  = "EN"
 weight       = 1
 
 
-title = "My awesome site"
+title = "Abraxas"
 # copyright = "Copy, _right?_ :thinking_face:"
 
 [params]
@@ -18,9 +18,9 @@ title = "My awesome site"
     # description = "My awesome website"
 
 [author]
-    name = "Abraxas"
+    name  = "Abraxas"
     image = "img/profile.png"
-    headline = "I'm only human"
+    # headline = "Just a nerd writing about tech"
     bio = "A little bit about you"
     links = [
         { email = "mailto:abr4xa5@proton.me" },
@@ -64,5 +64,5 @@ title = "My awesome site"
         { twitter = "https://twitter.com/Abr4Xa5_" },
         # { whatsapp = "https://wa.me/phone-number" },
         # { youtube = "https://youtube.com/username" },
-        { rss = "/index.xml" },
+        { rss = "/blog/index.xml" },
     ]
