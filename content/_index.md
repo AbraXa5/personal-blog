@@ -1,5 +1,5 @@
 ---
-description: Personal website of Abraxas
+description: Yet another nerdy blog
 title: "Abraxas"
 ---
 
