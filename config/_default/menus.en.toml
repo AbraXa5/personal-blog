@@ -36,11 +36,19 @@
     [main.params]
         action = "search"
 
-        # -- Footer Menu --
-        # The footer menu is displayed at the bottom of the page, just before
-        # the copyright notice. Configure as per the main menu above.
 
-        # [[footer]]
-        #   name = "Tags"
-        #   pageRef = "tags"
-        #   weight = 10
+# -- Footer Menu --
+# The footer menu is displayed at the bottom of the page, just before
+# the copyright notice. Configure as per the main menu above.
+# [[footer]]
+#   name = "Tags"
+#   pageRef = "tags"
+#   weight = 10
+[[footer]]
+    name   = "BuyMeACoffee"
+    url    = "https://www.buymeacoffee.com/abr4xa5"
+    weight = 30
+    [footer.params]
+        icon     = "buymeacoffee"
+        showName = true
+        target   = "_blank"
