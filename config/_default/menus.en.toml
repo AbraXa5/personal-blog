@@ -23,7 +23,7 @@
 [[main]]
     name    = "Tags"
     pageRef = "tags"
-    weight  = 30
+    weight  = 20
 
 [[main]]
     name    = "About Me"
