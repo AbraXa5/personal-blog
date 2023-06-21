@@ -10,7 +10,7 @@ summary: "First post on my blog"
 
 # Hello World :laptop:
 
-I have created this website to curate my online presence, providing a platform to showcase my projects, CTF writeups, delve into the topics I'm enthusiastic about, and share some ramblings. This site is set up with [Hugo](https://gohugo.io/) and uses [Congo](https://jpanther.github.io/congo/) theme! It's hosted and managed by [Cloudflare Pages](https://pages.cloudflare.com/), making it easy to deploy updates and posts here!
+I have created this website to curate my online presence, providing a platform to showcase my projects, CTF writeups, delve into the topics I'm enthusiastic about, and share some ramblings. This site is set up with [Hugo](https://gohugo.io/) and uses [Congo](https://jpanther.github.io/congo/) theme! It's hosted and managed by [Cloudflare Pages](https://pages.cloudflare.com/), making it easy to deploy updates and post here!
 
 ## Found a typo?
 
