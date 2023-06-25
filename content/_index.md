@@ -1,5 +1,5 @@
 ---
-description: Yet another nerdy blog
+description: Yet another infosec blog
 title: "Abraxas"
 ---
 
