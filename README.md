@@ -10,8 +10,14 @@ Its hosted using [Cloudflare Pages](https://pages.cloudflare.com/)
 -   hugo version 0.113.0+extended
 -   go version go1.20.4
 
-Run using
+Run using, the `-D` will also show draft posts
 
 ```sh
 hugo server -D
+```
+
+Create new blog post using teh blog archetype
+
+```sh
+hugo new blog/<blog-title>/index.md
 ```
