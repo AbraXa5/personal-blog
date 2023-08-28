@@ -6,9 +6,10 @@
         ".build": true
     },
 
-    "cSpell.words": [
-
-    ],
+    "cSpell.words": [],
+    "[markdown]": {
+        "editor.formatOnSave": false
+    },
 
     "git.ignoreLimitWarning": true,
     "git.branchProtection": ["main"],
