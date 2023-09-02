@@ -6,7 +6,35 @@
         ".build": true
     },
 
-    "cSpell.words": [],
+    "cSpell.words": [
+        "allnodes",
+        "allrouters",
+        "capsh",
+        "chfn",
+        "chsh",
+        "dockerenv",
+        "drwxr",
+        "drwxrwsr",
+        "egid",
+        "euid",
+        "gpasswd",
+        "GTFObins",
+        "hostkey",
+        "infosec",
+        "labbing",
+        "localnet",
+        "mcastprefix",
+        "monitorstwo",
+        "newgrp",
+        "nmap",
+        "nologin",
+        "pwncat",
+        "rockyou",
+        "rwxr",
+        "Snyk",
+        "varchar",
+        "wordlist"
+    ],
     "[markdown]": {
         "editor.formatOnSave": false
     },
