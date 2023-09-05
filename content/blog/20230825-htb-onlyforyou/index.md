@@ -2,7 +2,8 @@
 title: "HTB OnlyForYou"
 draft: false
 description: ""
-categories:
+categories: ["HTB"]
+tags:
     [
         "File read",
         "Command injection",
@@ -10,7 +11,6 @@ categories:
         "Malicious python package",
         "Chisel",
     ]
-tags: ["HTB"]
 date: 2023-08-27T23:01:23+05:30
 summary: "OnlyForYou is a Medium Linux box that requires source code analysis. The vhost has a file read vulnerability caused by the `os.path.join()` function, enabling access to the source code of another virtual host. This, in turn, exposes a command injection vulnerability by bypassing the regex. Additionally, an internal site is susceptible to cipher injection, which allows exfiltrating user hashes. Root escalation involves exploiting pip download using a malicious Python package"
 ---
