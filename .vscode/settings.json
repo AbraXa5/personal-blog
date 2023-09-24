@@ -1,17 +1,14 @@
 {
-    "editor.insertSpaces": false,
-    "files.trimTrailingWhitespace": true,
-    "files.exclude": {
-        ".git": true,
-        ".build": true
+    "[markdown]": {
+        "editor.formatOnSave": false
     },
-
     "cSpell.words": [
         "allnodes",
         "allrouters",
         "capsh",
         "chfn",
         "chsh",
+        "cmdline",
         "dockerenv",
         "drwxr",
         "drwxrwsr",
@@ -27,26 +24,35 @@
         "monitorstwo",
         "newgrp",
         "nmap",
+        "noall",
+        "nocmd",
         "nologin",
+        "nsupdate",
         "pwncat",
+        "rndc",
         "rockyou",
         "rwxr",
         "Snyk",
         "varchar",
+        "wfuzz",
         "wordlist"
     ],
-    "[markdown]": {
-        "editor.formatOnSave": false
+    "editor.insertSpaces": false,
+    "files.exclude": {
+        ".build": true,
+        ".git": true
     },
-
-    "git.ignoreLimitWarning": true,
-    "git.branchProtection": ["main"],
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true,
+    "git.branchProtection": [
+        "main"
+    ],
     "git.branchProtectionPrompt": "alwaysCommitToNewBranch",
     "git.branchRandomName.enable": true,
-    "git.pullBeforeCheckout": true,
+    "git.ignoreLimitWarning": true,
     "git.mergeEditor": false,
-    "files.insertFinalNewline": true,
-
+    "git.pullBeforeCheckout": true,
+    "peacock.remoteColor": "#1857a4",
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#1f6fd0",
         "activityBar.background": "#1f6fd0",
@@ -65,7 +71,5 @@
         "titleBar.activeForeground": "#e7e7e7",
         "titleBar.inactiveBackground": "#1857a499",
         "titleBar.inactiveForeground": "#e7e7e799"
-    },
-    "peacock.remoteColor": "#1857a4",
-    "ansible.python.interpreterPath": "/bin/python"
+    }
 }
