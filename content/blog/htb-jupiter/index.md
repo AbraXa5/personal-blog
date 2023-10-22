@@ -1,6 +1,6 @@
 ---
 title: "HTB Jupiter"
-draft: true
+draft: false
 description: ""
 categories: ["HTB"]
 tags: ["htb-medium","grafana","raw SQL queries","postgres command execution","command-execution","shadow-simulator","jupyter","arftracksat","file-read"]
