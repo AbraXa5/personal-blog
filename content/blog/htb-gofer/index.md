@@ -2,10 +2,10 @@
 title: "Htb Gofer"
 draft: false
 description: ""
-categories: ["HTB"]
-tags: ["htb-hard", "SMB", "phishing", "macros", "LibreOffice", "SSRF", "gopher", "Gopherus", "smtp", "pspy", "Ghidra", "Dangling pointer", "Use-after-free", "path-hijack"]
+categories: ["HTB", "Linux"]
+tags: ["htb-hard", "SMB", "cme", "wfuzz", "phishing", "macros", "LibreOffice", "SSRF", "gopher", "Gopherus", "smtp", "pspy", "Ghidra", "dangling-pointer", "use-after-free", "path-hijack"]
 date: 2023-10-29T00:50:07+05:30
-summary: "Gofer is a hard linux box, I discovered a bypassable HTTP proxy vulnerable to Server-Side Request Forgery. Utilizing this SSRF vulnerability, I sent a phishing email through the internal SMTP server via the gopher protocol, embedding a malicious macro that activates upon document opening. Next, I obtained user credentials from a background process linked to the proxy. Finally, I found a vulnerability in the 'notes' binary, exploiting a use-after-free vulnerability associated with a dangling pointer."
+summary: "Gofer is a hard linux box, I discovered a HTTP proxy vulnerable to Server-Side Request Forgery. Utilizing this SSRF vulnerability, I sent a phishing email through the internal SMTP server via the gopher protocol, embedding a malicious macro that activates upon document opening. Next, I obtained user credentials from a background process linked to the proxy. Finally, I found a vulnerability in the 'notes' binary, exploiting a use-after-free vulnerability associated with a dangling pointer."
 ---
 
 # Gofer HTB
@@ -13,7 +13,7 @@ summary: "Gofer is a hard linux box, I discovered a bypassable HTTP proxy vulner
 ## Overview
 ---
 
-> Gofer is a hard linux box, I discovered a bypassable HTTP proxy vulnerable to Server-Side Request Forgery. Utilizing this SSRF vulnerability, I sent a phishing email through the internal SMTP server via the gopher protocol, embedding a malicious macro that activates upon document opening. Next, I obtained user credentials from a background process linked to the proxy. Finally, I found a vulnerability in the `notes` binary, exploiting a use-after-free vulnerability associated with a dangling pointer.
+> Gofer is a hard linux box, I discovered a HTTP proxy vulnerable to Server-Side Request Forgery. Utilizing this SSRF vulnerability, I sent a phishing email through the internal SMTP server via the gopher protocol, embedding a malicious macro that activates upon document opening. Next, I obtained user credentials from a background process linked to the proxy. Finally, I found a vulnerability in the `notes` binary, exploiting a use-after-free vulnerability associated with a dangling pointer.
 
 ---
 ## Enumeration

@@ -2,7 +2,7 @@
 title: "HTB Pilgrimage"
 draft: false
 description: ""
-categories: ["HTB"]
+categories: ["HTB", "Linux"]
 tags: ["htb-easy", "git-dumper", "ImageMagick", "file-read", "CVE-2022-44268", "binwalk", "path-traversal", "file-write", "CVE-2022-4510"]
 date: 2023-11-26T20:30:36+05:30
 summary: "Pilgrimage is an easy Linux box, featuring a website for image shrinking and a Git repository housing the website's source code. Upon reviewing the source code, I found a vulnerable version of ImageMagick being used, susceptible to file retrieval. Leveraging this, I retrieved the website's database, uncovering user credentials that were subsequently reused for SSH access. Next, a bash script executed by the root user used a vulnerable version of binwalk. I exploited the binwalk vulnerability to get root privileges."

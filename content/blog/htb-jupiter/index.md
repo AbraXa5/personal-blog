@@ -2,8 +2,8 @@
 title: "HTB Jupiter"
 draft: false
 description: ""
-categories: ["HTB"]
-tags: ["htb-medium","grafana","raw SQL queries","postgres command execution","command-execution","shadow-simulator","jupyter","arftracksat","file-read"]
+categories: ["HTB", "Linux"]
+tags: ["htb-medium", "wfuzz", "grafana","raw-SQL-query","postgres-command-execution","command-execution","shadow-simulator","jupyter","arftracksat","file-read"]
 date: 2023-10-22T01:22:49+05:30
 summary: "Jupiter is a medium HTB box where I began by exploiting a supposed feature in Grafana to execute commands and gain an initial foothold. After establishing a foothold, I took advantage of configuration issues within a script executed by the Shadow Simulator via a cron job. Then, I discovered Jupyter server tokens in log files and leveraged them to execute commands within a Jupyter notebook. Finally, I exploited a customized version of arftracksat, a satellite tracking system, with the ability to run as the root user, elevating my privileges on the system."
 ---

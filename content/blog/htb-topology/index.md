@@ -2,8 +2,8 @@
 title: "HTB Topology"
 draft: false
 description: ""
-categories: ["HTB"]
-tags: ["htb-easy", "wfuzz", "latex injection", "inline math mode", "htpasswd", "gnuplot"]
+categories: ["HTB", "Linux"]
+tags: ["htb-easy", "wfuzz", "LaTeX", "latex-injection", "inline-math-mode", "htpasswd", "gnuplot"]
 date: 2023-11-04T17:58:58+05:30
 summary: "Topology is an easy linux box featuring a web server with a vulnerable virtual host susceptible to LaTeX injection. This LaTeX injection allowed me to access and read files on the server, leading to the discovery of SSH login credentials. Lastly, I exploited a misconfiguration along with the functionality of gnuplot to execute system commands as the root user."
 ---

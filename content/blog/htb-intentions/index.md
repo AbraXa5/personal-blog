@@ -2,15 +2,15 @@
 title: "HTB Intentions"
 draft: false
 description: ""
-categories: ["HTB"]
+categories: ["HTB", "Linux"]
 tags:
     [
         "htb-hard",
         "SQLi",
-        "Second order SQLi",
-        "PHPs Arbitrary Object Instantiation",
+        "second-order-SQLi",
+        "PHP Arbitrary Object Instantiation",
         "git",
-        "Brute forcing hashes",
+        "Bruteforcing-hashes",
         "capabilities",
         "CAP_DAC_READ_SEARCH",
     ]
