@@ -2,8 +2,8 @@
 title: "HTB Mailroom"
 draft: false
 description: ""
-categories: ["HTB"]
-tags: ["XXS", "HTTP exfil", "NoSQLi bruteforce", "Command injection", "strace"]
+categories: ["HTB", "Linux"]
+tags: ["htb-hard", "wfuzz", "XXS", "HTTP exfil", "NoSQLi-bruteforce", "command-injection", "strace"]
 date: 2023-08-21T17:50:38+05:30
 summary: "Mailroom is a hard linux box vulnerable to multiple vulnerabilities including XXS, NoSQLi and command injection. It also involves stracing a process to dump passwords."
 ---

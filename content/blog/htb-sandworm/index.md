@@ -3,7 +3,7 @@ title: "HTB Sandworm"
 draft: false
 description: ""
 categories: ["HTB", "Linux"]
-tags: ["htb-medium", "PGP", "SSTI", "firejail", "restricted-shell", "rust", "cargo", "library hijack", "CVE-2022-31214"]
+tags: ["htb-medium", "PGP", "SSTI", "firejail", "restricted-shell", "rust", "cargo", "library-hijack", "CVE-2022-31214"]
 date: 2023-11-27T01:34:17+05:30
 summary: "Sandworm is a medium linux box featuring a website with functionality for PGP operations, one of which is vulnerable to SSTI and leads to a restricted shell. Within the firejail environment, I discovered user credentials allowing me to pivot to a SSH shell. Next, I hijacked a cargo crate for command execution to get an unrestricted shell as the previous user. Finally, I exploit a vulnerable version of firejail to root privileges."
 ---

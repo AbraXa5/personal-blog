@@ -2,17 +2,17 @@
 title: "HTB Intentions"
 draft: false
 description: ""
-categories: ["HTB"]
+categories: ["HTB", "Linux"]
 tags:
     [
         "htb-hard",
         "SQLi",
-        "Second order SQLi",
-        "PHPs Arbitrary Object Instantiation",
+        "second-order-SQLi",
+        "PHP Arbitrary Object Instantiation",
         "git",
-        "Brute forcing hashes",
+        "bruteforcing-hashes",
         "capabilities",
-        "CAP_DAC_READ_SEARCH",
+        "cap_dac_read_search",
     ]
 date: 2023-10-17T11:12:07+05:30
 summary: "Intentions is a Hard linux box that involving a second-order SQL injection vulnerability which enables the extraction of admin password hashes. Leveraging a different API endpoint, these hashes can be used to access the admin page. Within the admin page, there's a feature to modify images, which relies on Imagick. This opens up an opportunity to exploit arbitrary object instantiation, ultimately allowing to write a PHP webshell and establishing a foothold. After gaining access to the system, credentials are found in an old Git commit in the website's repository. These credentials are reused for SSH access, allowing access to a user capable of running a copyright_scanner application, which has the CAP_DAC_READ_SEARCH capability. This capability can be exploited to read files as the root user."

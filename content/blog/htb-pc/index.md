@@ -2,7 +2,7 @@
 title: "HTB PC"
 draft: false
 description: ""
-categories: ["HTB"]
+categories: ["HTB", "Linux"]
 tags: [ "htb-easy","gRPC", "sqlite", "SQLi", "CVE-2023-0297" ]
 date: 2023-10-08T10:02:38+05:30
 summary: ""

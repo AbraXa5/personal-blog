@@ -2,12 +2,15 @@
 title: "HTB Snoopy"
 draft: false
 description: ""
-categories: ["HTB"]
+categories: ["HTB", "Linux"]
 tags:
+    - htb-hard
     - zone-transfer
-    - BIND DNS
-    - File read
-    - DNS poisoning
+    - dns
+    - BIND
+    - wfuzz
+    - file-read
+    - dns-poisoning
     - nsupdate
     - SSH Honeypot
     - CVE-2023-23946

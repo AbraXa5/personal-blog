@@ -2,8 +2,8 @@
 title: "HTB MonitorsTwo"
 draft: false
 description: ""
-categories: ["HTB"]
-tags: ["Cacti", "CVE-2022-46169", "SUID", "Docker engine", "CVE-2021-41091"]
+categories: ["HTB", "Linux"]
+tags: ["htb-easy", "Cacti", "CVE-2022-46169", "SUID", "docker-engine", "CVE-2021-41091"]
 date: 2023-09-02T15:40:09+05:30
 summary: "MonitorsTwo is an Easy Linux box that involves exploiting an outdated version of Cacti. This exploit allows to gain a shell within a Docker container. The container also hosts a MariaDB database that stores user credentials, which are reused for SSH access. Finally, to escalate privileges to root a vulnerability in the Docker engine is exploited."
 ---
