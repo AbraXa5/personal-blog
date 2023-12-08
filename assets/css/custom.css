@@ -1,4 +1,6 @@
-/* Increase article width size
-article {
-    max-width: fit-content;
-} */
+/* Increase max width for screens */
+@media (min-width: 401px) {
+    .max-w-prose {
+        max-width: 75% !important;
+    }
+}
