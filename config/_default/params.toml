@@ -6,8 +6,8 @@
 # https://jpanther.github.io/congo/docs/configuration/#theme-parameters
 
 # colorScheme          = "congo"
-colorScheme          = "fire"
-defaultAppearance    = "dark" # valid options: light or dark
+colorScheme          = "cherry"
+defaultAppearance    = "dark"   # valid options: light or dark
 autoSwitchAppearance = true
 
 
@@ -53,7 +53,7 @@ fingerprintAlgorithm = "sha256"
     showWordCount       = false
     showComments        = false
     showVisitCount      = true
-    # sharingLinks        = ["twitter", "mastodon", "reddit", "linkedin", "email"]
+    sharingLinks        = ["twitter", "mastodon", "reddit", "linkedin", "email"]
 
 [list]
     showBreadcrumbs     = false
