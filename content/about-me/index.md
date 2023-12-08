@@ -7,6 +7,7 @@ draft: false
 showEdit: false
 showReadingTime: false
 showDate: false
+showAuthor: true
 ---
 
 # Hey there, I am Abraxas! :waving_hand:
