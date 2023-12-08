@@ -31,6 +31,12 @@
     weight  = 30
 
 [[main]]
+    identifier = "appearance"
+    weight     = 90
+    [main.params]
+        action = "appearance"
+
+[[main]]
     identifier = "search"
     weight     = 99
     [main.params]
