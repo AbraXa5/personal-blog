@@ -1,5 +1,5 @@
 /* Increase max width for screens */
-@media (min-width: 401px) {
+@media (min-width: 601px) {
     .max-w-prose {
         max-width: 75% !important;
     }
