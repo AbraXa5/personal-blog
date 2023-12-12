@@ -346,7 +346,7 @@ admin_login.yml:$ansible$0*0*2fe48d56e7e16f71c18abd22085f39f4fb11a2b9a456cf4b72e
 Cracking the generated hash using JTR, gives the decryption password for the vault, `!@#$%^&*`.
 
 ```bash
-❯ john_rock vault_hash
+❯ john vault_hash  --wordlist=~/wordlists/rockyou.txt
 Using default input encoding: UTF-8
 Loaded 1 password hash (ansible, Ansible Vault [PBKDF2-SHA256 HMAC-256 128/128 AVX 4x])
 Cost 1 (iteration count) is 10000 for all loaded hashes
