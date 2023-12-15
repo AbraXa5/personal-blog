@@ -1025,7 +1025,9 @@ Impacket for Exegol - v0.10.1.dev1+20230806.34223.faf17b2 - Copyright 2022 Fortr
 [*] Requesting S4U2Proxy
 [-] Kerberos SessionError: KDC_ERR_S_PRINCIPAL_UNKNOWN(Server not found in Kerberos database)
 [-] Probably user Abraxas$ does not have constrained delegation permissions or impersonated user does not exist
-```### PassTheCert Attack
+```
+
+### PassTheCert Attack
 
 The remaining step involves attempting the PassTheCert attack, and I found an informative blog post [here](https://offsec.almond.consulting/authenticating-with-certificates-when-pkinit-is-not-supported.html). It can be used to:
 
