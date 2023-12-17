@@ -1,7 +1,7 @@
 ---
 title: "HTB Authority"
 draft: false
-categories: ["HTB", "Windows"]
+categories: ["HTB", "Windows", "Active-Directory"]
 tags:
     - htb-medium
     - SMB
@@ -11,8 +11,8 @@ tags:
     - ansible-vault
     - AD
     - ADCS
-    - active-directory
     - ESC1
+    - certipy
     - PassTheCert
 date: 2023-12-10T03:33:35+05:30
 summary: "Authority is a medium Windows AD box. I discovered Ansible playbooks in a publicly accessible share, containing encrypted variables that, once cracked, provided credentials for the PWM configuration manager. With PWM in config mode, I could make changes without authentication, allowing the capture of clear text LDAP credentials for subsequent WinRM authentication. I also discovered ADCS and a vulnerable certificate template (ESC1). Although I successfully exploited the vulnerability, Kerberos limitations prevented authentication with the generated certificate. To bypass this I used pass-the-cert attack to gain access as Administrator."
