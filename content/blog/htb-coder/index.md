@@ -1108,7 +1108,7 @@ Certificate Templates
 
 ```
 
-I can abuse the ESC1 vulnerability to request a certificate for Administrator.
+I can now abuse the ESC1 vulnerability to request a certificate for Administrator. I have a decent explanation of the ESC1 vulnerability in the [HTB Authority writeup](https://abraxas.pages.dev/blog/htb-authority/#ad-cs-certificate-abuse)
 
 ```bash
 ❯ certipy req \
