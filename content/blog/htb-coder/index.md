@@ -19,7 +19,6 @@ tags:
     - av-bypass
     - PKI-Admins
     - ADCS
-    - active-directory
     - ADCSTemplate
     - certipy
     - ESC1
@@ -160,9 +159,14 @@ PORT     STATE         SERVICE     VERSION
 I was able to resolve both the domains using the DNS server. Unfortunately, nothing on zone transfer
 
 ```bash
-❯ dig +noall +answer coder.htb @110.129.229.190
+❯ dig +noall +answer coder.htb @10.129.229.190
+coder.htb.		600	IN	A	10.129.229.190
+
 ❯ dig +noall +answer dc01.coder.htb @10.129.229.190
+dc01.coder.htb.		3600	IN	A	10.129.229.190
+
 ❯ dig +noall +nocmd +answer axfr @10.129.229.190 coder.htb
+; Transfer failed.
 ```
 
 ### port 80 - HTTP Enumeration
