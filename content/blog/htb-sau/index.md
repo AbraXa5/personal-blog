@@ -1,6 +1,6 @@
 ---
 title: "HTB Sau"
-draft: flase
+draft: false
 categories: ["HTB", "Linux"]
 tags:
     - htb-easy
