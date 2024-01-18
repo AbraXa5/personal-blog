@@ -1,6 +1,6 @@
 ---
 title: "Kod3r Test"
-draft: true
+draft: false
 categories: ["HTB", "Test2"]
 tags:
     - test1
