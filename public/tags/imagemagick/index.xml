@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ImageMagick on Abraxas</title>
+    <link>//localhost:1313/tags/imagemagick/</link>
+    <description>Recent content in ImageMagick on Abraxas</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 26 Nov 2023 20:30:36 +0530</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/imagemagick/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTB Pilgrimage</title>
+      <link>//localhost:1313/blog/htb-pilgrimage/</link>
+      <pubDate>Sun, 26 Nov 2023 20:30:36 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-pilgrimage/</guid>
+      <description>Pilgrimage is an easy Linux box, featuring a website for image shrinking and a Git repository housing the website&amp;rsquo;s source code. Upon reviewing the source code, I found a vulnerable version of ImageMagick being used, susceptible to file retrieval. Leveraging this, I retrieved the website&amp;rsquo;s database, uncovering user credentials that were subsequently reused for SSH access. Next, a bash script executed by the root user used a vulnerable version of binwalk. I exploited the binwalk vulnerability to get root privileges.</description>
+    </item>
+  </channel>
+</rss>

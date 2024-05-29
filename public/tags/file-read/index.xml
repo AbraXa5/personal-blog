@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>File-Read on Abraxas</title>
+    <link>//localhost:1313/tags/file-read/</link>
+    <description>Recent content in File-Read on Abraxas</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 04 Feb 2024 21:14:31 +0530</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/file-read/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Jenkins CVE-2024-23897</title>
+      <link>//localhost:1313/blog/cve-2024-23897/</link>
+      <pubDate>Sun, 04 Feb 2024 21:14:31 +0530</pubDate>
+      <guid>//localhost:1313/blog/cve-2024-23897/</guid>
+      <description>Analysis and proof-of-concept (PoC) for Jenkins file-read vulnerability CVE-2024-23897.</description>
+    </item>
+    <item>
+      <title>HTB Zipping</title>
+      <link>//localhost:1313/blog/htb-zipping/</link>
+      <pubDate>Sun, 14 Jan 2024 04:35:07 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-zipping/</guid>
+      <description>Zipping is a medium-difficulty Linux box hosting a PHP web application with a vulnerable file upload function. This function is susceptible to a file read exploit involving zip archives. By exploiting this flaw, I was able to obtain the application&amp;rsquo;s source code, revealing a SQL injection vulnerability. I leveraged this vulnerability to write a webshell on the system. Additionally, I discovered that the user &lt;code&gt;rektsu&lt;/code&gt; has sudo privileges over a binary, and misconfigurations in shared library objects can be exploited to gain root privileges.</description>
+    </item>
+    <item>
+      <title>HTB Download</title>
+      <link>//localhost:1313/blog/htb-download/</link>
+      <pubDate>Mon, 27 Nov 2023 15:13:42 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-download/</guid>
+      <description>Download is a hard linux box on HTB which hosts an Express application with a file read vulnerability that allowed me to retrieve it&amp;rsquo;s source code. Analyzing the code unveiled issues like broken object-level authentication and a JSON injection vulnerability. Leveraging these weaknesses, I successfully brute forced a user&amp;rsquo;s password, which was reused for SSH login. Next, I found database credentials in a URI of a background process. The database granted me &lt;code&gt;pg_write_server_files&lt;/code&gt; privileges, enabling me to write files on the system as the user postgres. Exploiting a cron job that interactively logs in as postgres, I utilized the write privileges to execute commands in the context of postgres. Further enumeration revealed multiple root TTY sessions, providing an opportunity to hijack them and execute commands as the root user.</description>
+    </item>
+    <item>
+      <title>HTB Pilgrimage</title>
+      <link>//localhost:1313/blog/htb-pilgrimage/</link>
+      <pubDate>Sun, 26 Nov 2023 20:30:36 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-pilgrimage/</guid>
+      <description>Pilgrimage is an easy Linux box, featuring a website for image shrinking and a Git repository housing the website&amp;rsquo;s source code. Upon reviewing the source code, I found a vulnerable version of ImageMagick being used, susceptible to file retrieval. Leveraging this, I retrieved the website&amp;rsquo;s database, uncovering user credentials that were subsequently reused for SSH access. Next, a bash script executed by the root user used a vulnerable version of binwalk. I exploited the binwalk vulnerability to get root privileges.</description>
+    </item>
+    <item>
+      <title>HTB Jupiter</title>
+      <link>//localhost:1313/blog/htb-jupiter/</link>
+      <pubDate>Sun, 22 Oct 2023 01:22:49 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-jupiter/</guid>
+      <description>Jupiter is a medium HTB box where I began by exploiting a supposed feature in Grafana to execute commands and gain an initial foothold. After establishing a foothold, I took advantage of configuration issues within a script executed by the Shadow Simulator via a cron job. Then, I discovered Jupyter server tokens in log files and leveraged them to execute commands within a Jupyter notebook. Finally, I exploited a customized version of arftracksat, a satellite tracking system, with the ability to run as the root user, elevating my privileges on the system.</description>
+    </item>
+    <item>
+      <title>HTB Snoopy</title>
+      <link>//localhost:1313/blog/htb-snoopy/</link>
+      <pubDate>Sat, 23 Sep 2023 14:12:27 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-snoopy/</guid>
+      <description>Snoopy is a Hard Linux box where I start by exploiting a file read vulnerability on the primary site, which allowed me to access BIND DNS config files and the rndc key. With this access, I could update DNS records for the mail server. With control over the mail server, I reset a user&amp;rsquo;s password to access a Mattermost site. During server provisioning, I set up a honeypot to capture SSH credentials. Once inside the server, I exploited a Git apply command vulnerability, enabling me to write to files outside the working copy. Finally, I leveraged an XXE vulnerability in ClamAV&amp;rsquo;s DMG parser to read root&amp;rsquo;s SSH keys.</description>
+    </item>
+    <item>
+      <title>HTB OnlyForYou</title>
+      <link>//localhost:1313/blog/20230825-htb-onlyforyou/</link>
+      <pubDate>Sun, 27 Aug 2023 23:01:23 +0530</pubDate>
+      <guid>//localhost:1313/blog/20230825-htb-onlyforyou/</guid>
+      <description>OnlyForYou is a Medium Linux box that requires source code analysis. The vhost has a file read vulnerability caused by the &lt;code&gt;os.path.join()&lt;/code&gt; function, enabling access to the source code of another virtual host. This, in turn, exposes a command injection vulnerability by bypassing the regex. Additionally, an internal site is susceptible to cipher injection, which allows exfiltrating user hashes. Root escalation involves exploiting pip download using a malicious Python package</description>
+    </item>
+  </channel>
+</rss>

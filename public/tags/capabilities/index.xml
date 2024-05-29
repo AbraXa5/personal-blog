@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Capabilities on Abraxas</title>
+    <link>//localhost:1313/tags/capabilities/</link>
+    <description>Recent content in Capabilities on Abraxas</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 17 Oct 2023 11:12:07 +0530</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/capabilities/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTB Intentions</title>
+      <link>//localhost:1313/blog/htb-intentions/</link>
+      <pubDate>Tue, 17 Oct 2023 11:12:07 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-intentions/</guid>
+      <description>Intentions is a Hard linux box that involving a second-order SQL injection vulnerability which enables the extraction of admin password hashes. Leveraging a different API endpoint, these hashes can be used to access the admin page. Within the admin page, there&amp;rsquo;s a feature to modify images, which relies on Imagick. This opens up an opportunity to exploit arbitrary object instantiation, ultimately allowing to write a PHP webshell and establishing a foothold. After gaining access to the system, credentials are found in an old Git commit in the website&amp;rsquo;s repository. These credentials are reused for SSH access, allowing access to a user capable of running a copyright_scanner application, which has the CAP_DAC_READ_SEARCH capability. This capability can be exploited to read files as the root user.</description>
+    </item>
+  </channel>
+</rss>

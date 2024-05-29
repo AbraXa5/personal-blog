@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Gopherus on Abraxas</title>
+    <link>//localhost:1313/tags/gopherus/</link>
+    <description>Recent content in Gopherus on Abraxas</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 29 Oct 2023 00:50:07 +0530</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/gopherus/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Htb Gofer</title>
+      <link>//localhost:1313/blog/htb-gofer/</link>
+      <pubDate>Sun, 29 Oct 2023 00:50:07 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-gofer/</guid>
+      <description>Gofer is a hard linux box, I discovered a HTTP proxy vulnerable to Server-Side Request Forgery. Utilizing this SSRF vulnerability, I sent a phishing email through the internal SMTP server via the gopher protocol, embedding a malicious macro that activates upon document opening. Next, I obtained user credentials from a background process linked to the proxy. Finally, I found a vulnerability in the &amp;rsquo;notes&amp;rsquo; binary, exploiting a use-after-free vulnerability associated with a dangling pointer.</description>
+    </item>
+  </channel>
+</rss>

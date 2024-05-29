@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Sqlite on Abraxas</title>
+    <link>//localhost:1313/tags/sqlite/</link>
+    <description>Recent content in Sqlite on Abraxas</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 08 Oct 2023 10:02:38 +0530</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/sqlite/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTB PC</title>
+      <link>//localhost:1313/blog/htb-pc/</link>
+      <pubDate>Sun, 08 Oct 2023 10:02:38 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-pc/</guid>
+      <description>PC is an easy Linux box with only one open port, aside from SSH, which hosts a gRPC application.</description>
+    </item>
+  </channel>
+</rss>

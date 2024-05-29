@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pager on Abraxas</title>
+    <link>//localhost:1313/tags/pager/</link>
+    <description>Recent content in Pager on Abraxas</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 10 Jan 2024 13:59:44 +0530</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/pager/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTB Sau</title>
+      <link>//localhost:1313/blog/htb-sau/</link>
+      <pubDate>Wed, 10 Jan 2024 13:59:44 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-sau/</guid>
+      <description>Sau is an easy linux box that hosts an website on a non standard port. Exploiting an SSRF vulnerability on the site allowed for the exploitation of a command injection flaw within an internal Mailtrail application, leading to a shell as the user &lt;code&gt;puma&lt;/code&gt;. Next, user puma has sudo privileges for &lt;code&gt;systemctl&lt;/code&gt;, and the &lt;code&gt;less&lt;/code&gt; pager is exploited to escalate privileges.</description>
+    </item>
+  </channel>
+</rss>

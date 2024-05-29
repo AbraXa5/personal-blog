@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Htb-Medium on Abraxas</title>
+    <link>//localhost:1313/tags/htb-medium/</link>
+    <description>Recent content in Htb-Medium on Abraxas</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 14 Jan 2024 04:35:07 +0530</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/htb-medium/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTB Zipping</title>
+      <link>//localhost:1313/blog/htb-zipping/</link>
+      <pubDate>Sun, 14 Jan 2024 04:35:07 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-zipping/</guid>
+      <description>Zipping is a medium-difficulty Linux box hosting a PHP web application with a vulnerable file upload function. This function is susceptible to a file read exploit involving zip archives. By exploiting this flaw, I was able to obtain the application&amp;rsquo;s source code, revealing a SQL injection vulnerability. I leveraged this vulnerability to write a webshell on the system. Additionally, I discovered that the user &lt;code&gt;rektsu&lt;/code&gt; has sudo privileges over a binary, and misconfigurations in shared library objects can be exploited to gain root privileges.</description>
+    </item>
+    <item>
+      <title>HTB Authority</title>
+      <link>//localhost:1313/blog/htb-authority/</link>
+      <pubDate>Sun, 10 Dec 2023 03:33:35 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-authority/</guid>
+      <description>Authority is a medium Windows AD box. I discovered Ansible playbooks in a publicly accessible share, containing encrypted variables that, once cracked, provided credentials for the PWM configuration manager. With PWM in config mode, I could make changes without authentication, allowing the capture of clear text LDAP credentials for subsequent WinRM authentication. I also discovered ADCS and a vulnerable certificate template (ESC1). Although I successfully exploited the vulnerability, Kerberos limitations prevented authentication with the generated certificate. To bypass this I used pass-the-cert attack to gain access as Administrator.</description>
+    </item>
+    <item>
+      <title>HTB Sandworm</title>
+      <link>//localhost:1313/blog/htb-sandworm/</link>
+      <pubDate>Mon, 27 Nov 2023 01:34:17 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-sandworm/</guid>
+      <description>Sandworm is a medium linux box featuring a website with functionality for PGP operations, one of which is vulnerable to SSTI and leads to a restricted shell. Within the firejail environment, I discovered user credentials allowing me to pivot to a SSH shell. Next, I hijacked a cargo crate for command execution to get an unrestricted shell as the previous user. Finally, I exploit a vulnerable version of firejail to root privileges.</description>
+    </item>
+    <item>
+      <title>HTB Jupiter</title>
+      <link>//localhost:1313/blog/htb-jupiter/</link>
+      <pubDate>Sun, 22 Oct 2023 01:22:49 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-jupiter/</guid>
+      <description>Jupiter is a medium HTB box where I began by exploiting a supposed feature in Grafana to execute commands and gain an initial foothold. After establishing a foothold, I took advantage of configuration issues within a script executed by the Shadow Simulator via a cron job. Then, I discovered Jupyter server tokens in log files and leveraged them to execute commands within a Jupyter notebook. Finally, I exploited a customized version of arftracksat, a satellite tracking system, with the ability to run as the root user, elevating my privileges on the system.</description>
+    </item>
+  </channel>
+</rss>

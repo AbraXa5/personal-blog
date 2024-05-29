@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ansible-Vault on Abraxas</title>
+    <link>//localhost:1313/tags/ansible-vault/</link>
+    <description>Recent content in Ansible-Vault on Abraxas</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 10 Dec 2023 03:33:35 +0530</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/ansible-vault/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTB Authority</title>
+      <link>//localhost:1313/blog/htb-authority/</link>
+      <pubDate>Sun, 10 Dec 2023 03:33:35 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-authority/</guid>
+      <description>Authority is a medium Windows AD box. I discovered Ansible playbooks in a publicly accessible share, containing encrypted variables that, once cracked, provided credentials for the PWM configuration manager. With PWM in config mode, I could make changes without authentication, allowing the capture of clear text LDAP credentials for subsequent WinRM authentication. I also discovered ADCS and a vulnerable certificate template (ESC1). Although I successfully exploited the vulnerability, Kerberos limitations prevented authentication with the generated certificate. To bypass this I used pass-the-cert attack to gain access as Administrator.</description>
+    </item>
+  </channel>
+</rss>

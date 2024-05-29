@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>PGP on Abraxas</title>
+    <link>//localhost:1313/tags/pgp/</link>
+    <description>Recent content in PGP on Abraxas</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 27 Nov 2023 01:34:17 +0530</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/pgp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTB Sandworm</title>
+      <link>//localhost:1313/blog/htb-sandworm/</link>
+      <pubDate>Mon, 27 Nov 2023 01:34:17 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-sandworm/</guid>
+      <description>Sandworm is a medium linux box featuring a website with functionality for PGP operations, one of which is vulnerable to SSTI and leads to a restricted shell. Within the firejail environment, I discovered user credentials allowing me to pivot to a SSH shell. Next, I hijacked a cargo crate for command execution to get an unrestricted shell as the previous user. Finally, I exploit a vulnerable version of firejail to root privileges.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Json-Injection on Abraxas</title>
+    <link>//localhost:1313/tags/json-injection/</link>
+    <description>Recent content in Json-Injection on Abraxas</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 27 Nov 2023 15:13:42 +0530</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/json-injection/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTB Download</title>
+      <link>//localhost:1313/blog/htb-download/</link>
+      <pubDate>Mon, 27 Nov 2023 15:13:42 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-download/</guid>
+      <description>Download is a hard linux box on HTB which hosts an Express application with a file read vulnerability that allowed me to retrieve it&amp;rsquo;s source code. Analyzing the code unveiled issues like broken object-level authentication and a JSON injection vulnerability. Leveraging these weaknesses, I successfully brute forced a user&amp;rsquo;s password, which was reused for SSH login. Next, I found database credentials in a URI of a background process. The database granted me &lt;code&gt;pg_write_server_files&lt;/code&gt; privileges, enabling me to write files on the system as the user postgres. Exploiting a cron job that interactively logs in as postgres, I utilized the write privileges to execute commands in the context of postgres. Further enumeration revealed multiple root TTY sessions, providing an opportunity to hijack them and execute commands as the root user.</description>
+    </item>
+  </channel>
+</rss>

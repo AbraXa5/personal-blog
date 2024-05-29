@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on Abraxas</title>
+    <link>//localhost:1313/categories/linux/</link>
+    <description>Recent content in Linux on Abraxas</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 14 Jan 2024 04:35:07 +0530</lastBuildDate>
+    <atom:link href="//localhost:1313/categories/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTB Zipping</title>
+      <link>//localhost:1313/blog/htb-zipping/</link>
+      <pubDate>Sun, 14 Jan 2024 04:35:07 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-zipping/</guid>
+      <description>Zipping is a medium-difficulty Linux box hosting a PHP web application with a vulnerable file upload function. This function is susceptible to a file read exploit involving zip archives. By exploiting this flaw, I was able to obtain the application&amp;rsquo;s source code, revealing a SQL injection vulnerability. I leveraged this vulnerability to write a webshell on the system. Additionally, I discovered that the user &lt;code&gt;rektsu&lt;/code&gt; has sudo privileges over a binary, and misconfigurations in shared library objects can be exploited to gain root privileges.</description>
+    </item>
+    <item>
+      <title>HTB Sau</title>
+      <link>//localhost:1313/blog/htb-sau/</link>
+      <pubDate>Wed, 10 Jan 2024 13:59:44 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-sau/</guid>
+      <description>Sau is an easy linux box that hosts an website on a non standard port. Exploiting an SSRF vulnerability on the site allowed for the exploitation of a command injection flaw within an internal Mailtrail application, leading to a shell as the user &lt;code&gt;puma&lt;/code&gt;. Next, user puma has sudo privileges for &lt;code&gt;systemctl&lt;/code&gt;, and the &lt;code&gt;less&lt;/code&gt; pager is exploited to escalate privileges.</description>
+    </item>
+    <item>
+      <title>HTB Download</title>
+      <link>//localhost:1313/blog/htb-download/</link>
+      <pubDate>Mon, 27 Nov 2023 15:13:42 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-download/</guid>
+      <description>Download is a hard linux box on HTB which hosts an Express application with a file read vulnerability that allowed me to retrieve it&amp;rsquo;s source code. Analyzing the code unveiled issues like broken object-level authentication and a JSON injection vulnerability. Leveraging these weaknesses, I successfully brute forced a user&amp;rsquo;s password, which was reused for SSH login. Next, I found database credentials in a URI of a background process. The database granted me &lt;code&gt;pg_write_server_files&lt;/code&gt; privileges, enabling me to write files on the system as the user postgres. Exploiting a cron job that interactively logs in as postgres, I utilized the write privileges to execute commands in the context of postgres. Further enumeration revealed multiple root TTY sessions, providing an opportunity to hijack them and execute commands as the root user.</description>
+    </item>
+    <item>
+      <title>HTB Sandworm</title>
+      <link>//localhost:1313/blog/htb-sandworm/</link>
+      <pubDate>Mon, 27 Nov 2023 01:34:17 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-sandworm/</guid>
+      <description>Sandworm is a medium linux box featuring a website with functionality for PGP operations, one of which is vulnerable to SSTI and leads to a restricted shell. Within the firejail environment, I discovered user credentials allowing me to pivot to a SSH shell. Next, I hijacked a cargo crate for command execution to get an unrestricted shell as the previous user. Finally, I exploit a vulnerable version of firejail to root privileges.</description>
+    </item>
+    <item>
+      <title>HTB Pilgrimage</title>
+      <link>//localhost:1313/blog/htb-pilgrimage/</link>
+      <pubDate>Sun, 26 Nov 2023 20:30:36 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-pilgrimage/</guid>
+      <description>Pilgrimage is an easy Linux box, featuring a website for image shrinking and a Git repository housing the website&amp;rsquo;s source code. Upon reviewing the source code, I found a vulnerable version of ImageMagick being used, susceptible to file retrieval. Leveraging this, I retrieved the website&amp;rsquo;s database, uncovering user credentials that were subsequently reused for SSH access. Next, a bash script executed by the root user used a vulnerable version of binwalk. I exploited the binwalk vulnerability to get root privileges.</description>
+    </item>
+    <item>
+      <title>HTB Topology</title>
+      <link>//localhost:1313/blog/htb-topology/</link>
+      <pubDate>Sat, 04 Nov 2023 17:58:58 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-topology/</guid>
+      <description>Topology is an easy linux box featuring a web server with a vulnerable virtual host susceptible to LaTeX injection. This LaTeX injection allowed me to access and read files on the server, leading to the discovery of SSH login credentials. Lastly, I exploited a misconfiguration along with the functionality of gnuplot to execute system commands as the root user.</description>
+    </item>
+    <item>
+      <title>Htb Gofer</title>
+      <link>//localhost:1313/blog/htb-gofer/</link>
+      <pubDate>Sun, 29 Oct 2023 00:50:07 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-gofer/</guid>
+      <description>Gofer is a hard linux box, I discovered a HTTP proxy vulnerable to Server-Side Request Forgery. Utilizing this SSRF vulnerability, I sent a phishing email through the internal SMTP server via the gopher protocol, embedding a malicious macro that activates upon document opening. Next, I obtained user credentials from a background process linked to the proxy. Finally, I found a vulnerability in the &amp;rsquo;notes&amp;rsquo; binary, exploiting a use-after-free vulnerability associated with a dangling pointer.</description>
+    </item>
+    <item>
+      <title>HTB Jupiter</title>
+      <link>//localhost:1313/blog/htb-jupiter/</link>
+      <pubDate>Sun, 22 Oct 2023 01:22:49 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-jupiter/</guid>
+      <description>Jupiter is a medium HTB box where I began by exploiting a supposed feature in Grafana to execute commands and gain an initial foothold. After establishing a foothold, I took advantage of configuration issues within a script executed by the Shadow Simulator via a cron job. Then, I discovered Jupyter server tokens in log files and leveraged them to execute commands within a Jupyter notebook. Finally, I exploited a customized version of arftracksat, a satellite tracking system, with the ability to run as the root user, elevating my privileges on the system.</description>
+    </item>
+    <item>
+      <title>HTB Intentions</title>
+      <link>//localhost:1313/blog/htb-intentions/</link>
+      <pubDate>Tue, 17 Oct 2023 11:12:07 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-intentions/</guid>
+      <description>Intentions is a Hard linux box that involving a second-order SQL injection vulnerability which enables the extraction of admin password hashes. Leveraging a different API endpoint, these hashes can be used to access the admin page. Within the admin page, there&amp;rsquo;s a feature to modify images, which relies on Imagick. This opens up an opportunity to exploit arbitrary object instantiation, ultimately allowing to write a PHP webshell and establishing a foothold. After gaining access to the system, credentials are found in an old Git commit in the website&amp;rsquo;s repository. These credentials are reused for SSH access, allowing access to a user capable of running a copyright_scanner application, which has the CAP_DAC_READ_SEARCH capability. This capability can be exploited to read files as the root user.</description>
+    </item>
+    <item>
+      <title>HTB PC</title>
+      <link>//localhost:1313/blog/htb-pc/</link>
+      <pubDate>Sun, 08 Oct 2023 10:02:38 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-pc/</guid>
+      <description>PC is an easy Linux box with only one open port, aside from SSH, which hosts a gRPC application.</description>
+    </item>
+    <item>
+      <title>HTB Snoopy</title>
+      <link>//localhost:1313/blog/htb-snoopy/</link>
+      <pubDate>Sat, 23 Sep 2023 14:12:27 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-snoopy/</guid>
+      <description>Snoopy is a Hard Linux box where I start by exploiting a file read vulnerability on the primary site, which allowed me to access BIND DNS config files and the rndc key. With this access, I could update DNS records for the mail server. With control over the mail server, I reset a user&amp;rsquo;s password to access a Mattermost site. During server provisioning, I set up a honeypot to capture SSH credentials. Once inside the server, I exploited a Git apply command vulnerability, enabling me to write to files outside the working copy. Finally, I leveraged an XXE vulnerability in ClamAV&amp;rsquo;s DMG parser to read root&amp;rsquo;s SSH keys.</description>
+    </item>
+    <item>
+      <title>HTB MonitorsTwo</title>
+      <link>//localhost:1313/blog/htb-monitorstwo/</link>
+      <pubDate>Sat, 02 Sep 2023 15:40:09 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-monitorstwo/</guid>
+      <description>MonitorsTwo is an Easy Linux box that involves exploiting an outdated version of Cacti. This exploit allows to gain a shell within a Docker container. The container also hosts a MariaDB database that stores user credentials, which are reused for SSH access. Finally, to escalate privileges to root a vulnerability in the Docker engine is exploited.</description>
+    </item>
+    <item>
+      <title>HTB OnlyForYou</title>
+      <link>//localhost:1313/blog/20230825-htb-onlyforyou/</link>
+      <pubDate>Sun, 27 Aug 2023 23:01:23 +0530</pubDate>
+      <guid>//localhost:1313/blog/20230825-htb-onlyforyou/</guid>
+      <description>OnlyForYou is a Medium Linux box that requires source code analysis. The vhost has a file read vulnerability caused by the &lt;code&gt;os.path.join()&lt;/code&gt; function, enabling access to the source code of another virtual host. This, in turn, exposes a command injection vulnerability by bypassing the regex. Additionally, an internal site is susceptible to cipher injection, which allows exfiltrating user hashes. Root escalation involves exploiting pip download using a malicious Python package</description>
+    </item>
+    <item>
+      <title>HTB Mailroom</title>
+      <link>//localhost:1313/blog/20230821-htb-mailroom/</link>
+      <pubDate>Mon, 21 Aug 2023 17:50:38 +0530</pubDate>
+      <guid>//localhost:1313/blog/20230821-htb-mailroom/</guid>
+      <description>Mailroom is a hard linux box vulnerable to multiple vulnerabilities including XXS, NoSQLi and command injection. It also involves stracing a process to dump passwords.</description>
+    </item>
+  </channel>
+</rss>

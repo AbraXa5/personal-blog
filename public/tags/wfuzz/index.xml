@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Wfuzz on Abraxas</title>
+    <link>//localhost:1313/tags/wfuzz/</link>
+    <description>Recent content in Wfuzz on Abraxas</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 04 Nov 2023 17:58:58 +0530</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/wfuzz/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTB Topology</title>
+      <link>//localhost:1313/blog/htb-topology/</link>
+      <pubDate>Sat, 04 Nov 2023 17:58:58 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-topology/</guid>
+      <description>Topology is an easy linux box featuring a web server with a vulnerable virtual host susceptible to LaTeX injection. This LaTeX injection allowed me to access and read files on the server, leading to the discovery of SSH login credentials. Lastly, I exploited a misconfiguration along with the functionality of gnuplot to execute system commands as the root user.</description>
+    </item>
+    <item>
+      <title>Htb Gofer</title>
+      <link>//localhost:1313/blog/htb-gofer/</link>
+      <pubDate>Sun, 29 Oct 2023 00:50:07 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-gofer/</guid>
+      <description>Gofer is a hard linux box, I discovered a HTTP proxy vulnerable to Server-Side Request Forgery. Utilizing this SSRF vulnerability, I sent a phishing email through the internal SMTP server via the gopher protocol, embedding a malicious macro that activates upon document opening. Next, I obtained user credentials from a background process linked to the proxy. Finally, I found a vulnerability in the &amp;rsquo;notes&amp;rsquo; binary, exploiting a use-after-free vulnerability associated with a dangling pointer.</description>
+    </item>
+    <item>
+      <title>HTB Jupiter</title>
+      <link>//localhost:1313/blog/htb-jupiter/</link>
+      <pubDate>Sun, 22 Oct 2023 01:22:49 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-jupiter/</guid>
+      <description>Jupiter is a medium HTB box where I began by exploiting a supposed feature in Grafana to execute commands and gain an initial foothold. After establishing a foothold, I took advantage of configuration issues within a script executed by the Shadow Simulator via a cron job. Then, I discovered Jupyter server tokens in log files and leveraged them to execute commands within a Jupyter notebook. Finally, I exploited a customized version of arftracksat, a satellite tracking system, with the ability to run as the root user, elevating my privileges on the system.</description>
+    </item>
+    <item>
+      <title>HTB Snoopy</title>
+      <link>//localhost:1313/blog/htb-snoopy/</link>
+      <pubDate>Sat, 23 Sep 2023 14:12:27 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-snoopy/</guid>
+      <description>Snoopy is a Hard Linux box where I start by exploiting a file read vulnerability on the primary site, which allowed me to access BIND DNS config files and the rndc key. With this access, I could update DNS records for the mail server. With control over the mail server, I reset a user&amp;rsquo;s password to access a Mattermost site. During server provisioning, I set up a honeypot to capture SSH credentials. Once inside the server, I exploited a Git apply command vulnerability, enabling me to write to files outside the working copy. Finally, I leveraged an XXE vulnerability in ClamAV&amp;rsquo;s DMG parser to read root&amp;rsquo;s SSH keys.</description>
+    </item>
+    <item>
+      <title>HTB OnlyForYou</title>
+      <link>//localhost:1313/blog/20230825-htb-onlyforyou/</link>
+      <pubDate>Sun, 27 Aug 2023 23:01:23 +0530</pubDate>
+      <guid>//localhost:1313/blog/20230825-htb-onlyforyou/</guid>
+      <description>OnlyForYou is a Medium Linux box that requires source code analysis. The vhost has a file read vulnerability caused by the &lt;code&gt;os.path.join()&lt;/code&gt; function, enabling access to the source code of another virtual host. This, in turn, exposes a command injection vulnerability by bypassing the regex. Additionally, an internal site is susceptible to cipher injection, which allows exfiltrating user hashes. Root escalation involves exploiting pip download using a malicious Python package</description>
+    </item>
+    <item>
+      <title>HTB Mailroom</title>
+      <link>//localhost:1313/blog/20230821-htb-mailroom/</link>
+      <pubDate>Mon, 21 Aug 2023 17:50:38 +0530</pubDate>
+      <guid>//localhost:1313/blog/20230821-htb-mailroom/</guid>
+      <description>Mailroom is a hard linux box vulnerable to multiple vulnerabilities including XXS, NoSQLi and command injection. It also involves stracing a process to dump passwords.</description>
+    </item>
+  </channel>
+</rss>

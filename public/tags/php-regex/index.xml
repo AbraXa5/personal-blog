@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Php-Regex on Abraxas</title>
+    <link>//localhost:1313/tags/php-regex/</link>
+    <description>Recent content in Php-Regex on Abraxas</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 14 Jan 2024 04:35:07 +0530</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/php-regex/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTB Zipping</title>
+      <link>//localhost:1313/blog/htb-zipping/</link>
+      <pubDate>Sun, 14 Jan 2024 04:35:07 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-zipping/</guid>
+      <description>Zipping is a medium-difficulty Linux box hosting a PHP web application with a vulnerable file upload function. This function is susceptible to a file read exploit involving zip archives. By exploiting this flaw, I was able to obtain the application&amp;rsquo;s source code, revealing a SQL injection vulnerability. I leveraged this vulnerability to write a webshell on the system. Additionally, I discovered that the user &lt;code&gt;rektsu&lt;/code&gt; has sudo privileges over a binary, and misconfigurations in shared library objects can be exploited to gain root privileges.</description>
+    </item>
+  </channel>
+</rss>

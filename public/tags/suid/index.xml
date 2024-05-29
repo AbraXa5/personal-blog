@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SUID on Abraxas</title>
+    <link>//localhost:1313/tags/suid/</link>
+    <description>Recent content in SUID on Abraxas</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 02 Sep 2023 15:40:09 +0530</lastBuildDate>
+    <atom:link href="//localhost:1313/tags/suid/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTB MonitorsTwo</title>
+      <link>//localhost:1313/blog/htb-monitorstwo/</link>
+      <pubDate>Sat, 02 Sep 2023 15:40:09 +0530</pubDate>
+      <guid>//localhost:1313/blog/htb-monitorstwo/</guid>
+      <description>MonitorsTwo is an Easy Linux box that involves exploiting an outdated version of Cacti. This exploit allows to gain a shell within a Docker container. The container also hosts a MariaDB database that stores user credentials, which are reused for SSH access. Finally, to escalate privileges to root a vulnerability in the Docker engine is exploited.</description>
+    </item>
+  </channel>
+</rss>
