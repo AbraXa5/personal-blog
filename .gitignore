@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/hugo
-# Edit at https://www.toptal.com/developers/gitignore?templates=hugo
+# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,hugo
+# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,hugo
 
 ### Hugo ###
 # Generated files by hugo
@@ -16,4 +16,23 @@ hugo.linux
 # Temporary lock file while building
 /.hugo_build.lock
 
-# End of https://www.toptal.com/developers/gitignore/api/hugo
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
+
+# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,hugo
