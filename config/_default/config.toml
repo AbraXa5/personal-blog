@@ -6,8 +6,11 @@ baseURL                = "/"
 defaultContentLanguage = "en"
 
 enableRobotsTXT = true
-paginate        = 10
-summaryLength   = 0
+# paginate        = 10
+summaryLength = 0
 
 [outputs]
     home = ["HTML", "RSS", "JSON"]
+
+[pagination]
+    pagerSize = 10

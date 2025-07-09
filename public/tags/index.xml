@@ -11,973 +11,973 @@
     <item>
       <title>CVE</title>
       <link>//localhost:1313/tags/cve/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 04 Feb 2024 21:14:31 +0530</pubDate>
       <guid>//localhost:1313/tags/cve/</guid>
       <description></description>
     </item>
     <item>
       <title>CVE-2024-23897</title>
       <link>//localhost:1313/tags/cve-2024-23897/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 04 Feb 2024 21:14:31 +0530</pubDate>
       <guid>//localhost:1313/tags/cve-2024-23897/</guid>
       <description></description>
     </item>
     <item>
       <title>File-Read</title>
       <link>//localhost:1313/tags/file-read/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 04 Feb 2024 21:14:31 +0530</pubDate>
       <guid>//localhost:1313/tags/file-read/</guid>
       <description></description>
     </item>
     <item>
       <title>Jenkins</title>
       <link>//localhost:1313/tags/jenkins/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 04 Feb 2024 21:14:31 +0530</pubDate>
       <guid>//localhost:1313/tags/jenkins/</guid>
       <description></description>
     </item>
     <item>
       <title>Python</title>
       <link>//localhost:1313/tags/python/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 04 Feb 2024 21:14:31 +0530</pubDate>
       <guid>//localhost:1313/tags/python/</guid>
       <description></description>
     </item>
     <item>
       <title>Shodan</title>
       <link>//localhost:1313/tags/shodan/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 04 Feb 2024 21:14:31 +0530</pubDate>
       <guid>//localhost:1313/tags/shodan/</guid>
       <description></description>
     </item>
     <item>
       <title>File-Inclusion</title>
       <link>//localhost:1313/tags/file-inclusion/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 14 Jan 2024 04:35:07 +0530</pubDate>
       <guid>//localhost:1313/tags/file-inclusion/</guid>
       <description></description>
     </item>
     <item>
       <title>Gdb</title>
       <link>//localhost:1313/tags/gdb/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 14 Jan 2024 04:35:07 +0530</pubDate>
       <guid>//localhost:1313/tags/gdb/</guid>
       <description></description>
     </item>
     <item>
       <title>Htb-Medium</title>
       <link>//localhost:1313/tags/htb-medium/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 14 Jan 2024 04:35:07 +0530</pubDate>
       <guid>//localhost:1313/tags/htb-medium/</guid>
       <description></description>
     </item>
     <item>
       <title>Lfi</title>
       <link>//localhost:1313/tags/lfi/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 14 Jan 2024 04:35:07 +0530</pubDate>
       <guid>//localhost:1313/tags/lfi/</guid>
       <description></description>
     </item>
     <item>
       <title>Ltrace</title>
       <link>//localhost:1313/tags/ltrace/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 14 Jan 2024 04:35:07 +0530</pubDate>
       <guid>//localhost:1313/tags/ltrace/</guid>
       <description></description>
     </item>
     <item>
       <title>Msfvenom</title>
       <link>//localhost:1313/tags/msfvenom/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 14 Jan 2024 04:35:07 +0530</pubDate>
       <guid>//localhost:1313/tags/msfvenom/</guid>
       <description></description>
     </item>
     <item>
       <title>Null-Byte</title>
       <link>//localhost:1313/tags/null-byte/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 14 Jan 2024 04:35:07 +0530</pubDate>
       <guid>//localhost:1313/tags/null-byte/</guid>
       <description></description>
     </item>
     <item>
       <title>Pdo-Prepare</title>
       <link>//localhost:1313/tags/pdo-prepare/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 14 Jan 2024 04:35:07 +0530</pubDate>
       <guid>//localhost:1313/tags/pdo-prepare/</guid>
       <description></description>
     </item>
     <item>
       <title>Php</title>
       <link>//localhost:1313/tags/php/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 14 Jan 2024 04:35:07 +0530</pubDate>
       <guid>//localhost:1313/tags/php/</guid>
       <description></description>
     </item>
     <item>
       <title>Php-Regex</title>
       <link>//localhost:1313/tags/php-regex/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 14 Jan 2024 04:35:07 +0530</pubDate>
       <guid>//localhost:1313/tags/php-regex/</guid>
       <description></description>
     </item>
     <item>
       <title>Preg_match</title>
       <link>//localhost:1313/tags/preg_match/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 14 Jan 2024 04:35:07 +0530</pubDate>
       <guid>//localhost:1313/tags/preg_match/</guid>
       <description></description>
     </item>
     <item>
       <title>Shared-Object</title>
       <link>//localhost:1313/tags/shared-object/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 14 Jan 2024 04:35:07 +0530</pubDate>
       <guid>//localhost:1313/tags/shared-object/</guid>
       <description></description>
     </item>
     <item>
       <title>Sql-Injection</title>
       <link>//localhost:1313/tags/sql-injection/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 14 Jan 2024 04:35:07 +0530</pubDate>
       <guid>//localhost:1313/tags/sql-injection/</guid>
       <description></description>
     </item>
     <item>
       <title>Sqli-File-Write</title>
       <link>//localhost:1313/tags/sqli-file-write/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 14 Jan 2024 04:35:07 +0530</pubDate>
       <guid>//localhost:1313/tags/sqli-file-write/</guid>
       <description></description>
     </item>
     <item>
       <title>Strings</title>
       <link>//localhost:1313/tags/strings/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 14 Jan 2024 04:35:07 +0530</pubDate>
       <guid>//localhost:1313/tags/strings/</guid>
       <description></description>
     </item>
     <item>
       <title>Zip</title>
       <link>//localhost:1313/tags/zip/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 14 Jan 2024 04:35:07 +0530</pubDate>
       <guid>//localhost:1313/tags/zip/</guid>
       <description></description>
     </item>
     <item>
       <title>Zip-Symlink</title>
       <link>//localhost:1313/tags/zip-symlink/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 14 Jan 2024 04:35:07 +0530</pubDate>
       <guid>//localhost:1313/tags/zip-symlink/</guid>
       <description></description>
     </item>
     <item>
       <title>Command-Injection</title>
       <link>//localhost:1313/tags/command-injection/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 10 Jan 2024 13:59:44 +0530</pubDate>
       <guid>//localhost:1313/tags/command-injection/</guid>
       <description></description>
     </item>
     <item>
       <title>Htb-Easy</title>
       <link>//localhost:1313/tags/htb-easy/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 10 Jan 2024 13:59:44 +0530</pubDate>
       <guid>//localhost:1313/tags/htb-easy/</guid>
       <description></description>
     </item>
     <item>
       <title>Less</title>
       <link>//localhost:1313/tags/less/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 10 Jan 2024 13:59:44 +0530</pubDate>
       <guid>//localhost:1313/tags/less/</guid>
       <description></description>
     </item>
     <item>
       <title>Mailtrail</title>
       <link>//localhost:1313/tags/mailtrail/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 10 Jan 2024 13:59:44 +0530</pubDate>
       <guid>//localhost:1313/tags/mailtrail/</guid>
       <description></description>
     </item>
     <item>
       <title>Pager</title>
       <link>//localhost:1313/tags/pager/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 10 Jan 2024 13:59:44 +0530</pubDate>
       <guid>//localhost:1313/tags/pager/</guid>
       <description></description>
     </item>
     <item>
       <title>Proxy</title>
       <link>//localhost:1313/tags/proxy/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 10 Jan 2024 13:59:44 +0530</pubDate>
       <guid>//localhost:1313/tags/proxy/</guid>
       <description></description>
     </item>
     <item>
       <title>Request-Baskets</title>
       <link>//localhost:1313/tags/request-baskets/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 10 Jan 2024 13:59:44 +0530</pubDate>
       <guid>//localhost:1313/tags/request-baskets/</guid>
       <description></description>
     </item>
     <item>
       <title>SSRF</title>
       <link>//localhost:1313/tags/ssrf/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 10 Jan 2024 13:59:44 +0530</pubDate>
       <guid>//localhost:1313/tags/ssrf/</guid>
       <description></description>
     </item>
     <item>
       <title>Systemctl</title>
       <link>//localhost:1313/tags/systemctl/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 10 Jan 2024 13:59:44 +0530</pubDate>
       <guid>//localhost:1313/tags/systemctl/</guid>
       <description></description>
     </item>
     <item>
       <title>2fa</title>
       <link>//localhost:1313/tags/2fa/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 17 Dec 2023 05:28:27 +0530</pubDate>
       <guid>//localhost:1313/tags/2fa/</guid>
       <description></description>
     </item>
     <item>
       <title>ADCS</title>
       <link>//localhost:1313/tags/adcs/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 17 Dec 2023 05:28:27 +0530</pubDate>
       <guid>//localhost:1313/tags/adcs/</guid>
       <description></description>
     </item>
     <item>
       <title>ADCSTemplate</title>
       <link>//localhost:1313/tags/adcstemplate/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 17 Dec 2023 05:28:27 +0530</pubDate>
       <guid>//localhost:1313/tags/adcstemplate/</guid>
       <description></description>
     </item>
     <item>
       <title>Av-Bypass</title>
       <link>//localhost:1313/tags/av-bypass/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 17 Dec 2023 05:28:27 +0530</pubDate>
       <guid>//localhost:1313/tags/av-bypass/</guid>
       <description></description>
     </item>
     <item>
       <title>C-Sharp</title>
       <link>//localhost:1313/tags/c-sharp/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 17 Dec 2023 05:28:27 +0530</pubDate>
       <guid>//localhost:1313/tags/c-sharp/</guid>
       <description></description>
     </item>
     <item>
       <title>Certipy</title>
       <link>//localhost:1313/tags/certipy/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 17 Dec 2023 05:28:27 +0530</pubDate>
       <guid>//localhost:1313/tags/certipy/</guid>
       <description></description>
     </item>
     <item>
       <title>Ci-Cd</title>
       <link>//localhost:1313/tags/ci-cd/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 17 Dec 2023 05:28:27 +0530</pubDate>
       <guid>//localhost:1313/tags/ci-cd/</guid>
       <description></description>
     </item>
     <item>
       <title>ESC1</title>
       <link>//localhost:1313/tags/esc1/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 17 Dec 2023 05:28:27 +0530</pubDate>
       <guid>//localhost:1313/tags/esc1/</guid>
       <description></description>
     </item>
     <item>
       <title>Git-Patch</title>
       <link>//localhost:1313/tags/git-patch/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 17 Dec 2023 05:28:27 +0530</pubDate>
       <guid>//localhost:1313/tags/git-patch/</guid>
       <description></description>
     </item>
     <item>
       <title>Htb-Insane</title>
       <link>//localhost:1313/tags/htb-insane/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 17 Dec 2023 05:28:27 +0530</pubDate>
       <guid>//localhost:1313/tags/htb-insane/</guid>
       <description></description>
     </item>
     <item>
       <title>Ilspy</title>
       <link>//localhost:1313/tags/ilspy/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 17 Dec 2023 05:28:27 +0530</pubDate>
       <guid>//localhost:1313/tags/ilspy/</guid>
       <description></description>
     </item>
     <item>
       <title>Keepass</title>
       <link>//localhost:1313/tags/keepass/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 17 Dec 2023 05:28:27 +0530</pubDate>
       <guid>//localhost:1313/tags/keepass/</guid>
       <description></description>
     </item>
     <item>
       <title>Nxc</title>
       <link>//localhost:1313/tags/nxc/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 17 Dec 2023 05:28:27 +0530</pubDate>
       <guid>//localhost:1313/tags/nxc/</guid>
       <description></description>
     </item>
     <item>
       <title>Personal-Builds</title>
       <link>//localhost:1313/tags/personal-builds/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 17 Dec 2023 05:28:27 +0530</pubDate>
       <guid>//localhost:1313/tags/personal-builds/</guid>
       <description></description>
     </item>
     <item>
       <title>PKI-Admins</title>
       <link>//localhost:1313/tags/pki-admins/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 17 Dec 2023 05:28:27 +0530</pubDate>
       <guid>//localhost:1313/tags/pki-admins/</guid>
       <description></description>
     </item>
     <item>
       <title>Pwsh-Creds-Decrypt</title>
       <link>//localhost:1313/tags/pwsh-creds-decrypt/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 17 Dec 2023 05:28:27 +0530</pubDate>
       <guid>//localhost:1313/tags/pwsh-creds-decrypt/</guid>
       <description></description>
     </item>
     <item>
       <title>RijndaelManaged</title>
       <link>//localhost:1313/tags/rijndaelmanaged/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 17 Dec 2023 05:28:27 +0530</pubDate>
       <guid>//localhost:1313/tags/rijndaelmanaged/</guid>
       <description></description>
     </item>
     <item>
       <title>SMB</title>
       <link>//localhost:1313/tags/smb/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 17 Dec 2023 05:28:27 +0530</pubDate>
       <guid>//localhost:1313/tags/smb/</guid>
       <description></description>
     </item>
     <item>
       <title>Teamcity</title>
       <link>//localhost:1313/tags/teamcity/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 17 Dec 2023 05:28:27 +0530</pubDate>
       <guid>//localhost:1313/tags/teamcity/</guid>
       <description></description>
     </item>
     <item>
       <title>AD</title>
       <link>//localhost:1313/tags/ad/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 10 Dec 2023 03:33:35 +0530</pubDate>
       <guid>//localhost:1313/tags/ad/</guid>
       <description></description>
     </item>
     <item>
       <title>Ansible-Vault</title>
       <link>//localhost:1313/tags/ansible-vault/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 10 Dec 2023 03:33:35 +0530</pubDate>
       <guid>//localhost:1313/tags/ansible-vault/</guid>
       <description></description>
     </item>
     <item>
       <title>Ldap</title>
       <link>//localhost:1313/tags/ldap/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 10 Dec 2023 03:33:35 +0530</pubDate>
       <guid>//localhost:1313/tags/ldap/</guid>
       <description></description>
     </item>
     <item>
       <title>PassTheCert</title>
       <link>//localhost:1313/tags/passthecert/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 10 Dec 2023 03:33:35 +0530</pubDate>
       <guid>//localhost:1313/tags/passthecert/</guid>
       <description></description>
     </item>
     <item>
       <title>PWM</title>
       <link>//localhost:1313/tags/pwm/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 10 Dec 2023 03:33:35 +0530</pubDate>
       <guid>//localhost:1313/tags/pwm/</guid>
       <description></description>
     </item>
     <item>
       <title>Bola</title>
       <link>//localhost:1313/tags/bola/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 27 Nov 2023 15:13:42 +0530</pubDate>
       <guid>//localhost:1313/tags/bola/</guid>
       <description></description>
     </item>
     <item>
       <title>Express</title>
       <link>//localhost:1313/tags/express/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 27 Nov 2023 15:13:42 +0530</pubDate>
       <guid>//localhost:1313/tags/express/</guid>
       <description></description>
     </item>
     <item>
       <title>Htb-Hard</title>
       <link>//localhost:1313/tags/htb-hard/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 27 Nov 2023 15:13:42 +0530</pubDate>
       <guid>//localhost:1313/tags/htb-hard/</guid>
       <description></description>
     </item>
     <item>
       <title>Json-Injection</title>
       <link>//localhost:1313/tags/json-injection/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 27 Nov 2023 15:13:42 +0530</pubDate>
       <guid>//localhost:1313/tags/json-injection/</guid>
       <description></description>
     </item>
     <item>
       <title>Password-Bruteforce</title>
       <link>//localhost:1313/tags/password-bruteforce/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 27 Nov 2023 15:13:42 +0530</pubDate>
       <guid>//localhost:1313/tags/password-bruteforce/</guid>
       <description></description>
     </item>
     <item>
       <title>Pg_write_server_files</title>
       <link>//localhost:1313/tags/pg_write_server_files/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 27 Nov 2023 15:13:42 +0530</pubDate>
       <guid>//localhost:1313/tags/pg_write_server_files/</guid>
       <description></description>
     </item>
     <item>
       <title>Postgres</title>
       <link>//localhost:1313/tags/postgres/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 27 Nov 2023 15:13:42 +0530</pubDate>
       <guid>//localhost:1313/tags/postgres/</guid>
       <description></description>
     </item>
     <item>
       <title>Prisma</title>
       <link>//localhost:1313/tags/prisma/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 27 Nov 2023 15:13:42 +0530</pubDate>
       <guid>//localhost:1313/tags/prisma/</guid>
       <description></description>
     </item>
     <item>
       <title>Root-Tty-Hijack</title>
       <link>//localhost:1313/tags/root-tty-hijack/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 27 Nov 2023 15:13:42 +0530</pubDate>
       <guid>//localhost:1313/tags/root-tty-hijack/</guid>
       <description></description>
     </item>
     <item>
       <title>Tty</title>
       <link>//localhost:1313/tags/tty/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 27 Nov 2023 15:13:42 +0530</pubDate>
       <guid>//localhost:1313/tags/tty/</guid>
       <description></description>
     </item>
     <item>
       <title>Cargo</title>
       <link>//localhost:1313/tags/cargo/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 27 Nov 2023 01:34:17 +0530</pubDate>
       <guid>//localhost:1313/tags/cargo/</guid>
       <description></description>
     </item>
     <item>
       <title>CVE-2022-31214</title>
       <link>//localhost:1313/tags/cve-2022-31214/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 27 Nov 2023 01:34:17 +0530</pubDate>
       <guid>//localhost:1313/tags/cve-2022-31214/</guid>
       <description></description>
     </item>
     <item>
       <title>Firejail</title>
       <link>//localhost:1313/tags/firejail/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 27 Nov 2023 01:34:17 +0530</pubDate>
       <guid>//localhost:1313/tags/firejail/</guid>
       <description></description>
     </item>
     <item>
       <title>Library-Hijack</title>
       <link>//localhost:1313/tags/library-hijack/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 27 Nov 2023 01:34:17 +0530</pubDate>
       <guid>//localhost:1313/tags/library-hijack/</guid>
       <description></description>
     </item>
     <item>
       <title>PGP</title>
       <link>//localhost:1313/tags/pgp/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 27 Nov 2023 01:34:17 +0530</pubDate>
       <guid>//localhost:1313/tags/pgp/</guid>
       <description></description>
     </item>
     <item>
       <title>Restricted-Shell</title>
       <link>//localhost:1313/tags/restricted-shell/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 27 Nov 2023 01:34:17 +0530</pubDate>
       <guid>//localhost:1313/tags/restricted-shell/</guid>
       <description></description>
     </item>
     <item>
       <title>Rust</title>
       <link>//localhost:1313/tags/rust/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 27 Nov 2023 01:34:17 +0530</pubDate>
       <guid>//localhost:1313/tags/rust/</guid>
       <description></description>
     </item>
     <item>
       <title>SSTI</title>
       <link>//localhost:1313/tags/ssti/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 27 Nov 2023 01:34:17 +0530</pubDate>
       <guid>//localhost:1313/tags/ssti/</guid>
       <description></description>
     </item>
     <item>
       <title>Binwalk</title>
       <link>//localhost:1313/tags/binwalk/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 26 Nov 2023 20:30:36 +0530</pubDate>
       <guid>//localhost:1313/tags/binwalk/</guid>
       <description></description>
     </item>
     <item>
       <title>CVE-2022-44268</title>
       <link>//localhost:1313/tags/cve-2022-44268/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 26 Nov 2023 20:30:36 +0530</pubDate>
       <guid>//localhost:1313/tags/cve-2022-44268/</guid>
       <description></description>
     </item>
     <item>
       <title>CVE-2022-4510</title>
       <link>//localhost:1313/tags/cve-2022-4510/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 26 Nov 2023 20:30:36 +0530</pubDate>
       <guid>//localhost:1313/tags/cve-2022-4510/</guid>
       <description></description>
     </item>
     <item>
       <title>File-Write</title>
       <link>//localhost:1313/tags/file-write/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 26 Nov 2023 20:30:36 +0530</pubDate>
       <guid>//localhost:1313/tags/file-write/</guid>
       <description></description>
     </item>
     <item>
       <title>Git-Dumper</title>
       <link>//localhost:1313/tags/git-dumper/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 26 Nov 2023 20:30:36 +0530</pubDate>
       <guid>//localhost:1313/tags/git-dumper/</guid>
       <description></description>
     </item>
     <item>
       <title>ImageMagick</title>
       <link>//localhost:1313/tags/imagemagick/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 26 Nov 2023 20:30:36 +0530</pubDate>
       <guid>//localhost:1313/tags/imagemagick/</guid>
       <description></description>
     </item>
     <item>
       <title>Path-Traversal</title>
       <link>//localhost:1313/tags/path-traversal/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 26 Nov 2023 20:30:36 +0530</pubDate>
       <guid>//localhost:1313/tags/path-traversal/</guid>
       <description></description>
     </item>
     <item>
       <title>Gnuplot</title>
       <link>//localhost:1313/tags/gnuplot/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 04 Nov 2023 17:58:58 +0530</pubDate>
       <guid>//localhost:1313/tags/gnuplot/</guid>
       <description></description>
     </item>
     <item>
       <title>Htpasswd</title>
       <link>//localhost:1313/tags/htpasswd/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 04 Nov 2023 17:58:58 +0530</pubDate>
       <guid>//localhost:1313/tags/htpasswd/</guid>
       <description></description>
     </item>
     <item>
       <title>Inline-Math-Mode</title>
       <link>//localhost:1313/tags/inline-math-mode/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 04 Nov 2023 17:58:58 +0530</pubDate>
       <guid>//localhost:1313/tags/inline-math-mode/</guid>
       <description></description>
     </item>
     <item>
       <title>LaTeX</title>
       <link>//localhost:1313/tags/latex/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 04 Nov 2023 17:58:58 +0530</pubDate>
       <guid>//localhost:1313/tags/latex/</guid>
       <description></description>
     </item>
     <item>
       <title>Latex-Injection</title>
       <link>//localhost:1313/tags/latex-injection/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 04 Nov 2023 17:58:58 +0530</pubDate>
       <guid>//localhost:1313/tags/latex-injection/</guid>
       <description></description>
     </item>
     <item>
       <title>Wfuzz</title>
       <link>//localhost:1313/tags/wfuzz/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 04 Nov 2023 17:58:58 +0530</pubDate>
       <guid>//localhost:1313/tags/wfuzz/</guid>
       <description></description>
     </item>
     <item>
       <title>Cme</title>
       <link>//localhost:1313/tags/cme/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 29 Oct 2023 00:50:07 +0530</pubDate>
       <guid>//localhost:1313/tags/cme/</guid>
       <description></description>
     </item>
     <item>
       <title>Dangling-Pointer</title>
       <link>//localhost:1313/tags/dangling-pointer/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 29 Oct 2023 00:50:07 +0530</pubDate>
       <guid>//localhost:1313/tags/dangling-pointer/</guid>
       <description></description>
     </item>
     <item>
       <title>Ghidra</title>
       <link>//localhost:1313/tags/ghidra/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 29 Oct 2023 00:50:07 +0530</pubDate>
       <guid>//localhost:1313/tags/ghidra/</guid>
       <description></description>
     </item>
     <item>
       <title>Gopher</title>
       <link>//localhost:1313/tags/gopher/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 29 Oct 2023 00:50:07 +0530</pubDate>
       <guid>//localhost:1313/tags/gopher/</guid>
       <description></description>
     </item>
     <item>
       <title>Gopherus</title>
       <link>//localhost:1313/tags/gopherus/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 29 Oct 2023 00:50:07 +0530</pubDate>
       <guid>//localhost:1313/tags/gopherus/</guid>
       <description></description>
     </item>
     <item>
       <title>LibreOffice</title>
       <link>//localhost:1313/tags/libreoffice/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 29 Oct 2023 00:50:07 +0530</pubDate>
       <guid>//localhost:1313/tags/libreoffice/</guid>
       <description></description>
     </item>
     <item>
       <title>Macros</title>
       <link>//localhost:1313/tags/macros/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 29 Oct 2023 00:50:07 +0530</pubDate>
       <guid>//localhost:1313/tags/macros/</guid>
       <description></description>
     </item>
     <item>
       <title>Path-Hijack</title>
       <link>//localhost:1313/tags/path-hijack/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 29 Oct 2023 00:50:07 +0530</pubDate>
       <guid>//localhost:1313/tags/path-hijack/</guid>
       <description></description>
     </item>
     <item>
       <title>Phishing</title>
       <link>//localhost:1313/tags/phishing/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 29 Oct 2023 00:50:07 +0530</pubDate>
       <guid>//localhost:1313/tags/phishing/</guid>
       <description></description>
     </item>
     <item>
       <title>Pspy</title>
       <link>//localhost:1313/tags/pspy/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 29 Oct 2023 00:50:07 +0530</pubDate>
       <guid>//localhost:1313/tags/pspy/</guid>
       <description></description>
     </item>
     <item>
       <title>Smtp</title>
       <link>//localhost:1313/tags/smtp/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 29 Oct 2023 00:50:07 +0530</pubDate>
       <guid>//localhost:1313/tags/smtp/</guid>
       <description></description>
     </item>
     <item>
       <title>Use-After-Free</title>
       <link>//localhost:1313/tags/use-after-free/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 29 Oct 2023 00:50:07 +0530</pubDate>
       <guid>//localhost:1313/tags/use-after-free/</guid>
       <description></description>
     </item>
     <item>
       <title>Arftracksat</title>
       <link>//localhost:1313/tags/arftracksat/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 22 Oct 2023 01:22:49 +0530</pubDate>
       <guid>//localhost:1313/tags/arftracksat/</guid>
       <description></description>
     </item>
     <item>
       <title>Command-Execution</title>
       <link>//localhost:1313/tags/command-execution/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 22 Oct 2023 01:22:49 +0530</pubDate>
       <guid>//localhost:1313/tags/command-execution/</guid>
       <description></description>
     </item>
     <item>
       <title>Grafana</title>
       <link>//localhost:1313/tags/grafana/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 22 Oct 2023 01:22:49 +0530</pubDate>
       <guid>//localhost:1313/tags/grafana/</guid>
       <description></description>
     </item>
     <item>
       <title>Jupyter</title>
       <link>//localhost:1313/tags/jupyter/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 22 Oct 2023 01:22:49 +0530</pubDate>
       <guid>//localhost:1313/tags/jupyter/</guid>
       <description></description>
     </item>
     <item>
       <title>Postgres-Command-Execution</title>
       <link>//localhost:1313/tags/postgres-command-execution/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 22 Oct 2023 01:22:49 +0530</pubDate>
       <guid>//localhost:1313/tags/postgres-command-execution/</guid>
       <description></description>
     </item>
     <item>
       <title>Raw-SQL-Query</title>
       <link>//localhost:1313/tags/raw-sql-query/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 22 Oct 2023 01:22:49 +0530</pubDate>
       <guid>//localhost:1313/tags/raw-sql-query/</guid>
       <description></description>
     </item>
     <item>
       <title>Shadow-Simulator</title>
       <link>//localhost:1313/tags/shadow-simulator/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 22 Oct 2023 01:22:49 +0530</pubDate>
       <guid>//localhost:1313/tags/shadow-simulator/</guid>
       <description></description>
     </item>
     <item>
       <title>Bruteforcing-Hashes</title>
       <link>//localhost:1313/tags/bruteforcing-hashes/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 17 Oct 2023 11:12:07 +0530</pubDate>
       <guid>//localhost:1313/tags/bruteforcing-hashes/</guid>
       <description></description>
     </item>
     <item>
       <title>Cap_dac_read_search</title>
       <link>//localhost:1313/tags/cap_dac_read_search/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 17 Oct 2023 11:12:07 +0530</pubDate>
       <guid>//localhost:1313/tags/cap_dac_read_search/</guid>
       <description></description>
     </item>
     <item>
       <title>Capabilities</title>
       <link>//localhost:1313/tags/capabilities/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 17 Oct 2023 11:12:07 +0530</pubDate>
       <guid>//localhost:1313/tags/capabilities/</guid>
       <description></description>
     </item>
     <item>
       <title>Git</title>
       <link>//localhost:1313/tags/git/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 17 Oct 2023 11:12:07 +0530</pubDate>
       <guid>//localhost:1313/tags/git/</guid>
       <description></description>
     </item>
     <item>
       <title>PHP Arbitrary Object Instantiation</title>
       <link>//localhost:1313/tags/php-arbitrary-object-instantiation/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 17 Oct 2023 11:12:07 +0530</pubDate>
       <guid>//localhost:1313/tags/php-arbitrary-object-instantiation/</guid>
       <description></description>
     </item>
     <item>
       <title>Second-Order-SQLi</title>
       <link>//localhost:1313/tags/second-order-sqli/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 17 Oct 2023 11:12:07 +0530</pubDate>
       <guid>//localhost:1313/tags/second-order-sqli/</guid>
       <description></description>
     </item>
     <item>
       <title>SQLi</title>
       <link>//localhost:1313/tags/sqli/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 17 Oct 2023 11:12:07 +0530</pubDate>
       <guid>//localhost:1313/tags/sqli/</guid>
       <description></description>
     </item>
     <item>
       <title>CVE-2023-0297</title>
       <link>//localhost:1313/tags/cve-2023-0297/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 08 Oct 2023 10:02:38 +0530</pubDate>
       <guid>//localhost:1313/tags/cve-2023-0297/</guid>
       <description></description>
     </item>
     <item>
       <title>GRPC</title>
       <link>//localhost:1313/tags/grpc/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 08 Oct 2023 10:02:38 +0530</pubDate>
       <guid>//localhost:1313/tags/grpc/</guid>
       <description></description>
     </item>
     <item>
       <title>Sqlite</title>
       <link>//localhost:1313/tags/sqlite/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 08 Oct 2023 10:02:38 +0530</pubDate>
       <guid>//localhost:1313/tags/sqlite/</guid>
       <description></description>
     </item>
     <item>
       <title>BIND</title>
       <link>//localhost:1313/tags/bind/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 23 Sep 2023 14:12:27 +0530</pubDate>
       <guid>//localhost:1313/tags/bind/</guid>
       <description></description>
     </item>
     <item>
       <title>ClamAV</title>
       <link>//localhost:1313/tags/clamav/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 23 Sep 2023 14:12:27 +0530</pubDate>
       <guid>//localhost:1313/tags/clamav/</guid>
       <description></description>
     </item>
     <item>
       <title>CVE-2023-20052</title>
       <link>//localhost:1313/tags/cve-2023-20052/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 23 Sep 2023 14:12:27 +0530</pubDate>
       <guid>//localhost:1313/tags/cve-2023-20052/</guid>
       <description></description>
     </item>
     <item>
       <title>CVE-2023-23946</title>
       <link>//localhost:1313/tags/cve-2023-23946/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 23 Sep 2023 14:12:27 +0530</pubDate>
       <guid>//localhost:1313/tags/cve-2023-23946/</guid>
       <description></description>
     </item>
     <item>
       <title>Dns</title>
       <link>//localhost:1313/tags/dns/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 23 Sep 2023 14:12:27 +0530</pubDate>
       <guid>//localhost:1313/tags/dns/</guid>
       <description></description>
     </item>
     <item>
       <title>Dns-Poisoning</title>
       <link>//localhost:1313/tags/dns-poisoning/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 23 Sep 2023 14:12:27 +0530</pubDate>
       <guid>//localhost:1313/tags/dns-poisoning/</guid>
       <description></description>
     </item>
     <item>
       <title>Git-Apply</title>
       <link>//localhost:1313/tags/git-apply/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 23 Sep 2023 14:12:27 +0530</pubDate>
       <guid>//localhost:1313/tags/git-apply/</guid>
       <description></description>
     </item>
     <item>
       <title>Nsupdate</title>
       <link>//localhost:1313/tags/nsupdate/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 23 Sep 2023 14:12:27 +0530</pubDate>
       <guid>//localhost:1313/tags/nsupdate/</guid>
       <description></description>
     </item>
     <item>
       <title>SSH Honeypot</title>
       <link>//localhost:1313/tags/ssh-honeypot/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 23 Sep 2023 14:12:27 +0530</pubDate>
       <guid>//localhost:1313/tags/ssh-honeypot/</guid>
       <description></description>
     </item>
     <item>
       <title>XXE</title>
       <link>//localhost:1313/tags/xxe/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 23 Sep 2023 14:12:27 +0530</pubDate>
       <guid>//localhost:1313/tags/xxe/</guid>
       <description></description>
     </item>
     <item>
       <title>Zone-Transfer</title>
       <link>//localhost:1313/tags/zone-transfer/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 23 Sep 2023 14:12:27 +0530</pubDate>
       <guid>//localhost:1313/tags/zone-transfer/</guid>
       <description></description>
     </item>
     <item>
       <title>Cacti</title>
       <link>//localhost:1313/tags/cacti/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 02 Sep 2023 15:40:09 +0530</pubDate>
       <guid>//localhost:1313/tags/cacti/</guid>
       <description></description>
     </item>
     <item>
       <title>CVE-2021-41091</title>
       <link>//localhost:1313/tags/cve-2021-41091/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 02 Sep 2023 15:40:09 +0530</pubDate>
       <guid>//localhost:1313/tags/cve-2021-41091/</guid>
       <description></description>
     </item>
     <item>
       <title>CVE-2022-46169</title>
       <link>//localhost:1313/tags/cve-2022-46169/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 02 Sep 2023 15:40:09 +0530</pubDate>
       <guid>//localhost:1313/tags/cve-2022-46169/</guid>
       <description></description>
     </item>
     <item>
       <title>Docker-Engine</title>
       <link>//localhost:1313/tags/docker-engine/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 02 Sep 2023 15:40:09 +0530</pubDate>
       <guid>//localhost:1313/tags/docker-engine/</guid>
       <description></description>
     </item>
     <item>
       <title>SUID</title>
       <link>//localhost:1313/tags/suid/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 02 Sep 2023 15:40:09 +0530</pubDate>
       <guid>//localhost:1313/tags/suid/</guid>
       <description></description>
     </item>
     <item>
       <title>Cypher-Injection</title>
       <link>//localhost:1313/tags/cypher-injection/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 27 Aug 2023 23:01:23 +0530</pubDate>
       <guid>//localhost:1313/tags/cypher-injection/</guid>
       <description></description>
     </item>
     <item>
       <title>Hisel</title>
       <link>//localhost:1313/tags/hisel/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 27 Aug 2023 23:01:23 +0530</pubDate>
       <guid>//localhost:1313/tags/hisel/</guid>
       <description></description>
     </item>
     <item>
       <title>Malicious Python Package</title>
       <link>//localhost:1313/tags/malicious-python-package/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 27 Aug 2023 23:01:23 +0530</pubDate>
       <guid>//localhost:1313/tags/malicious-python-package/</guid>
       <description></description>
     </item>
     <item>
       <title>HTTP Exfil</title>
       <link>//localhost:1313/tags/http-exfil/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 21 Aug 2023 17:50:38 +0530</pubDate>
       <guid>//localhost:1313/tags/http-exfil/</guid>
       <description></description>
     </item>
     <item>
       <title>NoSQLi-Bruteforce</title>
       <link>//localhost:1313/tags/nosqli-bruteforce/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 21 Aug 2023 17:50:38 +0530</pubDate>
       <guid>//localhost:1313/tags/nosqli-bruteforce/</guid>
       <description></description>
     </item>
     <item>
       <title>Strace</title>
       <link>//localhost:1313/tags/strace/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 21 Aug 2023 17:50:38 +0530</pubDate>
       <guid>//localhost:1313/tags/strace/</guid>
       <description></description>
     </item>
     <item>
       <title>XXS</title>
       <link>//localhost:1313/tags/xxs/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 21 Aug 2023 17:50:38 +0530</pubDate>
       <guid>//localhost:1313/tags/xxs/</guid>
       <description></description>
     </item>

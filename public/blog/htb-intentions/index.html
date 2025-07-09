@@ -15,7 +15,7 @@
 ><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="rgb(255,255,255)" />
+  <meta name="theme-color" content="#FFFFFF" />
   
   <title>HTB Intentions &middot; Abraxas</title>
     <meta name="title" content="HTB Intentions &middot; Abraxas" />
@@ -26,8 +26,8 @@
   
   <script
     type="text/javascript"
-    src="/js/appearance.min.74ad8406faea02f3e186ba5126249aaeed9073629e04b05037b903396b188724.js"
-    integrity="sha256-dK2EBvrqAvPhhrpRJiSaru2Qc2KeBLBQN7kDOWsYhyQ="
+    src="//localhost:1313/js/appearance.min.8a082f81b27f3cb2ee528df0b0bdc39787034cf2cc34d4669fbc9977c929023c.js"
+    integrity="sha256-iggvgbJ/PLLuUo3wsL3Dl4cDTPLMNNRmn7yZd8kpAjw="
   ></script>
   
   
@@ -42,8 +42,8 @@
   <link
     type="text/css"
     rel="stylesheet"
-    href="/css/main.bundle.min.017a29273e0d1e39f8792cba62098ea8e1c922fd373503ba94b73dcab44dea79.css"
-    integrity="sha256-AXopJz4NHjn4eSy6YgmOqOHJIv03NQO6lLc9yrRN6nk="
+    href="//localhost:1313/css/main.bundle.min.79b64142a8ab79f8cba0b80d386a1450e83b4b86935fb830cccb703f005c04d3.css"
+    integrity="sha256-ebZBQqirefjLoLgNOGoUUOg7S4aTX7gwzMtwPwBcBNM="
   />
   
     
@@ -66,8 +66,8 @@
       defer
       type="text/javascript"
       id="script-bundle"
-      src="/js/main.bundle.min.bb487ad6073790cb02c354ee8c5f8822c42c5513e10bf7a86bbe8f82118cd1fc.js"
-      integrity="sha256-u0h61gc3kMsCw1TujF&#43;IIsQsVRPhC/eoa76PghGM0fw="
+      src="//localhost:1313/js/main.bundle.min.cbcb4d7ec04757d63c3fea9f6faa3642cdcd3084b80ca1990969d9201ca349c9.js"
+      integrity="sha256-y8tNfsBHV9Y8P&#43;qfb6o2Qs3NMIS4DKGZCWnZIByjSck="
       data-copy="Copy"
       data-copied="Copied"
     ></script>
@@ -84,7 +84,9 @@
   
   
   
-  <link rel="canonical" href="//localhost:1313/blog/htb-intentions/" />
+  
+    <link rel="canonical" href="//localhost:1313/blog/htb-intentions/" />
+  
   
   
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -151,10 +153,43 @@
     "wordCount": "3675"
   }
   </script>
-
+    
+    <script type="application/ld+json">
+    {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "item": "//localhost:1313/",
+       "name": "Abraxas",
+       "position": 1
+     },
+     {
+       "@type": "ListItem",
+       "item": "//localhost:1313/blog/",
+       "name": "Blog Posts",
+       "position": 2
+     },
+     {
+       "@type": "ListItem",
+       "item": "//localhost:1313/categories/htb/",
+       "name": "HTB",
+       "position": 3
+     },
+     {
+       "@type": "ListItem",
+       "name": "Htb Intentions",
+       "position": 4
+     }
+   ]
+ }
+  </script>
 
   
-  <meta name="author" content="Abraxas" />
+  
+    <meta name="author" content="Abraxas" />
+  
   
     
       <link href="mailto:abr4xa5@proton.me" rel="me" />
@@ -180,6 +215,7 @@
 
 
 
+
   
   
 
@@ -187,7 +223,7 @@
   
 </head>
 <body
-    class="m-auto flex h-screen max-w-7xl flex-col bg-neutral px-6 text-lg leading-7 text-neutral-900 sm:px-14 md:px-24 lg:px-32 dark:bg-neutral-800 dark:text-neutral"
+    class="m-auto flex h-screen max-w-7xl flex-col bg-neutral px-6 text-lg leading-7 text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32"
   >
     <div id="the-top" class="absolute flex self-center">
       <a
@@ -199,7 +235,7 @@
     </div>
     
     
-      <header class="py-6 font-semibold text-neutral-900 print:hidden sm:py-10 dark:text-neutral">
+      <header class="py-6 font-semibold text-neutral-900 dark:text-neutral sm:py-10 print:hidden">
   <nav class="flex items-start justify-between sm:items-center">
     
     <div class="z-40 flex flex-row items-center">
@@ -240,7 +276,7 @@
                   
                     <a
                       href="/blog/"
-                      title=""
+                      title="Blog Posts"
                       onclick="close_menu()"
                       
                       ><span
@@ -257,7 +293,7 @@
                   
                     <a
                       href="/categories/"
-                      title=""
+                      title="Categories"
                       onclick="close_menu()"
                       
                       ><span
@@ -274,7 +310,7 @@
                   
                     <a
                       href="/tags/"
-                      title=""
+                      title="Tags"
                       onclick="close_menu()"
                       
                       ><span
@@ -291,7 +327,7 @@
                   
                     <a
                       href="/about-me/"
-                      title=""
+                      title="About Me"
                       onclick="close_menu()"
                       
                       ><span
@@ -375,7 +411,7 @@
               
                 <a
                   href="/blog/"
-                  title=""
+                  title="Blog Posts"
                   
                   ><span
                       class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
@@ -391,7 +427,7 @@
               
                 <a
                   href="/categories/"
-                  title=""
+                  title="Categories"
                   
                   ><span
                       class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
@@ -407,7 +443,7 @@
               
                 <a
                   href="/tags/"
-                  title=""
+                  title="Tags"
                   
                   ><span
                       class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
@@ -423,7 +459,7 @@
               
                 <a
                   href="/about-me/"
-                  title=""
+                  title="About Me"
                   
                   ><span
                       class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
@@ -507,7 +543,7 @@
   <article>
     <header class="max-w-prose">
       
-        <ol class="text-sm text-neutral-500 print:hidden dark:text-neutral-400">
+        <ol class="text-sm text-neutral-500 dark:text-neutral-400 print:hidden">
   
   
     
@@ -517,7 +553,7 @@
   <li class="hidden inline">
     <a
       class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
-      href="/"
+      href="//localhost:1313/"
       >Abraxas</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
@@ -526,7 +562,7 @@
   <li class=" inline">
     <a
       class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
-      href="/blog/"
+      href="//localhost:1313/blog/"
       >Blog Posts</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
@@ -535,7 +571,7 @@
   <li class="hidden inline">
     <a
       class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
-      href="/blog/htb-intentions/"
+      href="//localhost:1313/blog/htb-intentions/"
       >HTB Intentions</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
@@ -544,11 +580,11 @@
 
 
       
-      <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+      <h1 class="mb-8 mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
         HTB Intentions
       </h1>
       
-        <div class="mb-12 mt-8 text-base text-neutral-500 print:hidden dark:text-neutral-400">
+        <div class="mb-10 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
           
 
 
@@ -615,13 +651,13 @@
         
           
             <a
-              href="/categories/htb/"
+              href="//localhost:1313/categories/htb/"
               class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
               >HTB</a
             >
           
             <a
-              href="/categories/linux/"
+              href="//localhost:1313/categories/linux/"
               class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
               >Linux</a
             >
@@ -631,49 +667,49 @@
         
           
             <a
-              href="/tags/htb-hard/"
+              href="//localhost:1313/tags/htb-hard/"
               class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
               >Htb-Hard</a
             >
           
             <a
-              href="/tags/sqli/"
+              href="//localhost:1313/tags/sqli/"
               class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
               >SQLi</a
             >
           
             <a
-              href="/tags/second-order-sqli/"
+              href="//localhost:1313/tags/second-order-sqli/"
               class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
               >Second-Order-SQLi</a
             >
           
             <a
-              href="/tags/php-arbitrary-object-instantiation/"
+              href="//localhost:1313/tags/php-arbitrary-object-instantiation/"
               class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
               >PHP Arbitrary Object Instantiation</a
             >
           
             <a
-              href="/tags/git/"
+              href="//localhost:1313/tags/git/"
               class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
               >Git</a
             >
           
             <a
-              href="/tags/bruteforcing-hashes/"
+              href="//localhost:1313/tags/bruteforcing-hashes/"
               class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
               >Bruteforcing-Hashes</a
             >
           
             <a
-              href="/tags/capabilities/"
+              href="//localhost:1313/tags/capabilities/"
               class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
               >Capabilities</a
             >
           
             <a
-              href="/tags/cap_dac_read_search/"
+              href="//localhost:1313/tags/cap_dac_read_search/"
               class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
               >Cap_dac_read_search</a
             >
@@ -702,7 +738,7 @@
 
   
     <picture
-      class="mb-6 -mt-4 rounded-md"
+      class="mb-6 rounded-md"
       
     >
       
@@ -712,7 +748,7 @@
         <source
           
             
-              srcset="/blog/htb-intentions/cover_hu719acdc6bad4c9a317d73d07a9baa046_81961_300x300_resize_q75_h2_box_3.webp"
+              srcset="//localhost:1313/blog/htb-intentions/cover_hu_b7c0e82d28f18af5.webp"
             
           
           sizes="100vw"
@@ -722,11 +758,11 @@
       <img
         width="300"
         height="300"
-        class="mb-6 -mt-4 rounded-md"
+        class="mb-6 rounded-md"
         
         
         
-          src="/blog/htb-intentions/cover.png"
+          src="//localhost:1313/blog/htb-intentions/cover.png"
         
       />
     </picture>
@@ -740,7 +776,7 @@
     <section class="prose mt-0 flex max-w-full flex-col dark:prose-invert lg:flex-row">
       
         <div class="order-first px-0 lg:order-last lg:max-w-xs lg:ps-8">
-          <div class="toc pe-5 print:hidden lg:sticky lg:top-10">
+          <div class="toc pe-5 lg:sticky lg:top-10 print:hidden">
             <details open class="-ms-5 mt-0 overflow-hidden rounded-lg ps-5">
   <summary
     class="block cursor-pointer bg-neutral-100 py-1 ps-5 text-lg font-semibold text-neutral-800 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden"
@@ -780,8 +816,7 @@
       <div class="min-h-0 min-w-0 max-w-prose grow">
         <h1 id="htb-intentions" class="relative group">HTB Intentions <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#htb-intentions" aria-label="Anchor">#</a></span></h1><h2 id="overview" class="relative group">Overview <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#overview" aria-label="Anchor">#</a></span></h2><hr>
 <blockquote>
-<p>Intentions is a Hard linux box that involving a second-order SQL injection vulnerability which enables the extraction of admin password hashes. Leveraging a different API endpoint, these hashes can be used to access the admin page. Within the admin page, there&rsquo;s a feature to modify images, which relies on Imagick. This opens up an opportunity to exploit arbitrary object instantiation, ultimately allowing to write a PHP webshell and establishing a foothold. After gaining access to the system, credentials are found in an old Git commit in the website&rsquo;s repository. These credentials are reused for SSH access, allowing access to a user capable of running a copyright_scanner application, which has the <code>CAP_DAC_READ_SEARCH</code> capability. This capability can be exploited to read files as the root user.</p>
-</blockquote>
+<p>Intentions is a Hard linux box that involving a second-order SQL injection vulnerability which enables the extraction of admin password hashes. Leveraging a different API endpoint, these hashes can be used to access the admin page. Within the admin page, there&rsquo;s a feature to modify images, which relies on Imagick. This opens up an opportunity to exploit arbitrary object instantiation, ultimately allowing to write a PHP webshell and establishing a foothold. After gaining access to the system, credentials are found in an old Git commit in the website&rsquo;s repository. These credentials are reused for SSH access, allowing access to a user capable of running a copyright_scanner application, which has the <code>CAP_DAC_READ_SEARCH</code> capability. This capability can be exploited to read files as the root user.</p></blockquote>
 <hr>
 <h2 id="enumeration" class="relative group">Enumeration <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#enumeration" aria-label="Anchor">#</a></span></h2><hr>
 <h3 id="open-ports" class="relative group">Open Ports <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#open-ports" aria-label="Anchor">#</a></span></h3><p>Found two open ports</p>
@@ -1282,8 +1317,7 @@ Considering the Imagick module is being used for the modifications, found an exp
      •  invoke open_by_handle_at(2);
      •  use the linkat(2) AT_EMPTY_PATH flag to create a link
         to a file referred to by a file descriptor.
-</code></pre>
-</blockquote>
+</code></pre></blockquote>
 <p>As there no manual page entries were available for <code>scanner</code>, the <code>-h</code> or <code>--help</code> options are the most effective approach to gather additional information about the binary. According to the help message, it appears to be a utility that uses MD5 hashes to identify copyrighted data.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="o">(</span>remote<span class="o">)</span> greg@intentions:/home/greg$ /opt/scanner/scanner --help
@@ -1538,7 +1572,7 @@ $ ls -la /tmp/root_rce
       <div class="flex justify-between pt-3">
         <span>
           
-            <a class="group flex" href="/blog/htb-pc/">
+            <a class="group flex" href="//localhost:1313/blog/htb-pc/">
               <span
                 class="me-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
                 ><span class="ltr:inline rtl:hidden">&larr;</span
@@ -1560,7 +1594,7 @@ $ ls -la /tmp/root_rce
         </span>
         <span>
           
-            <a class="group flex text-right" href="/blog/htb-jupiter/">
+            <a class="group flex text-right" href="//localhost:1313/blog/htb-jupiter/">
               <span class="flex flex-col">
                 <span
                   class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
@@ -1573,7 +1607,7 @@ $ ls -la /tmp/root_rce
                 </span>
               </span>
               <span
-                class="ms-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                class="ms-2 text-neutral-700 transition-transform group-hover:-translate-x-[-2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
                 ><span class="ltr:inline rtl:hidden">&rarr;</span
                 ><span class="ltr:hidden rtl:inline">&larr;</span></span
               >
@@ -1610,19 +1644,23 @@ initComments({
     </footer>
   </article>
 
-        
-          <div class="pointer-events-none absolute bottom-0 end-0 top-[100vh] w-12">
-            <a
-              href="#the-top"
-              class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 backdrop-blur hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
-              aria-label="Scroll to top"
-              title="Scroll to top"
-            >
-              &uarr;
-            </a>
-          </div>
-        
-      </main><footer class="py-10 print:hidden">
+      </main>
+      
+        <div
+          class="pointer-events-none absolute bottom-0 end-0 top-[100vh] w-12"
+          id="to-top"
+          hidden="true"
+        >
+          <a
+            href="#the-top"
+            class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 backdrop-blur hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+            aria-label="Scroll to top"
+            title="Scroll to top"
+          >
+            &uarr;
+          </a>
+        </div>
+      <footer class="py-10 print:hidden">
   
   
     <nav class="pb-4 text-base font-medium text-neutral-500 dark:text-neutral-400">
@@ -1693,7 +1731,7 @@ initComments({
       
         <p class="text-sm text-neutral-500 dark:text-neutral-400">
             &copy;
-            2024
+            2025
             Abraxas
         </p>
       
@@ -1733,7 +1771,7 @@ initComments({
 </footer>
 <div
   id="search-wrapper"
-  class="invisible fixed inset-0 z-50 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm sm:p-6 md:p-[10vh] lg:p-[12vh] dark:bg-neutral-900/50"
+  class="invisible fixed inset-0 z-50 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
   data-url="//localhost:1313/"
 >
   <div

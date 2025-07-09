@@ -15,7 +15,7 @@
 ><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="rgb(255,255,255)" />
+  <meta name="theme-color" content="#FFFFFF" />
   
   <title>HTB Jupiter &middot; Abraxas</title>
     <meta name="title" content="HTB Jupiter &middot; Abraxas" />
@@ -26,8 +26,8 @@
   
   <script
     type="text/javascript"
-    src="/js/appearance.min.74ad8406faea02f3e186ba5126249aaeed9073629e04b05037b903396b188724.js"
-    integrity="sha256-dK2EBvrqAvPhhrpRJiSaru2Qc2KeBLBQN7kDOWsYhyQ="
+    src="//localhost:1313/js/appearance.min.8a082f81b27f3cb2ee528df0b0bdc39787034cf2cc34d4669fbc9977c929023c.js"
+    integrity="sha256-iggvgbJ/PLLuUo3wsL3Dl4cDTPLMNNRmn7yZd8kpAjw="
   ></script>
   
   
@@ -42,8 +42,8 @@
   <link
     type="text/css"
     rel="stylesheet"
-    href="/css/main.bundle.min.017a29273e0d1e39f8792cba62098ea8e1c922fd373503ba94b73dcab44dea79.css"
-    integrity="sha256-AXopJz4NHjn4eSy6YgmOqOHJIv03NQO6lLc9yrRN6nk="
+    href="//localhost:1313/css/main.bundle.min.79b64142a8ab79f8cba0b80d386a1450e83b4b86935fb830cccb703f005c04d3.css"
+    integrity="sha256-ebZBQqirefjLoLgNOGoUUOg7S4aTX7gwzMtwPwBcBNM="
   />
   
     
@@ -66,8 +66,8 @@
       defer
       type="text/javascript"
       id="script-bundle"
-      src="/js/main.bundle.min.bb487ad6073790cb02c354ee8c5f8822c42c5513e10bf7a86bbe8f82118cd1fc.js"
-      integrity="sha256-u0h61gc3kMsCw1TujF&#43;IIsQsVRPhC/eoa76PghGM0fw="
+      src="//localhost:1313/js/main.bundle.min.cbcb4d7ec04757d63c3fea9f6faa3642cdcd3084b80ca1990969d9201ca349c9.js"
+      integrity="sha256-y8tNfsBHV9Y8P&#43;qfb6o2Qs3NMIS4DKGZCWnZIByjSck="
       data-copy="Copy"
       data-copied="Copied"
     ></script>
@@ -84,7 +84,9 @@
   
   
   
-  <link rel="canonical" href="//localhost:1313/blog/htb-jupiter/" />
+  
+    <link rel="canonical" href="//localhost:1313/blog/htb-jupiter/" />
+  
   
   
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -151,10 +153,43 @@
     "wordCount": "3066"
   }
   </script>
-
+    
+    <script type="application/ld+json">
+    {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "item": "//localhost:1313/",
+       "name": "Abraxas",
+       "position": 1
+     },
+     {
+       "@type": "ListItem",
+       "item": "//localhost:1313/blog/",
+       "name": "Blog Posts",
+       "position": 2
+     },
+     {
+       "@type": "ListItem",
+       "item": "//localhost:1313/categories/htb/",
+       "name": "HTB",
+       "position": 3
+     },
+     {
+       "@type": "ListItem",
+       "name": "Htb Jupiter",
+       "position": 4
+     }
+   ]
+ }
+  </script>
 
   
-  <meta name="author" content="Abraxas" />
+  
+    <meta name="author" content="Abraxas" />
+  
   
     
       <link href="mailto:abr4xa5@proton.me" rel="me" />
@@ -180,6 +215,7 @@
 
 
 
+
   
   
 
@@ -187,7 +223,7 @@
   
 </head>
 <body
-    class="m-auto flex h-screen max-w-7xl flex-col bg-neutral px-6 text-lg leading-7 text-neutral-900 sm:px-14 md:px-24 lg:px-32 dark:bg-neutral-800 dark:text-neutral"
+    class="m-auto flex h-screen max-w-7xl flex-col bg-neutral px-6 text-lg leading-7 text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32"
   >
     <div id="the-top" class="absolute flex self-center">
       <a
@@ -199,7 +235,7 @@
     </div>
     
     
-      <header class="py-6 font-semibold text-neutral-900 print:hidden sm:py-10 dark:text-neutral">
+      <header class="py-6 font-semibold text-neutral-900 dark:text-neutral sm:py-10 print:hidden">
   <nav class="flex items-start justify-between sm:items-center">
     
     <div class="z-40 flex flex-row items-center">
@@ -240,7 +276,7 @@
                   
                     <a
                       href="/blog/"
-                      title=""
+                      title="Blog Posts"
                       onclick="close_menu()"
                       
                       ><span
@@ -257,7 +293,7 @@
                   
                     <a
                       href="/categories/"
-                      title=""
+                      title="Categories"
                       onclick="close_menu()"
                       
                       ><span
@@ -274,7 +310,7 @@
                   
                     <a
                       href="/tags/"
-                      title=""
+                      title="Tags"
                       onclick="close_menu()"
                       
                       ><span
@@ -291,7 +327,7 @@
                   
                     <a
                       href="/about-me/"
-                      title=""
+                      title="About Me"
                       onclick="close_menu()"
                       
                       ><span
@@ -375,7 +411,7 @@
               
                 <a
                   href="/blog/"
-                  title=""
+                  title="Blog Posts"
                   
                   ><span
                       class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
@@ -391,7 +427,7 @@
               
                 <a
                   href="/categories/"
-                  title=""
+                  title="Categories"
                   
                   ><span
                       class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
@@ -407,7 +443,7 @@
               
                 <a
                   href="/tags/"
-                  title=""
+                  title="Tags"
                   
                   ><span
                       class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
@@ -423,7 +459,7 @@
               
                 <a
                   href="/about-me/"
-                  title=""
+                  title="About Me"
                   
                   ><span
                       class="decoration-primary-500 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-2"
@@ -507,7 +543,7 @@
   <article>
     <header class="max-w-prose">
       
-        <ol class="text-sm text-neutral-500 print:hidden dark:text-neutral-400">
+        <ol class="text-sm text-neutral-500 dark:text-neutral-400 print:hidden">
   
   
     
@@ -517,7 +553,7 @@
   <li class="hidden inline">
     <a
       class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
-      href="/"
+      href="//localhost:1313/"
       >Abraxas</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
@@ -526,7 +562,7 @@
   <li class=" inline">
     <a
       class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
-      href="/blog/"
+      href="//localhost:1313/blog/"
       >Blog Posts</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
@@ -535,7 +571,7 @@
   <li class="hidden inline">
     <a
       class="dark:underline-neutral-600 decoration-neutral-300 hover:underline"
-      href="/blog/htb-jupiter/"
+      href="//localhost:1313/blog/htb-jupiter/"
       >HTB Jupiter</a
     ><span class="px-1 text-primary-500">/</span>
   </li>
@@ -544,11 +580,11 @@
 
 
       
-      <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+      <h1 class="mb-8 mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
         HTB Jupiter
       </h1>
       
-        <div class="mb-12 mt-8 text-base text-neutral-500 print:hidden dark:text-neutral-400">
+        <div class="mb-10 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
           
 
 
@@ -615,13 +651,13 @@
         
           
             <a
-              href="/categories/htb/"
+              href="//localhost:1313/categories/htb/"
               class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
               >HTB</a
             >
           
             <a
-              href="/categories/linux/"
+              href="//localhost:1313/categories/linux/"
               class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
               >Linux</a
             >
@@ -631,61 +667,61 @@
         
           
             <a
-              href="/tags/htb-medium/"
+              href="//localhost:1313/tags/htb-medium/"
               class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
               >Htb-Medium</a
             >
           
             <a
-              href="/tags/wfuzz/"
+              href="//localhost:1313/tags/wfuzz/"
               class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
               >Wfuzz</a
             >
           
             <a
-              href="/tags/grafana/"
+              href="//localhost:1313/tags/grafana/"
               class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
               >Grafana</a
             >
           
             <a
-              href="/tags/raw-sql-query/"
+              href="//localhost:1313/tags/raw-sql-query/"
               class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
               >Raw-SQL-Query</a
             >
           
             <a
-              href="/tags/postgres-command-execution/"
+              href="//localhost:1313/tags/postgres-command-execution/"
               class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
               >Postgres-Command-Execution</a
             >
           
             <a
-              href="/tags/command-execution/"
+              href="//localhost:1313/tags/command-execution/"
               class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
               >Command-Execution</a
             >
           
             <a
-              href="/tags/shadow-simulator/"
+              href="//localhost:1313/tags/shadow-simulator/"
               class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
               >Shadow-Simulator</a
             >
           
             <a
-              href="/tags/jupyter/"
+              href="//localhost:1313/tags/jupyter/"
               class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
               >Jupyter</a
             >
           
             <a
-              href="/tags/arftracksat/"
+              href="//localhost:1313/tags/arftracksat/"
               class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
               >Arftracksat</a
             >
           
             <a
-              href="/tags/file-read/"
+              href="//localhost:1313/tags/file-read/"
               class="mx-1 my-1 rounded-md border border-neutral-200 px-1 py-[1px] hover:border-primary-300 hover:text-primary-700 dark:border-neutral-600 dark:hover:border-primary-600 dark:hover:text-primary-400"
               >File-Read</a
             >
@@ -714,7 +750,7 @@
 
   
     <picture
-      class="mb-6 -mt-4 rounded-md"
+      class="mb-6 rounded-md"
       
     >
       
@@ -724,7 +760,7 @@
         <source
           
             
-              srcset="/blog/htb-jupiter/cover_hud3792f08dbeeb41c7691fe8d4cb8e5c4_96576_300x300_resize_q75_h2_box_3.webp"
+              srcset="//localhost:1313/blog/htb-jupiter/cover_hu_51debe394546872f.webp"
             
           
           sizes="100vw"
@@ -734,11 +770,11 @@
       <img
         width="300"
         height="300"
-        class="mb-6 -mt-4 rounded-md"
+        class="mb-6 rounded-md"
         
         
         
-          src="/blog/htb-jupiter/cover.png"
+          src="//localhost:1313/blog/htb-jupiter/cover.png"
         
       />
     </picture>
@@ -752,7 +788,7 @@
     <section class="prose mt-0 flex max-w-full flex-col dark:prose-invert lg:flex-row">
       
         <div class="order-first px-0 lg:order-last lg:max-w-xs lg:ps-8">
-          <div class="toc pe-5 print:hidden lg:sticky lg:top-10">
+          <div class="toc pe-5 lg:sticky lg:top-10 print:hidden">
             <details open class="-ms-5 mt-0 overflow-hidden rounded-lg ps-5">
   <summary
     class="block cursor-pointer bg-neutral-100 py-1 ps-5 text-lg font-semibold text-neutral-800 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden"
@@ -802,8 +838,7 @@
       <div class="min-h-0 min-w-0 max-w-prose grow">
         <h1 id="jupiter-htb" class="relative group">Jupiter HTB <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#jupiter-htb" aria-label="Anchor">#</a></span></h1><h2 id="overview" class="relative group">Overview <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#overview" aria-label="Anchor">#</a></span></h2><hr>
 <blockquote>
-<p>Jupiter is a medium HTB box where I began by exploiting a supposed feature in Grafana to execute commands and gain an initial foothold. After establishing a foothold, I took advantage of configuration issues within a script executed by the Shadow Simulator via a cron job. Then, I discovered Jupyter server tokens in log files and leveraged them to execute commands within a Jupyter notebook. Finally, I exploited a customized version of arftracksat, a satellite tracking system, with the ability to run as the root user, elevating my privileges on the system.</p>
-</blockquote>
+<p>Jupiter is a medium HTB box where I began by exploiting a supposed feature in Grafana to execute commands and gain an initial foothold. After establishing a foothold, I took advantage of configuration issues within a script executed by the Shadow Simulator via a cron job. Then, I discovered Jupyter server tokens in log files and leveraged them to execute commands within a Jupyter notebook. Finally, I exploited a customized version of arftracksat, a satellite tracking system, with the ability to run as the root user, elevating my privileges on the system.</p></blockquote>
 <hr>
 <h2 id="enumeration" class="relative group">Enumeration <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#enumeration" aria-label="Anchor">#</a></span></h2><hr>
 <h3 id="open-ports" class="relative group">Open Ports <span class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#open-ports" aria-label="Anchor">#</a></span></h3><p>I discovered two open ports through a Nmap scan</p>
@@ -1120,8 +1155,7 @@
 </span></span><span class="line"><span class="cl">-rw-------  <span class="m">1</span> postgres postgres <span class="m">26976</span> Jun <span class="m">22</span> 13:50 PostgreSQL.1576774596
 </span></span><span class="line"><span class="cl">drwxrwxr-x  <span class="m">3</span> juno     juno       <span class="m">100</span> Jun <span class="m">22</span> 16:02 shadow.data
 </span></span></code></pre></div><blockquote>
-<p>Shadow is a discrete-event network simulator that directly executes real application code, enabling you to simulate distributed systems with thousands of network-connected processes in <strong>realistic</strong> and <strong>scalable</strong> private network experiments using your laptop, desktop, or server running Linux.</p>
-</blockquote>
+<p>Shadow is a discrete-event network simulator that directly executes real application code, enabling you to simulate distributed systems with thousands of network-connected processes in <strong>realistic</strong> and <strong>scalable</strong> private network experiments using your laptop, desktop, or server running Linux.</p></blockquote>
 <p>The <code>network-simulation.yml</code> file appears to implement a client-server model, and the commands specified in the <code>processes</code> YAML parameter are being executed as native Linux processes through the system call API.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yml" data-lang="yml"><span class="line"><span class="cl"><span class="nt">general</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># stop after 10 simulated seconds</span><span class="w">
@@ -1510,7 +1544,7 @@
       <div class="flex justify-between pt-3">
         <span>
           
-            <a class="group flex" href="/blog/htb-intentions/">
+            <a class="group flex" href="//localhost:1313/blog/htb-intentions/">
               <span
                 class="me-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
                 ><span class="ltr:inline rtl:hidden">&larr;</span
@@ -1532,7 +1566,7 @@
         </span>
         <span>
           
-            <a class="group flex text-right" href="/blog/htb-gofer/">
+            <a class="group flex text-right" href="//localhost:1313/blog/htb-gofer/">
               <span class="flex flex-col">
                 <span
                   class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
@@ -1545,7 +1579,7 @@
                 </span>
               </span>
               <span
-                class="ms-2 text-neutral-700 transition-transform group-hover:-translate-x-[2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
+                class="ms-2 text-neutral-700 transition-transform group-hover:-translate-x-[-2px] group-hover:text-primary-600 dark:text-neutral dark:group-hover:text-primary-400"
                 ><span class="ltr:inline rtl:hidden">&rarr;</span
                 ><span class="ltr:hidden rtl:inline">&larr;</span></span
               >
@@ -1582,19 +1616,23 @@ initComments({
     </footer>
   </article>
 
-        
-          <div class="pointer-events-none absolute bottom-0 end-0 top-[100vh] w-12">
-            <a
-              href="#the-top"
-              class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 backdrop-blur hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
-              aria-label="Scroll to top"
-              title="Scroll to top"
-            >
-              &uarr;
-            </a>
-          </div>
-        
-      </main><footer class="py-10 print:hidden">
+      </main>
+      
+        <div
+          class="pointer-events-none absolute bottom-0 end-0 top-[100vh] w-12"
+          id="to-top"
+          hidden="true"
+        >
+          <a
+            href="#the-top"
+            class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 backdrop-blur hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+            aria-label="Scroll to top"
+            title="Scroll to top"
+          >
+            &uarr;
+          </a>
+        </div>
+      <footer class="py-10 print:hidden">
   
   
     <nav class="pb-4 text-base font-medium text-neutral-500 dark:text-neutral-400">
@@ -1665,7 +1703,7 @@ initComments({
       
         <p class="text-sm text-neutral-500 dark:text-neutral-400">
             &copy;
-            2024
+            2025
             Abraxas
         </p>
       
@@ -1705,7 +1743,7 @@ initComments({
 </footer>
 <div
   id="search-wrapper"
-  class="invisible fixed inset-0 z-50 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm sm:p-6 md:p-[10vh] lg:p-[12vh] dark:bg-neutral-900/50"
+  class="invisible fixed inset-0 z-50 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
   data-url="//localhost:1313/"
 >
   <div
