@@ -27,3 +27,13 @@ Create new post based on the htb archtype
 ```sh
 hugo new --kind htb blog/htb-<box-name>
 ```
+
+## July 2025 Update
+
+- Bump Hugo version to 0.148.0
+- Set build config framework as hugo
+- Build system version set to 3 for production and preview
+
+## ToDo
+
+- [ ] Migrate from [pages to workers](https://developers.cloudflare.com/workers/static-assets/migration-guides/migrate-from-pages/)
