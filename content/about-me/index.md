@@ -12,12 +12,13 @@ showAuthor: true
 
 # Hey there, I am Abraxas! :waving_hand:
 
-Welcome back to my corner of the digital realm! I'm Abraxas, a SOC Analyst for a FinTech organization, keeping the financial world safe. While I'm no longer a full-time software developer, code still runs through my veins. You'll still find me hacking away on platforms like [HackTheBox](https://app.hackthebox.com/profile/414497) and hunting for CVEs to sharpen my infosec skills.
+Welcome to my corner of the digital realm! I work as a Pentester at a FinTech organization, where my work includes internal offensive testing, threat intelligence, and automation with an emphasis on detection as code. I spend a lot of time studying how attackers operate in real environments and how systems respond when assumptions break.
 
-Beyond hacking, I find solace in a good book, and exploring the endless possibilities of home labbing.  I also continue to contribute as a moderator to an international community of hackers on Discord called [Republic of Hackers](https://discord.gg/mzRm73QE58).
+Much of my current focus is on Active Directory security. I like moving across different security domains to stay well rounded, but Active Directory remains a recurring pull. I am less active on public CTF platforms these days, as internal work and research take up most of my time. Outside of that, I continue developing my skills and preparing for certifications such as CRTO.
 
-When I'm not coding, you'll find me hacking away on platforms like [HackTheBox](https://app.hackthebox.com/profile/414497) and hunting for CVEs to improve my infosec skills. Beyond hacking, I find refuge in books, and in the endless possibilities of home labbing. Additionally, I also contribute as a moderator to an international community of hackers on Discord called .
+I keep home labs running for experimentation and learning. Outside of work, I spend time reading, refining tooling, and improving workflows that support both offensive and defensive practice. I also moderate [Republic of Hackers](https://discord.gg/mzRm73QE58), an international Discord community focused on security practice and shared learning.
 
-Through this blog, I aim to document my journey as a SOC Analyst, sharing insights, experiences from the trenches, and showcasing some of the cool projects I tinker with in my downtime. Feel free to drop by, geek out with me as I navigate the ever-evolving world of cybersecurity, unraveling its mysteries one blog post at a time.
+This blog is my personal space. I use it to document things I am working through, ideas I want to revisit, and lessons picked up along the way. It is mainly for my own reference, but others are welcome to follow along.
+
 
 ![Abraxas HTB Badge](https://www.hackthebox.eu/badge/image/414497)
