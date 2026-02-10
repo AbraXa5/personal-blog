@@ -1,3 +1,2 @@
-baseURL      = '/'
-languageCode = 'en-us'
-title        = 'My New Hugo Site'
+# Root config - settings are in config/_default/
+# This file kept minimal; see config/_default/*.toml for full configuration

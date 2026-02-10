@@ -52,8 +52,7 @@ fingerprintAlgorithm = "sha256"
     showTaxonomies      = true
     showWordCount       = false
     showComments        = false
-    showVisitCount      = true
-    sharingLinks        = ["twitter", "linkedin", "reddit"]
+    sharingLinks        = ["x-twitter", "linkedin", "reddit"]
 
 [list]
     showBreadcrumbs     = false
@@ -68,10 +67,6 @@ fingerprintAlgorithm = "sha256"
 
 [taxonomy]
     showTermCount = true
-
-[fathomAnalytics]
-    # site = "ABC12345"
-    # domain = "llama.yoursite.com"
 
 [verification]
     # google = ""
